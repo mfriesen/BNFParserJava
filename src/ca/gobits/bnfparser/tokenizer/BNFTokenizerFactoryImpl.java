@@ -9,7 +9,6 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 		NONE, 
 		COMMENT_SINGLE_LINE, COMMENT_MULTI_LINE, 
 		QUOTE_SINGLE, QUOTE_DOUBLE,
-		QUOTED_STRING,
 		NUMBER, 
 		LETTER, 
 		SYMBOL, SYMBOL_HASH, SYMBOL_AT, SYMBOL_STAR, SYMBOL_SLASH_FORWARD, 
@@ -31,8 +30,6 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 		for (int i = 0; i < len; i++) {
 			
 			char c = text.charAt(i);
-			System.out.println (String.valueOf(c));
-			BNFToken last = !stack.isEmpty() ? stack.peek() : null;
 			BNFTokenizerType type = getType(c, lastTypes);
 
 			boolean fastForwarding = isFastForwarding(fastForwardEnd);
@@ -44,11 +41,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 
 				if (fastForwardEnded) {
 					
-					if (fastForwardStart == BNFTokenizerType.QUOTED_STRING) {
-						BNFToken token = createBNFToken(sb.toString(), fastForwardStart);
-						setNextToken(stack, token);
-						stack.push(token);						
-					}
+					finishFastForward(stack, sb, fastForwardStart, fastForwardEnd);
 
 					fastForwarding = false;
 					fastForwardEnd = BNFTokenizerType.NONE;
@@ -57,49 +50,22 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 				
 			} else {
 				
-				if (type == BNFTokenizerType.COMMENT_SINGLE_LINE) {
-					
-					stack.pop();
-					setNextToken(stack, null);
-					fastForwardStart = type;
-					fastForwardEnd = BNFTokenizerType.WHITESPACE_OTHER;
-					
-				} else if (type == BNFTokenizerType.COMMENT_MULTI_LINE) {
-					
-					stack.pop();
-					setNextToken(stack, null);
-					fastForwardStart = type;
-					fastForwardEnd = BNFTokenizerType.COMMENT_MULTI_LINE;					
-				
-				} else if (type == BNFTokenizerType.QUOTED_STRING) {
+				fastForwardEnd = calculateFastForwardEnd(type, stack);
+				fastForwardStart = type;
 
-					BNFToken t = stack.pop();
-					sb.append(t.getValue());
-					sb.append(String.valueOf(c));
-					
-					setNextToken(stack, null);
-					fastForwardStart = type;
-					fastForwardEnd = getType(t.getValue().charAt(0));
-
-				} else if (isWhitespace(type)) {
-					
-				} else if (type != BNFTokenizerType.NONE) {
-				
-					BNFToken token = null;
-					
-					if (isAppendable(lastTypes, type)) {
+				if (fastForwardEnd != BNFTokenizerType.NONE) { 
+					sb.append(c);
+				} else if (!isWhitespace(type)) {
 						
-						token = last;
-						token.appendValue(c);
-						last = null;
-						
-					} else {
-						token = createBNFToken(c, type);
-						stack.push(token);
-					}
+					if (type != BNFTokenizerType.NONE) {
 					
-					if (last != null) {
-						last.setNextToken(token);
+						if (isAppendable(lastTypes, type)) {
+							
+							stack.peek().appendValue(c);
+							
+						} else {
+							addBNFToken(stack, type, c);
+						}					
 					}
 				}
 			}
@@ -109,6 +75,63 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 		}
 		
 		return !stack.isEmpty() ? stack.firstElement() : new BNFToken("");
+	}
+
+	private BNFTokenizerType calculateFastForwardEnd(BNFTokenizerType type, Stack<BNFToken> stack) {
+		
+		BNFToken last = !stack.isEmpty() ? stack.peek() : null;
+		BNFTokenizerType tokenizerType = BNFTokenizerType.NONE;
+		
+		if (type == BNFTokenizerType.COMMENT_SINGLE_LINE) {
+			
+			tokenizerType = BNFTokenizerType.WHITESPACE_OTHER;
+			
+		} else if (type == BNFTokenizerType.COMMENT_MULTI_LINE) {
+			
+			tokenizerType = BNFTokenizerType.COMMENT_MULTI_LINE;					
+		
+		} else if (type == BNFTokenizerType.QUOTE_DOUBLE) {
+			
+			tokenizerType = BNFTokenizerType.QUOTE_DOUBLE;
+		
+		} else if (type == BNFTokenizerType.QUOTE_SINGLE && !isWord(last)) {
+			
+			tokenizerType = BNFTokenizerType.QUOTE_SINGLE;
+		}
+
+		return tokenizerType;
+	}
+
+	private boolean isWord(BNFToken last) {
+		return last != null && last.isWord();
+	}
+
+	private void finishFastForward(Stack<BNFToken> stack, StringBuilder sb, BNFTokenizerType fastForwardStart, BNFTokenizerType fastForwardType) {
+
+		if (isComment(fastForwardStart)) {
+			
+			stack.pop();
+			setNextToken(stack, null);
+			
+		} else {
+			
+			addBNFToken(stack, fastForwardType, sb.toString());
+		}
+	}
+
+	private void addBNFToken(Stack<BNFToken> stack, BNFTokenizerType type, char c) {
+		addBNFToken(stack, type, String.valueOf(c));
+	}
+	
+	private void addBNFToken(Stack<BNFToken> stack, BNFTokenizerType type, String c) {
+		
+		BNFToken token = createBNFToken(c, type);
+		
+		if (!stack.isEmpty()) {
+			stack.peek().setNextToken(token);
+		}
+		
+		stack.push(token);
 	}
 
 	private void setNextToken(Stack<BNFToken> stack, BNFToken nextToken) {
@@ -128,10 +151,6 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 	private boolean isAppendable(BNFTokenizerType[] lasts, BNFTokenizerType current) {
 		return lasts[0] == current && (current == BNFTokenizerType.LETTER || current == BNFTokenizerType.NUMBER);
 	}
-
-	private BNFToken createBNFToken(char c, BNFTokenizerType type) {
-		return createBNFToken(String.valueOf(c), type);
-	}
 	
 	private BNFToken createBNFToken(String value, BNFTokenizerType type) {
 		BNFToken token = new BNFToken();
@@ -139,17 +158,18 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 
 		if (isComment(type)) {
 			token.setType(BNFTokenType.COMMENT);
-		} else if (isQuotedString(type)) {
-			token.setType(BNFTokenType.QUOTED_STRING);
 		} else if (isNumber(type)) {
 			token.setType(BNFTokenType.NUMBER);
-		} else if (isWord(type)) {
+		} else if (isLetter(type)) {
 			token.setType(BNFTokenType.WORD);
 		} else if (isSymbol(type)) {
 			token.setType(BNFTokenType.SYMBOL);
 		} else if (isWhitespace(type)) {
 			token.setType(BNFTokenType.WHITESPACE);
+		} else if (isQuote(type)) {
+			token.setType(BNFTokenType.QUOTED_STRING);
 		}
+
 		
 		return token;
 	}
@@ -167,18 +187,9 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 			
 			type = BNFTokenizerType.COMMENT_MULTI_LINE;
 			
-		} else if (lastTypes.length > 1) {
-			
-			if (isQuotedString(lastTypes, type)) {
-				type = BNFTokenizerType.QUOTED_STRING;
-			}
-		} 
+		}
 		
 		return type;
-	}
-
-	private boolean isQuotedString(BNFTokenizerType[] lastTypes, BNFTokenizerType type) {
-		return (isNone(lastTypes[1]) || isWhitespace(lastTypes[1])) && isQuote(lastTypes[0]) && !isWhitespace(type);
 	}
 		
 	private boolean isQuote(BNFTokenizerType type) {
@@ -211,15 +222,11 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 				|| type == BNFTokenizerType.COMMENT_SINGLE_LINE;
 	}
 	
-	public boolean isQuotedString(BNFTokenizerType type) {
-		return type == BNFTokenizerType.QUOTED_STRING;
-	}
-	
 	public boolean isNumber(BNFTokenizerType type) {
 		return type == BNFTokenizerType.NUMBER;
 	}
 	
-	public boolean isWord(BNFTokenizerType type) {
+	public boolean isLetter(BNFTokenizerType type) {
 		return type == BNFTokenizerType.LETTER;
 	}
 

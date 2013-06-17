@@ -167,6 +167,30 @@ public class BNFTokenizerFactoryTest {
 	}
 	
 	@Test
+	public void testQuotedString06() {
+		// given
+		String s = "'asd':'123'}";
+		
+		// when
+		BNFToken token = factory.tokens(s);
+		
+		// then
+		assertEquals("'asd'", token.getValue());
+		assertTrue(token.isQuotedString());
+		token = token.getNextToken();
+		
+		assertEquals(":", token.getValue());
+		token = token.getNextToken();
+
+		assertEquals("'123'", token.getValue());
+		assertTrue(token.isQuotedString());
+		token = token.getNextToken();
+		
+		assertEquals("}", token.getValue());
+		assertNull(token.getNextToken());
+	}
+	
+	@Test
 	public void testJsonGrammar() throws Exception {
 		
 		// given
