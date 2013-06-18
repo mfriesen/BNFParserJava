@@ -13,16 +13,20 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-package ca.gobits.bnf.parser;
+package ca.gobits.bnf.parser.states;
 
-public class BNFStateEnd extends BNFState {
+import ca.gobits.bnf.tokenizer.BNFToken;
 
-	public BNFStateEnd() {
-		super("@end");
+public class BNFStateQuotedString extends BNFState {
+	
+	@Override
+	public boolean match(BNFToken token) {
+		String value = token.getValue();
+		return value.startsWith("\"") && value.endsWith("\"");
 	}
 	
 	@Override
-	public boolean isEnd() {
+	public boolean matchAdvancedToNextToken(BNFToken token) {
 		return true;
 	}
 }

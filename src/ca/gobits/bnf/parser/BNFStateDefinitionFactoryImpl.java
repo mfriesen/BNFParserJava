@@ -23,7 +23,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import ca.gobits.bnf.parser.BNFState.Repetition;
+import ca.gobits.bnf.parser.states.BNFState;
+import ca.gobits.bnf.parser.states.BNFStateEmpty;
+import ca.gobits.bnf.parser.states.BNFStateEnd;
+import ca.gobits.bnf.parser.states.BNFStateNumber;
+import ca.gobits.bnf.parser.states.BNFStateQuotedString;
+import ca.gobits.bnf.parser.states.BNFState.Repetition;
 
 public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory {
 

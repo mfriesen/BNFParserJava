@@ -23,6 +23,10 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import ca.gobits.bnf.parser.states.BNFState;
+import ca.gobits.bnf.parser.states.BNFStateEnd;
+import ca.gobits.bnf.parser.states.BNFStateQuotedString;
+
 
 public class BNFStateDefinitionFactoryTest {
 

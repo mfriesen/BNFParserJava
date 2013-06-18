@@ -25,7 +25,7 @@ public class BNFParserFactoryImpl implements BNFParserFactory {
 	public BNFParser json() {
 		
 		Map<String, BNFStateDefinition> map = df.json();
-		BNFParser parser = new BNFParser(map);
+		BNFParser parser = new BNFParserImpl(map);
 		
 		return parser;
 	}

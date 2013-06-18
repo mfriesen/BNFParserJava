@@ -34,7 +34,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 	public BNFToken tokens(String text) {
 
 		Stack<BNFToken> stack = new Stack<BNFToken>();
-		FastForward ff = new FastForward();
+		BNFFastForward ff = new BNFFastForward();
 		
 		BNFTokenizerType lastType = BNFTokenizerType.NONE;
 		
@@ -83,7 +83,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 		return !stack.isEmpty() ? stack.firstElement() : new BNFToken("");
 	}
 
-	private void calculateFastForward(FastForward ff, BNFTokenizerType type, Stack<BNFToken> stack, BNFTokenizerType lastType) {
+	private void calculateFastForward(BNFFastForward ff, BNFTokenizerType type, Stack<BNFToken> stack, BNFTokenizerType lastType) {
 		
 		BNFToken last = !stack.isEmpty() ? stack.peek() : null;
 		ff.setStart(BNFTokenizerType.NONE);
@@ -122,7 +122,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 		return last != null && last.isWord();
 	}
 
-	private void finishFastForward(Stack<BNFToken> stack, FastForward ff) {
+	private void finishFastForward(Stack<BNFToken> stack, BNFFastForward ff) {
 
 		if (isComment(ff.getStart())) {
 			

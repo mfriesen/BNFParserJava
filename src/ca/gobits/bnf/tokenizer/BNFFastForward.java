@@ -17,13 +17,13 @@ package ca.gobits.bnf.tokenizer;
 
 import ca.gobits.bnf.tokenizer.BNFTokenizerFactoryImpl.BNFTokenizerType;
 
-public class FastForward {
+public class BNFFastForward {
 
 	private BNFTokenizerType start = BNFTokenizerType.NONE;
 	private BNFTokenizerType[] end = new BNFTokenizerType[] { BNFTokenizerType.NONE };
 	private StringBuilder sb = new StringBuilder();
 	
-	public FastForward() {		
+	public BNFFastForward() {		
 	}
 
 	public BNFTokenizerType getStart() {

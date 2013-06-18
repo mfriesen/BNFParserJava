@@ -15,10 +15,11 @@
 
 package ca.gobits.bnf.parser;
 
+import ca.gobits.bnf.parser.states.BNFState;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 
-public class BNFPath {
+public class BNFParserPath {
 
 	private int pathPosition;
 	private int pathCount;
@@ -26,10 +27,10 @@ public class BNFPath {
 	private BNFToken token;
 	private BNFState state;
 	
-	public BNFPath() {		
+	public BNFParserPath() {		
 	}
 	
-	public BNFPath(BNFState state, BNFToken token) {
+	public BNFParserPath(BNFState state, BNFToken token) {
 		this.state = state;
 		this.token = token;
 	}

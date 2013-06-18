@@ -40,7 +40,7 @@ public class BNFParserTest {
 	@Before
 	public void before() throws Exception {
 		map = sdf.json();
-		parser = new BNFParser(map);
+		parser = new BNFParserImpl(map);
 	}
 	
 	@Test
@@ -51,7 +51,7 @@ public class BNFParserTest {
 		BNFToken token = tokenizerFactory.tokens(json);
 
 		// when		
-		BNFParserResult result = parser.parser(token);
+		BNFParserResult result = parser.parse(token);
 		
 		// then
 		assertNotNull(result.getTop());
@@ -67,7 +67,7 @@ public class BNFParserTest {
 		BNFToken token = tokenizerFactory.tokens(json);
 
 		// when		
-		BNFParserResult result = parser.parser(token);
+		BNFParserResult result = parser.parse(token);
 		
 		// then
 		assertTrue(result.isSuccess());
@@ -83,7 +83,7 @@ public class BNFParserTest {
 		BNFToken token = tokenizerFactory.tokens(json);
 
 		// when		
-		BNFParserResult result = parser.parser(token);
+		BNFParserResult result = parser.parse(token);
 		
 		// then
 		assertTrue(result.isSuccess());
@@ -99,7 +99,7 @@ public class BNFParserTest {
 		BNFToken token = tokenizerFactory.tokens(json);
 
 		// when		
-		BNFParserResult result = parser.parser(token);
+		BNFParserResult result = parser.parse(token);
 		
 		// then
 		assertTrue(result.isSuccess());
@@ -124,7 +124,7 @@ public class BNFParserTest {
 		BNFToken token = tokenizerFactory.tokens(json);
 
 		// when		
-		BNFParserResult result = parser.parser(token);
+		BNFParserResult result = parser.parse(token);
 		
 		// then
 		assertFalse(result.isSuccess());
@@ -140,7 +140,7 @@ public class BNFParserTest {
 		BNFToken token = tokenizerFactory.tokens(json);
 
 		// when		
-		BNFParserResult result = parser.parser(token);
+		BNFParserResult result = parser.parse(token);
 		
 		// then
 		assertFalse(result.isSuccess());

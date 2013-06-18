@@ -17,6 +17,8 @@ package ca.gobits.bnf.parser;
 
 import java.util.Collection;
 
+import ca.gobits.bnf.parser.states.BNFState;
+
 
 public class BNFStateDefinition {
 

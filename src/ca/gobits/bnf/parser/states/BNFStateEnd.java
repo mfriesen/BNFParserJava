@@ -13,24 +13,16 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-package ca.gobits.bnf.parser;
+package ca.gobits.bnf.parser.states;
 
-import java.util.regex.Pattern;
+public class BNFStateEnd extends BNFState {
 
-import ca.gobits.bnf.tokenizer.BNFToken;
-
-public class BNFStateNumber extends BNFState {
-	
-	private Pattern p = Pattern.compile("^[\\d\\-\\.]+$");
-	
-	@Override
-	public boolean match(BNFToken token) {
-		String value = token.getValue();
-		return p.matcher(value).matches();
+	public BNFStateEnd() {
+		super("@end");
 	}
 	
 	@Override
-	public boolean matchAdvancedToNextToken(BNFToken token) {
+	public boolean isEnd() {
 		return true;
 	}
 }
