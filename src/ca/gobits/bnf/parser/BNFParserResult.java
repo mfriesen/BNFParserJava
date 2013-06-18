@@ -21,7 +21,7 @@ public class BNFParserResult {
 
 	private BNFToken top;
 	private BNFToken error;
-	private MaxMatchToken
+	private BNFToken maxToken;
 	private boolean success;
 	
 	public boolean isSuccess() {
@@ -52,7 +52,15 @@ public class BNFParserResult {
 	}
 
 	public void setMaxMatchToken(BNFToken token) {
-		// TODO Auto-generated method stub
-		
+		if (this.maxToken == null || (token != null && token.getId() > this.maxToken.getId())) {
+			this.maxToken = token;
+		}
+	}
+
+	public void complete() {
+
+		if (!isSuccess()) {			
+			setError(maxToken);
+		}
 	}
 }

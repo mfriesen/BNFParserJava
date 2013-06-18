@@ -35,6 +35,7 @@ public class BNFParser {
 		
 		BNFParserResult result = new BNFParserResult();
 		result.setTop(token);
+		result.setMaxMatchToken(token);
 		
 		BNFStateDefinition sd = stateDefinitions.get("@start");
 		pushToStack(token, sd);
@@ -57,9 +58,7 @@ public class BNFParser {
 			}
 		}
 		
-		if (!result.isSuccess() && result.getError() == null) {
-			result.setError(result.getTop());
-		}
+		result.complete();
 		
 		return result;
 	}

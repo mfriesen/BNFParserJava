@@ -67,7 +67,7 @@ public class BNFToken {
 	}
 	
 	public String toString() {
-		return "TOKEN: " + getValue();
+		return "TOKEN value: " + getValue() + " id: " + getId() + " type: " + getType();
 	}
 
 	public boolean isSymbol() {

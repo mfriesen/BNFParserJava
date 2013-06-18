@@ -146,6 +146,7 @@ public class BNFParserTest {
 		assertFalse(result.isSuccess());
 		assertNotNull(result.getTop());
 		assertNotNull(result.getError());
-		assertEquals(json, result.getError().getValue());
+		assertEquals(2, result.getError().getId());
+		assertEquals("asdasd", result.getError().getValue());
 	}
 }
