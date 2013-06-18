@@ -1,3 +1,5 @@
+// json grammar
+
 @start        = Empty | array | object;
 
 object        = openCurly objectContent closeCurly;
