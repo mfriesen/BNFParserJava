@@ -1,19 +1,21 @@
 package ca.gobits.bnf.parser;
 
-import ca.gobits.bnfparser.tokenizer.BNFToken;
+import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFState {
 
-	public enum Repetition { ZERO_OR_MORE };
+	public enum Repetition { NONE, ZERO_OR_MORE };
 		
 	private String name;
 	private BNFState nextState;
 	private Repetition repetition;
 	
-	public BNFState() {		
+	public BNFState() {
+		this.repetition = Repetition.NONE;
 	}
 
 	public BNFState(String name) {
+		this();
 		this.name = name;
 	}
 	
@@ -42,11 +44,15 @@ public class BNFState {
 	}
 	
 	public boolean match(BNFToken token) {
-		return name.equals(token.getValue());
+		return nameMatches(token) || repetition == Repetition.ZERO_OR_MORE;
 	}
 	
+	private boolean nameMatches(BNFToken token) {
+		return getName().equals(token.getValue());
+	} 
+	
 	public boolean matchAdvancedToNextToken(BNFToken token) {
-		return true;
+		return nameMatches(token);
 	}
 	
 	public boolean isEnd() {

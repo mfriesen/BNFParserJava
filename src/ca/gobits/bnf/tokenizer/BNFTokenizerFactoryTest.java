@@ -1,4 +1,4 @@
-package ca.gobits.bnfparser.tokenizer;
+package ca.gobits.bnf.tokenizer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

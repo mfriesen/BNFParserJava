@@ -1,4 +1,4 @@
-package ca.gobits.bnfparser.tokenizer;
+package ca.gobits.bnf.tokenizer;
 
 public interface BNFTokenizerFactory {
 	BNFToken tokens(String text);

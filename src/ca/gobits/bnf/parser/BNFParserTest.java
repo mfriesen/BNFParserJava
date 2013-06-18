@@ -9,9 +9,9 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import ca.gobits.bnfparser.tokenizer.BNFToken;
-import ca.gobits.bnfparser.tokenizer.BNFTokenizerFactory;
-import ca.gobits.bnfparser.tokenizer.BNFTokenizerFactoryImpl;
+import ca.gobits.bnf.tokenizer.BNFToken;
+import ca.gobits.bnf.tokenizer.BNFTokenizerFactory;
+import ca.gobits.bnf.tokenizer.BNFTokenizerFactoryImpl;
 
 public class BNFParserTest {
 

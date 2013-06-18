@@ -1,8 +1,8 @@
-package ca.gobits.bnfparser.tokenizer;
+package ca.gobits.bnf.tokenizer;
 
 import java.util.Stack;
 
-import ca.gobits.bnfparser.tokenizer.BNFToken.BNFTokenType;
+import ca.gobits.bnf.tokenizer.BNFToken.BNFTokenType;
 public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 	
 	private enum BNFTokenizerType {

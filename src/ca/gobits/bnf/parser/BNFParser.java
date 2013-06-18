@@ -3,7 +3,7 @@ package ca.gobits.bnf.parser;
 import java.util.Map;
 import java.util.Stack;
 
-import ca.gobits.bnfparser.tokenizer.BNFToken;
+import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFParser {
 	
@@ -35,7 +35,9 @@ public class BNFParser {
 				}
 			}
 			
-			parse();
+			if (!stack.isEmpty()) {
+				parse();
+			}
 		}
 		
 		return result;
@@ -94,7 +96,7 @@ public class BNFParser {
 				break;
 			} else if (sp.getPathPosition() == sp.getPathCount()) {
 				sp = stack.pop();
-				System.out.println ("REWIND " + sp.getState().getName());
+				System.out.println ("REWIND1 " + sp.getState().getName());
 			} else {
 				break;
 			}
@@ -109,7 +111,7 @@ public class BNFParser {
 			BNFPath sp = stack.pop();
 			nextState = sp.getState().getNextState();			
 			
-			System.out.println ("REWIND " + sp.getState().getName());
+			System.out.println ("REWIND2 " + sp.getState().getName());
 			if (nextState != null) {
 				break;
 			}		

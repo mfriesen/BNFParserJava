@@ -1,6 +1,6 @@
 package ca.gobits.bnf.parser;
 
-import ca.gobits.bnfparser.tokenizer.BNFToken;
+import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFParserResult {
 
