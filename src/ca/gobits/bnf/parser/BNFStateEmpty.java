@@ -18,10 +18,13 @@ package ca.gobits.bnf.parser;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFStateEmpty extends BNFState {
+	
+	@Override
 	public boolean match(BNFToken token) {
 		return true;
 	}
 	
+	@Override
 	public boolean matchAdvancedToNextToken(BNFToken token) {
 		return token != null && token.getValue().trim().length() == 0 ? true : false;
 	}

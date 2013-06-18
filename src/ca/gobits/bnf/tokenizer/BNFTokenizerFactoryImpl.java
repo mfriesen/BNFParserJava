@@ -28,7 +28,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 		LETTER, 
 		SYMBOL, SYMBOL_HASH, SYMBOL_AT, SYMBOL_STAR, SYMBOL_SLASH_FORWARD, 
 		WHITESPACE, WHITESPACE_OTHER
-	};
+	}
 	
 	@Override
 	public BNFToken tokens(String text) {

@@ -23,11 +23,13 @@ public class BNFStateNumber extends BNFState {
 	
 	private Pattern p = Pattern.compile("^[\\d\\-\\.]+$");
 	
+	@Override
 	public boolean match(BNFToken token) {
 		String value = token.getValue();
 		return p.matcher(value).matches();
 	}
 	
+	@Override
 	public boolean matchAdvancedToNextToken(BNFToken token) {
 		return true;
 	}

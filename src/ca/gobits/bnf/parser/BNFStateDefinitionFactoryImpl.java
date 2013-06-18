@@ -27,6 +27,7 @@ import ca.gobits.bnf.parser.BNFState.Repetition;
 
 public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory {
 
+	@Override
 	public Map<String, BNFStateDefinition> json() {
 		
 		Map<String, BNFStateDefinition> map = new HashMap<String, BNFStateDefinition>();
@@ -81,10 +82,8 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 				previousState = state;
 			}
 
-			if (name.equals("@start")) {
+			if (previousState != null && name.equals("@start")) {
 				previousState.setNextState(new BNFStateEnd());
-			} else {
-				//previousState.setNextState(new StateEndPath());
 			}
 			
 			c.add(firstState);

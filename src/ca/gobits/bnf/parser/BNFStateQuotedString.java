@@ -19,11 +19,13 @@ import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFStateQuotedString extends BNFState {
 	
+	@Override
 	public boolean match(BNFToken token) {
 		String value = token.getValue();
 		return value.startsWith("\"") && value.endsWith("\"");
 	}
 	
+	@Override
 	public boolean matchAdvancedToNextToken(BNFToken token) {
 		return true;
 	}

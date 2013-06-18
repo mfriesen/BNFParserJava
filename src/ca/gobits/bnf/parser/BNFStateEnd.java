@@ -21,6 +21,7 @@ public class BNFStateEnd extends BNFState {
 		super("@end");
 	}
 	
+	@Override
 	public boolean isEnd() {
 		return true;
 	}

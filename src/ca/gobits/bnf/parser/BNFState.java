@@ -19,7 +19,7 @@ import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFState {
 
-	public enum Repetition { NONE, ZERO_OR_MORE };
+	public enum Repetition { NONE, ZERO_OR_MORE }
 		
 	private String name;
 	private BNFState nextState;
@@ -74,6 +74,7 @@ public class BNFState {
 		return false;
 	}
 	
+	@Override
 	public String toString() {
 		return "state " + getName();
 	}

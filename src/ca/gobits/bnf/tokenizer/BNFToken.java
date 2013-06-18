@@ -24,7 +24,7 @@ public class BNFToken {
 		WORD, 
 		SYMBOL, 
 		WHITESPACE
-	};
+	}
 	
 	private int id;
 	private String value;
@@ -66,6 +66,7 @@ public class BNFToken {
 		this.nextToken = nextToken;
 	}
 	
+	@Override
 	public String toString() {
 		return "TOKEN value: " + getValue() + " id: " + getId() + " type: " + getType();
 	}

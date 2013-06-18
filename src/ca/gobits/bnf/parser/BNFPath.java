@@ -34,6 +34,7 @@ public class BNFPath {
 		this.token = token;
 	}
 	
+	@Override
 	public String toString() {
 		return state + " " + token + " position " + pathPosition + " count " + pathCount;
 	}
