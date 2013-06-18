@@ -43,7 +43,9 @@ public class BNFParser {
 			BNFPath sp = stack.peek();
 			
 			if (sp.getState().getClass().equals(BNFStateEnd.class)) {
+				
 				sp = stack.pop();
+				
 				if (sp.getToken() == null) {
 					result.setSuccess(true);
 					break;
@@ -51,8 +53,12 @@ public class BNFParser {
 			}
 			
 			if (!stack.isEmpty()) {
-				parse();
+				parse(result);
 			}
+		}
+		
+		if (!result.isSuccess() && result.getError() == null) {
+			result.setError(result.getTop());
 		}
 		
 		return result;
@@ -77,7 +83,7 @@ public class BNFParser {
 		}
 	}
 	
-	private void parse() {
+	private void parse(BNFParserResult result) {
 		
 		BNFPath sp = stack.peek();
 		BNFState state = sp.getState();
@@ -86,9 +92,10 @@ public class BNFParser {
 		if (state.match(token)) {
 
 			System.out.println ("FOUND MATCH " + state.getName() + " " + token.getValue());
-			
+
 			if (state.matchAdvancedToNextToken(token)) {
 				token = token.getNextToken();
+				result.setMaxMatchToken(token);
 			}
 			
 			BNFState rewindState = rewindStackToNextState();
@@ -96,9 +103,12 @@ public class BNFParser {
 			pushToStack(rewindState, token);
 
 		} else if (stateDefinitions.containsKey(state.getName())) {
+			
 			BNFStateDefinition sd = stateDefinitions.get(state.getName());
 			pushToStack(token, sd);
+			
 		} else {
+			
 			rewindStackToNextPath();
 		}		
 	}

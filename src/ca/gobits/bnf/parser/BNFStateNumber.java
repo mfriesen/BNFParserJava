@@ -15,13 +15,20 @@
 
 package ca.gobits.bnf.parser;
 
-public class BNFStateEnd extends BNFState {
+import java.util.regex.Pattern;
 
-	public BNFStateEnd() {
-		super("@end");
+import ca.gobits.bnf.tokenizer.BNFToken;
+
+public class BNFStateNumber extends BNFState {
+	
+	private Pattern p = Pattern.compile("^[\\d\\-\\.]+$");
+	
+	public boolean match(BNFToken token) {
+		String value = token.getValue();
+		return p.matcher(value).matches();
 	}
 	
-	public boolean isEnd() {
+	public boolean matchAdvancedToNextToken(BNFToken token) {
 		return true;
 	}
 }

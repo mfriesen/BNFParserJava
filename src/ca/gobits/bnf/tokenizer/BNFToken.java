@@ -26,6 +26,7 @@ public class BNFToken {
 		WHITESPACE
 	};
 	
+	private int id;
 	private String value;
 	private BNFTokenType type;
 	private BNFToken nextToken;
@@ -91,5 +92,13 @@ public class BNFToken {
 	
 	public boolean isWhitespace() {
 		return type == BNFTokenType.WHITESPACE;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

@@ -55,9 +55,11 @@ public class BNFTokenizerFactoryTest {
 		
 		// then
 		assertEquals("{", token.getValue());
+		assertEquals(1, token.getId());
 		assertTrue(token.isSymbol());
 		token = token.getNextToken();
 		assertEquals("}", token.getValue());
+		assertEquals(2, token.getId());
 		assertTrue(token.isSymbol());
 		assertNull(token.getNextToken());
 	}
@@ -199,6 +201,30 @@ public class BNFTokenizerFactoryTest {
 
 		assertEquals("'123'", token.getValue());
 		assertTrue(token.isQuotedString());
+		token = token.getNextToken();
+		
+		assertEquals("}", token.getValue());
+		assertNull(token.getNextToken());
+	}
+	
+	@Test
+	public void testQuotedNumber01() {
+		// given
+		String s = "'asd':123}";
+		
+		// when
+		BNFToken token = factory.tokens(s);
+		
+		// then
+		assertEquals("'asd'", token.getValue());
+		assertTrue(token.isQuotedString());
+		token = token.getNextToken();
+		
+		assertEquals(":", token.getValue());
+		token = token.getNextToken();
+
+		assertEquals("123", token.getValue());
+		assertTrue(token.isNumber());
 		token = token.getNextToken();
 		
 		assertEquals("}", token.getValue());

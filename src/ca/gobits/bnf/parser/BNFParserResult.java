@@ -21,6 +21,7 @@ public class BNFParserResult {
 
 	private BNFToken top;
 	private BNFToken error;
+	private MaxMatchToken
 	private boolean success;
 	
 	public boolean isSuccess() {
@@ -48,5 +49,10 @@ public class BNFParserResult {
 
 	public void setError(BNFToken error) {
 		this.error = error;
+	}
+
+	public void setMaxMatchToken(BNFToken token) {
+		// TODO Auto-generated method stub
+		
 	}
 }

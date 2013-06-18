@@ -15,6 +15,8 @@
 
 package ca.gobits.bnf.parser;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -87,5 +89,63 @@ public class BNFParserTest {
 		assertTrue(result.isSuccess());
 		assertNotNull(result.getTop());
 		assertNull(result.getError());
+	}
+	
+	@Test
+	public void testNumber() throws Exception {
+		
+		// given
+		String json = "{ \"asd\":123}";
+		BNFToken token = tokenizerFactory.tokens(json);
+
+		// when		
+		BNFParserResult result = parser.parser(token);
+		
+		// then
+		assertTrue(result.isSuccess());
+		assertNotNull(result.getTop());
+		assertNull(result.getError());
+	}
+	
+	@Test
+	public void testNested() throws Exception {
+		
+	}
+	
+	@Test
+	public void testSimpleArray() throws Exception {
+		
+	}
+	
+	@Test
+	public void testBadSimple01() throws Exception {
+		// given
+		String json = "asdasd";
+		BNFToken token = tokenizerFactory.tokens(json);
+
+		// when		
+		BNFParserResult result = parser.parser(token);
+		
+		// then
+		assertFalse(result.isSuccess());
+		assertNotNull(result.getTop());
+		assertEquals(result.getError(), result.getTop());
+		assertEquals(json, result.getError().getValue());
+	}
+	
+	@Test
+	public void testBadSimple02() throws Exception {
+		// given
+		String json = "{ asdasd";
+		BNFToken token = tokenizerFactory.tokens(json);
+
+		// when		
+		BNFParserResult result = parser.parser(token);
+		
+		// then
+		assertFalse(result.isSuccess());
+		assertNotNull(result.getTop());
+		assertNotNull(result.getError());
+		assertEquals(json, result.getError().getValue());
 	}
 }

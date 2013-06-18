@@ -112,7 +112,9 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 	private BNFState createStateInstance(String ss) {
 		BNFState state;
 
-		if (ss.equals("QuotedString")) {
+		if (ss.equals("Number")) {
+			state = new BNFStateNumber();
+		} else if (ss.equals("QuotedString")) {
 			state = new BNFStateQuotedString();
 		} else if (ss.equals("Empty")) {
 			state = new BNFStateEmpty();
