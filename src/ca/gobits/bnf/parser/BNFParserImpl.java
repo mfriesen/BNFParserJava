@@ -10,18 +10,18 @@ import ca.gobits.bnf.tokenizer.BNFToken;
 public class BNFParserImpl implements BNFParser {
 
 	private Map<String, BNFStateDefinition> stateDefinitions;
-	private Stack<BNFParserPath> stack = new Stack<BNFParserPath>();
+	private Stack<BNFParsePath> stack = new Stack<BNFParsePath>();
 	
 	public BNFParserImpl(Map<String, BNFStateDefinition> stateDefinitions) {
 		this.stateDefinitions = stateDefinitions; 
 	}
 	
 	@Override
-	public BNFParserResult parse(BNFToken token) {
+	public BNFParseResult parse(BNFToken token) {
 		
 		stack.clear();
 		
-		BNFParserResultImpl result = new BNFParserResultImpl();
+		BNFParseResultImpl result = new BNFParseResultImpl();
 		result.setTop(token);
 		result.setMaxMatchToken(token);
 		
@@ -29,7 +29,7 @@ public class BNFParserImpl implements BNFParser {
 		pushToStack(token, sd);
 	
 		while (!stack.isEmpty()) {		
-			BNFParserPath sp = stack.peek();
+			BNFParsePath sp = stack.peek();
 			
 			if (sp.getState().getClass().equals(BNFStateEnd.class)) {
 				
@@ -53,7 +53,7 @@ public class BNFParserImpl implements BNFParser {
 	
 	private void pushToStack(BNFState state, BNFToken token) {
 		System.out.println ("ADDING NEXT STATE " + state.getName() + " setting token " + token);
-		stack.push(new BNFParserPath(state, token));
+		stack.push(new BNFParsePath(state, token));
 	}
 	
 	private void pushToStack(BNFToken token, BNFStateDefinition sd) {		
@@ -61,7 +61,7 @@ public class BNFParserImpl implements BNFParser {
 		int i = sd.getStates().size();
 		for (BNFState state : sd.getStates()) {
 
-			BNFParserPath statePath = new BNFParserPath(state, token);
+			BNFParsePath statePath = new BNFParsePath(state, token);
 			statePath.setPathCount(sd.getStates().size());
 			statePath.setPathPosition(i);
 			System.out.println ("pushing " + state.getName() + " " + token.getValue() + " PATH: " + statePath.getPathPosition() + " " + statePath.getPathCount());
@@ -70,9 +70,9 @@ public class BNFParserImpl implements BNFParser {
 		}
 	}
 	
-	private void parse(BNFParserResultImpl result) {
+	private void parse(BNFParseResultImpl result) {
 		
-		BNFParserPath sp = stack.peek();
+		BNFParsePath sp = stack.peek();
 		BNFState state = sp.getState();
 		BNFToken token = sp.getToken();
 
@@ -102,7 +102,7 @@ public class BNFParserImpl implements BNFParser {
 
 	private void rewindStackToNextPath() {
 		while (!stack.isEmpty()) {
-			BNFParserPath sp = stack.peek();
+			BNFParsePath sp = stack.peek();
 			if (sp.getPathPosition() < sp.getPathCount()) {
 				sp = stack.pop();
 				break;
@@ -120,7 +120,7 @@ public class BNFParserImpl implements BNFParser {
 		BNFState nextState = null;
 		
 		while (!stack.isEmpty()) {
-			BNFParserPath sp = stack.pop();
+			BNFParsePath sp = stack.pop();
 			nextState = sp.getState().getNextState();			
 			
 			System.out.println ("REWIND2 " + sp.getState().getName());

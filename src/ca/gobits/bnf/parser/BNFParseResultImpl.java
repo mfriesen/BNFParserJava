@@ -2,14 +2,14 @@ package ca.gobits.bnf.parser;
 
 import ca.gobits.bnf.tokenizer.BNFToken;
 
-public class BNFParserResultImpl implements BNFParserResult {
+public class BNFParseResultImpl implements BNFParseResult {
 
 	private BNFToken top;
 	private BNFToken error;
 	private BNFToken maxToken;
 	private boolean success;
 
-	public BNFParserResultImpl() {		
+	public BNFParseResultImpl() {		
 	}
 
 	@Override

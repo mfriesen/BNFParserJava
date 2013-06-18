@@ -18,7 +18,7 @@ package ca.gobits.bnf.parser;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 
-public interface BNFParserResult {
+public interface BNFParseResult {
 
 	BNFToken getTop();
 	

@@ -19,7 +19,7 @@ import ca.gobits.bnf.parser.states.BNFState;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 
-public class BNFParserPath {
+public class BNFParsePath {
 
 	private int pathPosition;
 	private int pathCount;
@@ -27,10 +27,10 @@ public class BNFParserPath {
 	private BNFToken token;
 	private BNFState state;
 	
-	public BNFParserPath() {		
+	public BNFParsePath() {		
 	}
 	
-	public BNFParserPath(BNFState state, BNFToken token) {
+	public BNFParsePath(BNFState state, BNFToken token) {
 		this.state = state;
 		this.token = token;
 	}
