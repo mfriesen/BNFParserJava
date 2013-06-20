@@ -1,15 +1,14 @@
 package ca.gobits.bnf.parser;
 
 import ca.gobits.bnf.parser.states.BNFState;
-import ca.gobits.bnf.parser.states.BNFState.BNFRepetition;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFPathStateDefinition implements BNFPath {
 
 	private BNFStateDefinition stateDefinition;
-	private BNFRepetition repetition;
 	private BNFToken token;
 	private int position;
+	private boolean rewind;
 
 	public BNFPathStateDefinition() {
 		this.position = 0;
@@ -21,15 +20,6 @@ public class BNFPathStateDefinition implements BNFPath {
 
 	public void setStateDefinition(BNFStateDefinition stateDefinition) {
 		this.stateDefinition = stateDefinition;
-	}
-
-	@Override
-	public BNFRepetition getRepetition() {
-		return this.repetition;
-	}
-
-	public void setRepetition(BNFRepetition repetition) {
-		this.repetition = repetition;
 	}
 
 	@Override
@@ -48,7 +38,7 @@ public class BNFPathStateDefinition implements BNFPath {
 	
 	@Override
 	public String toString() {
-		return "state definition " + stateDefinition.getName() + " repetition " + repetition + " token " + token.getValue();
+		return "state definition " + stateDefinition.getName() + " token " + token.getValue();
 	}
 
 	@Override
@@ -78,5 +68,15 @@ public class BNFPathStateDefinition implements BNFPath {
 		}
 		
 		return state;
+	}
+	
+	@Override
+	public boolean isRewind() {
+		return this.rewind;
+	}
+
+	@Override
+	public void setRewind(boolean rewind) {
+		this.rewind = rewind;
 	}
 }

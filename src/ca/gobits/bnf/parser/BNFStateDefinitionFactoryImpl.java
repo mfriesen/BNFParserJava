@@ -69,11 +69,6 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 				return 0;
 			}
 		});
-		
-		System.out.println ("----------------------------------------------");
-		for (BNFState s : states) {
-			System.out.println (s.getClass().getName() + " NAME: " + s.getName());
-		}
 	}
 
 	private Properties jsonProperties() {

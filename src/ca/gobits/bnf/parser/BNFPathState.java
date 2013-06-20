@@ -16,22 +16,17 @@
 package ca.gobits.bnf.parser;
 
 import ca.gobits.bnf.parser.states.BNFState;
-import ca.gobits.bnf.parser.states.BNFState.BNFRepetition;
 import ca.gobits.bnf.parser.states.BNFStateEnd;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 
 public class BNFPathState implements BNFPath {
 
-	private int pathPosition;
-	private int pathCount;
-	
 	private BNFToken token;
 	private BNFState state;
-	private BNFRepetition repetition;
+	private boolean rewind;
 	
 	public BNFPathState() {
-		this.repetition = BNFRepetition.NONE;
 	}
 	
 	public BNFPathState(BNFState state, BNFToken token) {
@@ -42,7 +37,7 @@ public class BNFPathState implements BNFPath {
 	
 	@Override
 	public String toString() {
-		return state + " " + token + " position " + pathPosition + " count " + pathCount;
+		return state + " " + token;
 	}
 	
 	@Override
@@ -62,31 +57,6 @@ public class BNFPathState implements BNFPath {
 		this.state = state;
 	}
 
-	public int getPathPosition() {
-		return pathPosition;
-	}
-
-	public void setPathPosition(int pathPosition) {
-		this.pathPosition = pathPosition;
-	}
-
-	public int getPathCount() {
-		return pathCount;
-	}
-
-	public void setPathCount(int pathCount) {
-		this.pathCount = pathCount;
-	}
-	
-	@Override
-	public BNFRepetition getRepetition() {
-		return this.repetition;
-	}
-
-	public void setRepetition(BNFRepetition repetition) {
-		this.repetition = repetition;
-	}
-
 	@Override
 	public boolean isStateEnd() {
 		return getState().getClass().equals(BNFStateEnd.class);
@@ -100,5 +70,15 @@ public class BNFPathState implements BNFPath {
 	@Override
 	public BNFState getNextState() {
 		return state.getNextState();
+	}
+
+	@Override
+	public boolean isRewind() {
+		return this.rewind;
+	}
+
+	@Override
+	public void setRewind(boolean rewind) {
+		this.rewind = rewind;
 	}
 }

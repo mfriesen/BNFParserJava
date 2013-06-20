@@ -60,16 +60,8 @@ public class BNFState {
 	}
 	
 	public boolean match(BNFToken token) {
-		return nameMatches(token) /*|| repetition == Repetition.ZERO_OR_MORE*/;
-	}
-	
-	private boolean nameMatches(BNFToken token) {
 		return getName().equals(token.getValue());
 	} 
-	
-	public boolean matchAdvancedToNextToken(BNFToken token) {
-		return nameMatches(token);
-	}
 	
 	public boolean isEnd() {
 		return false;

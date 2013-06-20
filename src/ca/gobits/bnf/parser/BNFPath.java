@@ -1,7 +1,6 @@
 package ca.gobits.bnf.parser;
 
 import ca.gobits.bnf.parser.states.BNFState;
-import ca.gobits.bnf.parser.states.BNFState.BNFRepetition;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 public interface BNFPath {
@@ -10,11 +9,10 @@ public interface BNFPath {
 
 	BNFToken getToken();
 
-	BNFRepetition getRepetition();
-
 	boolean isStateDefinition();
 
+	boolean isRewind();
+	void setRewind(boolean rewind);
+	
 	BNFState getNextState();
-
-
 }

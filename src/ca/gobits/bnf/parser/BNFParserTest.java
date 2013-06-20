@@ -108,7 +108,23 @@ public class BNFParserTest {
 	}
 
 	@Test
-	public void testSimple() throws Exception {
+	public void testSimple01() throws Exception {
+		
+		// given
+		String json = "{\"id\": \"118019484951173_228591\",\"message\": \"test test\"}";
+		BNFToken token = tokenizerFactory.tokens(json);
+		
+		// when		
+		BNFParseResult result = parser.parse(token);
+		
+		// then
+		assertTrue(result.isSuccess());
+		assertNotNull(result.getTop());
+		assertNull(result.getError());
+	}
+
+	@Test
+	public void testSimple02() throws Exception {
 		
 		// given
 		String json = "{\"id\": \"118019484951173_228591\",\"message\": \"test test\",\"created_time\": \"2011-06-19T09:14:16+0000\"}";
@@ -123,7 +139,7 @@ public class BNFParserTest {
 		assertNotNull(result.getTop());
 		assertNull(result.getError());
 	}
-	
+
 	@Test
 	public void testNested() throws Exception {
 		

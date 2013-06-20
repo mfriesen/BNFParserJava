@@ -24,9 +24,4 @@ public class BNFStateQuotedString extends BNFStateTerminal {
 		String value = token.getValue();
 		return value.startsWith("\"") && value.endsWith("\"");
 	}
-	
-	@Override
-	public boolean matchAdvancedToNextToken(BNFToken token) {
-		return true;
-	}
 }

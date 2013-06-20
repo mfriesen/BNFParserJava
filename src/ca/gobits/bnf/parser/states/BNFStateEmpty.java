@@ -23,10 +23,4 @@ public class BNFStateEmpty extends BNFStateTerminal {
 	public boolean match(BNFToken token) {
 		return false;
 	}
-	
-	@Override
-	public boolean matchAdvancedToNextToken(BNFToken token) {
-//		return token != null && token.getValue().trim().length() == 0 ? true : false;
-		return false;
-	}
 }
