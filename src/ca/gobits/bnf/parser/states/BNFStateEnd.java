@@ -15,7 +15,7 @@
 
 package ca.gobits.bnf.parser.states;
 
-public class BNFStateEnd extends BNFState {
+public class BNFStateEnd extends BNFStateTerminal {
 
 	public BNFStateEnd() {
 		super("@end");

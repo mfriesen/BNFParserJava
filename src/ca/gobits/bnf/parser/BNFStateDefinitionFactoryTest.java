@@ -17,6 +17,7 @@ package ca.gobits.bnf.parser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -31,7 +32,7 @@ import ca.gobits.bnf.parser.states.BNFStateQuotedString;
 public class BNFStateDefinitionFactoryTest {
 
 	@Test
-	public void startJson() throws Exception {
+	public void testStartJson() throws Exception {
 		BNFStateDefinitionFactory f = new BNFStateDefinitionFactoryImpl();
 		Map<String, BNFStateDefinition> map = f.json();
 		
@@ -45,7 +46,7 @@ public class BNFStateDefinitionFactoryTest {
 	}
 
 	@Test
-	public void openCurly() throws Exception {
+	public void testOpenCurly() throws Exception {
 		BNFStateDefinitionFactoryImpl f = new BNFStateDefinitionFactoryImpl();
 		Map<String, BNFStateDefinition> map = f.json();
 		
@@ -55,10 +56,32 @@ public class BNFStateDefinitionFactoryTest {
 		Iterator<BNFState> itr = openCurly.getStates().iterator();
 		BNFState ss = itr.next();
 		assertEquals("{", ss.getName());
+		assertEquals(0, ss.getPosition());
+		assertTrue(ss.isTerminal());
 	}
 	
 	@Test
-	public void quotedString() throws Exception {
+	public void testObject() throws Exception {
+		BNFStateDefinitionFactoryImpl f = new BNFStateDefinitionFactoryImpl();
+		Map<String, BNFStateDefinition> map = f.json();
+		
+		BNFStateDefinition object = map.get("object");
+		assertNotNull(object);
+		assertEquals(1, object.getStates().size());
+		Iterator<BNFState> itr = object.getStates().iterator();
+		BNFState ss = itr.next();
+		assertEquals("openCurly", ss.getName());
+		assertEquals(0, ss.getPosition());
+		ss = ss.getNextState();
+		assertEquals("objectContent", ss.getName());
+		assertEquals(1, ss.getPosition());
+		ss = ss.getNextState();
+		assertEquals("closeCurly", ss.getName());
+		assertEquals(2, ss.getPosition());
+	}
+	
+	@Test
+	public void testQuotedString() throws Exception {
 		BNFStateDefinitionFactoryImpl f = new BNFStateDefinitionFactoryImpl();
 		Map<String, BNFStateDefinition> map = f.json();
 		

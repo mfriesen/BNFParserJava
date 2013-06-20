@@ -15,7 +15,7 @@
 
 package ca.gobits.bnf.parser;
 
-import java.util.Collection;
+import java.util.List;
 
 import ca.gobits.bnf.parser.states.BNFState;
 
@@ -23,12 +23,12 @@ import ca.gobits.bnf.parser.states.BNFState;
 public class BNFStateDefinition {
 
 	private String name;
-	private Collection<BNFState> states;
+	private List<BNFState> states;
 	
 	public BNFStateDefinition() {		
 	}
 	
-	public BNFStateDefinition(String name, Collection<BNFState> states) {
+	public BNFStateDefinition(String name, List<BNFState> states) {
 		this.name = name;
 		this.states = states;
 	}
@@ -41,11 +41,26 @@ public class BNFStateDefinition {
 		this.name = name;
 	}
 
-	public Collection<BNFState> getStates() {
+	public List<BNFState> getStates() {
 		return states;
 	}
 
-	public void setStates(Collection<BNFState> states) {
+	public void setStates(List<BNFState> states) {
 		this.states = states;
+	}
+	
+	public boolean hasSequences() {
+		return states.size() > 1;
+	}
+	
+	public BNFState getFirstState() {
+		
+		BNFState state = null;
+		
+		if (!states.isEmpty()) {
+			state = states.get(0);
+		}
+		
+		return state;
 	}
 }

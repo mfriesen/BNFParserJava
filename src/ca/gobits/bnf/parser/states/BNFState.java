@@ -19,14 +19,15 @@ import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFState {
 
-	public enum Repetition { NONE, ZERO_OR_MORE }
+	public enum BNFRepetition { NONE, ZERO_OR_MORE }
 		
 	private String name;
 	private BNFState nextState;
-	private Repetition repetition;
+	private BNFRepetition repetition;
+	private int position;
 	
 	public BNFState() {
-		this.repetition = Repetition.NONE;
+		this.repetition = BNFRepetition.NONE;
 	}
 
 	public BNFState(String name) {
@@ -42,11 +43,11 @@ public class BNFState {
 		this.name = name;
 	}
 
-	public Repetition getRepetition() {
+	public BNFRepetition getRepetition() {
 		return repetition;
 	}
 
-	public void setRepetition(Repetition repetition) {
+	public void setRepetition(BNFRepetition repetition) {
 		this.repetition = repetition;
 	}
 
@@ -59,7 +60,7 @@ public class BNFState {
 	}
 	
 	public boolean match(BNFToken token) {
-		return nameMatches(token) || repetition == Repetition.ZERO_OR_MORE;
+		return nameMatches(token) /*|| repetition == Repetition.ZERO_OR_MORE*/;
 	}
 	
 	private boolean nameMatches(BNFToken token) {
@@ -77,5 +78,17 @@ public class BNFState {
 	@Override
 	public String toString() {
 		return "state " + getName();
+	}
+
+	public int getPosition() {
+		return this.position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+	
+	public boolean isTerminal() {
+		return false;
 	}
 }

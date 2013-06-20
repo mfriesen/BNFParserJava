@@ -17,15 +17,16 @@ package ca.gobits.bnf.parser.states;
 
 import ca.gobits.bnf.tokenizer.BNFToken;
 
-public class BNFStateEmpty extends BNFState {
+public class BNFStateEmpty extends BNFStateTerminal {
 	
 	@Override
 	public boolean match(BNFToken token) {
-		return true;
+		return false;
 	}
 	
 	@Override
 	public boolean matchAdvancedToNextToken(BNFToken token) {
-		return token != null && token.getValue().trim().length() == 0 ? true : false;
+//		return token != null && token.getValue().trim().length() == 0 ? true : false;
+		return false;
 	}
 }

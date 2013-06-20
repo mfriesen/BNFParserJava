@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 import ca.gobits.bnf.tokenizer.BNFToken;
 
-public class BNFStateNumber extends BNFState {
+public class BNFStateNumber extends BNFStateTerminal {
 	
 	private Pattern p = Pattern.compile("^[\\d\\-\\.]+$");
 	

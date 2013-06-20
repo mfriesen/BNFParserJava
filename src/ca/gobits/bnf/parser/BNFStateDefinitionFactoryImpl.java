@@ -18,17 +18,20 @@ package ca.gobits.bnf.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import ca.gobits.bnf.parser.states.BNFState;
+import ca.gobits.bnf.parser.states.BNFState.BNFRepetition;
 import ca.gobits.bnf.parser.states.BNFStateEmpty;
 import ca.gobits.bnf.parser.states.BNFStateEnd;
 import ca.gobits.bnf.parser.states.BNFStateNumber;
 import ca.gobits.bnf.parser.states.BNFStateQuotedString;
-import ca.gobits.bnf.parser.states.BNFState.Repetition;
+import ca.gobits.bnf.parser.states.BNFStateTerminal;
 
 public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory {
 
@@ -45,7 +48,7 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 
 			String[] values = value.split("[|]");
 
-			Collection<BNFState> states = createStates(name, values);
+			List<BNFState> states = createStates(name, values);
 			
 			map.put(name, new BNFStateDefinition(name, states));
 		}
@@ -64,18 +67,22 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 		return p;
 	}
 	
-	private Collection<BNFState> createStates(String name, String[] states)
+	private List<BNFState> createStates(String name, String[] states)
 	{
-		Collection<BNFState> c = new ArrayList<BNFState>(states.length);
+		List<BNFState> c = new ArrayList<BNFState>(states.length);
 		
 		for (String s : states) {
-			
+
+			int pos = 0;
 			BNFState firstState = null;
 			BNFState previousState = null;
 			String[] split = s.trim().split(" ");
 
 			for (String ss : split) {
+
 				BNFState state = createState(ss);
+				state.setPosition(pos);
+				
 				if (firstState == null) {
 					firstState = state;
 				} 
@@ -85,6 +92,7 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 				}
 				
 				previousState = state;
+				pos++;
 			}
 
 			if (previousState != null && name.equals("@start")) {
@@ -94,29 +102,47 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 			c.add(firstState);
 		}		
 		
+		Collections.sort(c, new Comparator<BNFState>() {
+			@Override
+			public int compare(BNFState o1, BNFState o2) {
+				if (o1.getClass().equals(BNFStateEmpty.class)) {
+					return 1;
+				}
+				return 0;
+			}
+		});
+		
+		System.out.println ("----------------------------------------------");
+		for (BNFState s : c) {
+			System.out.println (s.getClass().getName() + " NAME: " + s.getName());
+		}
+		
 		return c;
 	}
 	
 	private BNFState createState(String ss) {
+		boolean isTerminal = isTerminal(ss);
 		String name = fixQuotedString(ss);
-		Repetition repetition = null;
+		BNFRepetition repetition = BNFRepetition.NONE;
 		
 		if (name.endsWith("*")) {
-			repetition = Repetition.ZERO_OR_MORE;
+			repetition = BNFRepetition.ZERO_OR_MORE;
 			name = name.substring(0, name.length() - 1);
 		}
 		
-		BNFState state = createStateInstance(name);
+		BNFState state = createStateInstance(name, isTerminal);
 		state.setName(name);
 		state.setRepetition(repetition);
 		
 		return state;
 	}
 
-	private BNFState createStateInstance(String ss) {
-		BNFState state;
+	private BNFState createStateInstance(String ss, boolean terminal) {
+		BNFState state = null;
 
-		if (ss.equals("Number")) {
+		if (terminal) {
+			state = new BNFStateTerminal();
+		} else if (ss.equals("Number")) {
 			state = new BNFStateNumber();
 		} else if (ss.equals("QuotedString")) {
 			state = new BNFStateQuotedString();
@@ -129,6 +155,10 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 		return state;
 	}
 
+	private boolean isTerminal(String ss) {
+		return ss.startsWith("'") || ss.startsWith("\"");
+	}
+	
 	private String fixQuotedString(String ss) {
 
 		int len = ss.length();

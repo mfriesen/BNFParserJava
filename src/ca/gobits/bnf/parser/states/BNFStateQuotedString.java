@@ -17,7 +17,7 @@ package ca.gobits.bnf.parser.states;
 
 import ca.gobits.bnf.tokenizer.BNFToken;
 
-public class BNFStateQuotedString extends BNFState {
+public class BNFStateQuotedString extends BNFStateTerminal {
 	
 	@Override
 	public boolean match(BNFToken token) {
