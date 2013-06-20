@@ -49,12 +49,32 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 			String[] values = value.split("[|]");
 
 			List<BNFState> states = createStates(name, values);
+			sort(states);
 			
 			map.put(name, new BNFStateDefinition(name, states));
 		}
 	
 		return map;
 	}	
+	
+	private void sort(List<BNFState> states) {
+		Collections.sort(states, new Comparator<BNFState>() {
+			@Override
+			public int compare(BNFState o1, BNFState o2) {
+				if (o1.getClass().equals(BNFStateEmpty.class)) {
+					return 1;
+				} else if (o2.getClass().equals(BNFStateEmpty.class)) {
+					return -1;
+				}
+				return 0;
+			}
+		});
+		
+		System.out.println ("----------------------------------------------");
+		for (BNFState s : states) {
+			System.out.println (s.getClass().getName() + " NAME: " + s.getName());
+		}
+	}
 
 	private Properties jsonProperties() {
 		InputStream in = getClass().getResourceAsStream("/ca/gobits/bnf/parser/json.bnf");
@@ -100,21 +120,6 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 			}
 			
 			c.add(firstState);
-		}		
-		
-		Collections.sort(c, new Comparator<BNFState>() {
-			@Override
-			public int compare(BNFState o1, BNFState o2) {
-				if (o1.getClass().equals(BNFStateEmpty.class)) {
-					return 1;
-				}
-				return 0;
-			}
-		});
-		
-		System.out.println ("----------------------------------------------");
-		for (BNFState s : c) {
-			System.out.println (s.getClass().getName() + " NAME: " + s.getName());
 		}
 		
 		return c;

@@ -43,7 +43,8 @@ public class BNFParserImpl implements BNFParser {
 				}
 			} else if (sp.isStateDefinition()) {
 				
-				if (!parseStateDefinition(sp.getToken())) {
+				boolean added = parseStateDefinition(sp.getToken());
+				if (!added) {
 					result.setSuccess(false);
 					break;
 				}

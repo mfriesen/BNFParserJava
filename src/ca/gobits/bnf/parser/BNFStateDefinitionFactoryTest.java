@@ -39,6 +39,9 @@ public class BNFStateDefinitionFactoryTest {
 		BNFStateDefinition start = map.get("@start");
 		assertNotNull(start);
 		assertEquals(3, start.getStates().size());
+		assertEquals("array", start.getStates().get(0).getName());
+		assertEquals("object", start.getStates().get(1).getName());
+		assertEquals("Empty", start.getStates().get(2).getName());
 		for (BNFState ss : start.getStates()) {
 			assertEquals("@end", ss.getNextState().getName());
 			assertEquals(BNFStateEnd.class, ss.getNextState().getClass());
