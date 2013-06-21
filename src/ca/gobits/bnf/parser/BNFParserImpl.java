@@ -1,17 +1,15 @@
 package ca.gobits.bnf.parser;
 
 import java.util.Map;
-import java.util.Stack;
 
 import ca.gobits.bnf.parser.states.BNFState;
 import ca.gobits.bnf.parser.states.BNFStateEmpty;
-import ca.gobits.bnf.parser.states.BNFState.BNFRepetition;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFParserImpl implements BNFParser {
 
 	private Map<String, BNFStateDefinition> stateDefinitions;
-	private Stack<BNFPath> stack = new Stack<BNFPath>();
+	private BNFStack stack = new BNFStack();
 	
 	public BNFParserImpl(Map<String, BNFStateDefinition> stateDefinitions) {
 		this.stateDefinitions = stateDefinitions; 
@@ -120,7 +118,7 @@ public class BNFParserImpl implements BNFParser {
 			
 		} else if (state.getClass().equals(BNFStateEmpty.class)) {
 			
-			BNFState rewindState = rewindStackToNextStateOrStateDefinitionWithNextSequence();
+			BNFState rewindState = stack.rewindStackEmptyState();
 			pushToStack(rewindState, token);
 			
 		} else if (state.match(token)) {
@@ -130,180 +128,13 @@ public class BNFParserImpl implements BNFParser {
 			token = token.getNextToken();
 			result.setMaxMatchToken(token);
 			
-			BNFState rewindState = rewindStackToNextStateOrRepetition();
-			
-			if (rewindState.getRepetition() != BNFRepetition.NONE) {
-				//!!!
-				rewindStackToStateAboveStateDefinition();
-				
-				BNFStateDefinition sd = stateDefinitions.get(rewindState.getName());
-				BNFPathStateDefinition path = pushToStack(token, sd);
-				path.setRewind(true);
-				
-			} else {				
-				pushToStack(rewindState, token);
-			}
+			BNFState rewindState = stack.rewindStackMatchedToken();
+			pushToStack(rewindState, token);
 							
 		} else {
 			
-			rewindStackToNextStateDefinition();
-			
-			if (stack.peek().isRewind()) {
-				BNFState rewindState = rewindStackToNextStateOrRepetition();
-				pushToStack(rewindState, token);
-			}
+			BNFState nextState = stack.rewindStackUnmatchedToken();
+			pushToStack(nextState, token);
 		}		
-	}
-
-	private void rewindStackToStateAboveStateDefinition() {
-
-		while (!stack.isEmpty()) {
-			
-			BNFPath sp = stack.pop();
-			System.out.println ("REWIND6 " + sp.toString());
-			if (sp.isStateDefinition()) {
-				break;
-			}
-		}		
-	}
-
-	private void rewindStackToNextStateDefinition() {
-		while (!stack.isEmpty()) {
-			BNFPath sp = stack.peek();
-			
-			if (!sp.isStateDefinition()) {
-				sp = stack.pop();
-				System.out.println ("REWIND1 " + sp);
-			} else {
-				break;
-			}
-		}
-	}
-
-//	private void rewindStackToNextRepetition(BNFRepetition repetition) {
-//		
-//		while (!stack.isEmpty()) {
-//			
-//			BNFPath sp = stack.peek();
-//			
-//			if (repetition == sp.getRepetition()) {
-//				stack.pop();
-//				System.out.println ("REWIND3 " + sp.toString());
-//			} else {
-//				break;
-//			}			
-//		}
-//	}
-	
-	private BNFState rewindStackToNextStateOrRepetition() {
-		
-		BNFState nextState = null;
-		
-		while (!stack.isEmpty()) {
-			
-			BNFPath sp = stack.peek();	
-			
-			if (!sp.isStateDefinition()) {
-				
-				BNFPathState bps = (BNFPathState) stack.pop();
-				BNFState state = bps.getState();
-				nextState = state.getNextState();			
-			
-				System.out.println ("REWIND2 " + state.getName());
-				if (nextState != null) {
-					break;
-				}
-				
-//				if (state.getRepetition() != BNFRepetition.NONE) {
-//					nextState = state;
-//					break;
-//				}
-				
-			} else {
-				System.out.println ("REWIND2 " + sp.toString());
-				stack.pop();
-			}
-		}
-		
-		return nextState;
-	}
-	
-//	@Deprecated
-//	private BNFState rewindStackToNextStateOrStateDefinition() {
-//		
-//		BNFState nextState = null;
-//		
-//		while (!stack.isEmpty()) {
-//			
-//			BNFPath sp = stack.peek();
-//			
-//			if (!sp.isStateDefinition()) {
-//				
-//				BNFPathState bps = (BNFPathState) stack.pop();
-//				nextState = bps.getState().getNextState();			
-//			
-//				System.out.println ("REWIND2 " + bps.getState().getName());
-//				if (nextState != null) {
-//					break;
-//				}
-//			} else {
-//				break;
-//			}
-//		}
-//		
-//		return nextState;
-//	}
-
-	private BNFState rewindStackToNextStateOrStateDefinitionWithNextSequence() {
-		
-		BNFState nextState = null;
-		
-		while (!stack.isEmpty()) {
-			
-			BNFPath sp = stack.peek();
-			
-			if (sp.isStateDefinition()) {
-				
-				BNFPathStateDefinition sd = (BNFPathStateDefinition) stack.pop();
-				System.out.println ("NEXT SEQ " + sd.toString());
-//				nextState = sd.getNextSequence();
-				nextState = sd.getNextState();
-				
-			} else {
-				
-				BNFPathState bps = (BNFPathState) stack.pop();
-				nextState = bps.getState().getNextState();			
-			
-				System.out.println ("REWIND4 " + bps.getState().getName());
-			}
-			
-			if (nextState != null) {
-				break;
-			}
-
-//			nextState = sp.getNextState();
-//			
-//			if (nextState == null) {
-//				sp = stack.pop();
-//				System.out.println ("REWIND2 " + sp.toString());
-//			} else {
-//				break;
-//			}
-			
-//			if (!sp.isStateDefinition()) {
-//				
-//				BNFPathState bps = (BNFPathState) stack.pop();
-//				nextState = bps.getState().getNextState();			
-//			
-//				System.out.println ("REWIND2 " + bps.getState().getName());
-//				if (nextState != null) {
-//					break;
-//				}
-//			} else {
-//				break;
-//			}
-		}
-		
-		return nextState;
 	}
 }

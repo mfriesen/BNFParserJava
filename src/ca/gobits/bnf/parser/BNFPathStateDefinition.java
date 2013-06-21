@@ -8,7 +8,6 @@ public class BNFPathStateDefinition implements BNFPath {
 	private BNFStateDefinition stateDefinition;
 	private BNFToken token;
 	private int position;
-	private boolean rewind;
 
 	public BNFPathStateDefinition() {
 		this.position = 0;
@@ -68,15 +67,5 @@ public class BNFPathStateDefinition implements BNFPath {
 		}
 		
 		return state;
-	}
-	
-	@Override
-	public boolean isRewind() {
-		return this.rewind;
-	}
-
-	@Override
-	public void setRewind(boolean rewind) {
-		this.rewind = rewind;
-	}
+	}	
 }

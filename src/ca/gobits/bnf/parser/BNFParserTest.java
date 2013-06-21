@@ -134,24 +134,43 @@ public class BNFParserTest {
 		BNFParseResult result = parser.parse(token);
 		
 		// then
-		System.out.println ("ERROR: " + result.getError().getValue());
 		assertTrue(result.isSuccess());
 		assertNotNull(result.getTop());
 		assertNull(result.getError());
 	}
 
 	@Test
-	public void testNested() throws Exception {
+	public void testNested() throws Exception {		
+		// given
+		String json = "{\"card\":\"2\",\"numbers\":{\"Conway\":[1,11,21,1211,111221,312211],\"Fibonacci\":[0,1,1,2,3,5,8,13,21,34]}}";
+		BNFToken token = tokenizerFactory.tokens(json);
 		
+		// when		
+		BNFParseResult result = parser.parse(token);
+		
+		// then
+		assertTrue(result.isSuccess());
+		assertNotNull(result.getTop());
+		assertNull(result.getError());
 	}
 	
 	@Test
-	public void testSimpleArray() throws Exception {
+	public void testArray() throws Exception {
+		// given
+		String json = "[1,11,21,1211,111221,312211]";
+		BNFToken token = tokenizerFactory.tokens(json);
 		
+		// when		
+		BNFParseResult result = parser.parse(token);
+		
+		// then
+		assertTrue(result.isSuccess());
+		assertNotNull(result.getTop());
+		assertNull(result.getError());
 	}
 	
 	@Test
-	public void testBadSimple01() throws Exception {
+	public void testBadSimple00() throws Exception {
 		// given
 		String json = "asdasd";
 		BNFToken token = tokenizerFactory.tokens(json);
@@ -167,7 +186,7 @@ public class BNFParserTest {
 	}
 	
 	@Test
-	public void testBadSimple02() throws Exception {
+	public void testBadSimple01() throws Exception {
 		// given
 		String json = "{ asdasd";
 		BNFToken token = tokenizerFactory.tokens(json);
@@ -181,5 +200,22 @@ public class BNFParserTest {
 		assertNotNull(result.getError());
 		assertEquals(2, result.getError().getId());
 		assertEquals("asdasd", result.getError().getValue());
+	}
+	
+	@Test
+	public void testBadSimple02() throws Exception {
+		
+		// given
+		String json = "{\"id\": \"118019484951173_228591\",\"message\": \"test test\",\"created_time\"! \"2011-06-19T09:14:16+0000\"}";
+		BNFToken token = tokenizerFactory.tokens(json);
+		
+		// when		
+		BNFParseResult result = parser.parse(token);
+		
+		// then
+		assertFalse(result.isSuccess());
+		assertNotNull(result.getTop());
+		assertNotNull(result.getError());
+		assertEquals("!", result.getError().getValue());
 	}
 }

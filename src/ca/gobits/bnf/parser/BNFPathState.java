@@ -24,7 +24,6 @@ public class BNFPathState implements BNFPath {
 
 	private BNFToken token;
 	private BNFState state;
-	private boolean rewind;
 	
 	public BNFPathState() {
 	}
@@ -70,15 +69,5 @@ public class BNFPathState implements BNFPath {
 	@Override
 	public BNFState getNextState() {
 		return state.getNextState();
-	}
-
-	@Override
-	public boolean isRewind() {
-		return this.rewind;
-	}
-
-	@Override
-	public void setRewind(boolean rewind) {
-		this.rewind = rewind;
 	}
 }

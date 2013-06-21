@@ -10,9 +10,6 @@ public interface BNFPath {
 	BNFToken getToken();
 
 	boolean isStateDefinition();
-
-	boolean isRewind();
-	void setRewind(boolean rewind);
 	
 	BNFState getNextState();
 }
