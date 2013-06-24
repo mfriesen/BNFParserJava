@@ -88,7 +88,6 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 		
 		for (String s : states) {
 
-			int pos = 0;
 			BNFState firstState = null;
 			BNFState previousState = null;
 			String[] split = s.trim().split(" ");
@@ -96,7 +95,6 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 			for (String ss : split) {
 
 				BNFState state = createState(ss);
-				state.setPosition(pos);
 				
 				if (firstState == null) {
 					firstState = state;
@@ -107,7 +105,6 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 				}
 				
 				previousState = state;
-				pos++;
 			}
 
 			if (previousState != null && name.equals("@start")) {

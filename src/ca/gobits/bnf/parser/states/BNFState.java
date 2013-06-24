@@ -24,7 +24,6 @@ public class BNFState {
 	private String name;
 	private BNFState nextState;
 	private BNFRepetition repetition;
-	private int position;
 	
 	public BNFState() {
 		this.repetition = BNFRepetition.NONE;
@@ -70,14 +69,6 @@ public class BNFState {
 	@Override
 	public String toString() {
 		return "state " + getName();
-	}
-
-	public int getPosition() {
-		return this.position;
-	}
-
-	public void setPosition(int position) {
-		this.position = position;
 	}
 	
 	public boolean isTerminal() {

@@ -59,7 +59,6 @@ public class BNFStateDefinitionFactoryTest {
 		Iterator<BNFState> itr = openCurly.getStates().iterator();
 		BNFState ss = itr.next();
 		assertEquals("{", ss.getName());
-		assertEquals(0, ss.getPosition());
 		assertTrue(ss.isTerminal());
 	}
 	
@@ -74,13 +73,10 @@ public class BNFStateDefinitionFactoryTest {
 		Iterator<BNFState> itr = object.getStates().iterator();
 		BNFState ss = itr.next();
 		assertEquals("openCurly", ss.getName());
-		assertEquals(0, ss.getPosition());
 		ss = ss.getNextState();
 		assertEquals("objectContent", ss.getName());
-		assertEquals(1, ss.getPosition());
 		ss = ss.getNextState();
 		assertEquals("closeCurly", ss.getName());
-		assertEquals(2, ss.getPosition());
 	}
 	
 	@Test
