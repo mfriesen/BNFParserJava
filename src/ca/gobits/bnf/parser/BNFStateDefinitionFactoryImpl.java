@@ -80,17 +80,6 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 		}
 	}
 	
-//	private Properties jsonProperties() {
-//		InputStream in = getClass().getResourceAsStream("/ca/gobits/bnf/parser/json.bnf");
-//		Properties p = new Properties();
-//		try {
-//			p.load(in);
-//		} catch (IOException e) {
-//			throw new RuntimeException(e);
-//		}
-//		return p;
-//	}
-	
 	private List<BNFState> createStates(String name, String[] states)
 	{
 		List<BNFState> c = new ArrayList<BNFState>(states.length);
