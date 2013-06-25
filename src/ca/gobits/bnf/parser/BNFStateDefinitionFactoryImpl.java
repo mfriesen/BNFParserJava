@@ -15,7 +15,6 @@
 
 package ca.gobits.bnf.parser;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +22,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import ca.gobits.bnf.parser.states.BNFState;
 import ca.gobits.bnf.parser.states.BNFState.BNFRepetition;
@@ -40,8 +38,9 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 		
 		Map<String, BNFStateDefinition> map = new HashMap<String, BNFStateDefinition>();
 		
-		Properties prop = jsonProperties();
-		for (Map.Entry<Object, Object> e : prop.entrySet()) {
+		Map<String, String> prop = loadProperties();
+
+		for (Map.Entry<String, String> e : prop.entrySet()) {
 			String name = e.getKey().toString();
 			
 			String value = e.getValue().toString();
@@ -56,7 +55,7 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 	
 		return map;
 	}	
-	
+
 	private void sort(List<BNFState> states) {
 		Collections.sort(states, new Comparator<BNFState>() {
 			@Override
@@ -71,16 +70,26 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 		});
 	}
 
-	private Properties jsonProperties() {
-		InputStream in = getClass().getResourceAsStream("/ca/gobits/bnf/parser/json.bnf");
-		Properties p = new Properties();
+	private Map<String, String> loadProperties() {
+		PropertyParser parser = new PropertyParser();
+		InputStream is = getClass().getResourceAsStream("/ca/gobits/bnf/parser/json.bnf");
 		try {
-			p.load(in);
-		} catch (IOException e) {
+			return parser.parse(is);
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		return p;
 	}
+	
+//	private Properties jsonProperties() {
+//		InputStream in = getClass().getResourceAsStream("/ca/gobits/bnf/parser/json.bnf");
+//		Properties p = new Properties();
+//		try {
+//			p.load(in);
+//		} catch (IOException e) {
+//			throw new RuntimeException(e);
+//		}
+//		return p;
+//	}
 	
 	private List<BNFState> createStates(String name, String[] states)
 	{

@@ -23,7 +23,7 @@ public class BNFToken {
 		NUMBER, 
 		WORD, 
 		SYMBOL, 
-		WHITESPACE
+		WHITESPACE, WHITESPACE_NEWLINE
 	}
 	
 	private int id;

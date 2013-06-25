@@ -27,11 +27,16 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 		NUMBER, 
 		LETTER, 
 		SYMBOL, SYMBOL_HASH, SYMBOL_AT, SYMBOL_STAR, SYMBOL_SLASH_FORWARD, 
-		WHITESPACE, WHITESPACE_OTHER
+		WHITESPACE, WHITESPACE_OTHER, WHITESPACE_NEWLINE
 	}
 	
 	@Override
 	public BNFToken tokens(String text) {
+		return tokens(text, new BNFTokenizerParams());
+	}
+	
+	@Override
+	public BNFToken tokens(String text, BNFTokenizerParams params) {
 
 		Stack<BNFToken> stack = new Stack<BNFToken>();
 		BNFFastForward ff = new BNFFastForward();
@@ -65,7 +70,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 					
 					ff.appendIfActive(c);
 				
-				} else if (!isWhitespace(type)) {
+				} else if (includeText(type, params)) {
 						
 					if (isAppendable(lastType, type)) {
 						
@@ -83,6 +88,13 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 		return !stack.isEmpty() ? stack.firstElement() : new BNFToken("");
 	}
 
+	private boolean includeText(BNFTokenizerType type, BNFTokenizerParams params) {
+		return (params.isIncludeWhitespace() && type == BNFTokenizerType.WHITESPACE) 
+				|| (params.isIncludeWhitespaceOther() && type == BNFTokenizerType.WHITESPACE_OTHER)
+				|| (params.isIncludeWhitespaceNewlines() && type == BNFTokenizerType.WHITESPACE_NEWLINE)
+				|| !isWhitespace(type);
+	}
+	
 	private void calculateFastForward(BNFFastForward ff, BNFTokenizerType type, Stack<BNFToken> stack, BNFTokenizerType lastType) {
 		
 		BNFToken last = !stack.isEmpty() ? stack.peek() : null;
@@ -92,7 +104,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 		if (lastType == BNFTokenizerType.SYMBOL_SLASH_FORWARD && type == BNFTokenizerType.SYMBOL_SLASH_FORWARD) { 
 			
 			ff.setStart(BNFTokenizerType.COMMENT_SINGLE_LINE);
-			ff.setEnd(new BNFTokenizerType[] { BNFTokenizerType.WHITESPACE_OTHER });
+			ff.setEnd(new BNFTokenizerType[] { BNFTokenizerType.WHITESPACE_NEWLINE });
 			
 			BNFToken token = stack.pop();
 			ff.appendIfActive(token.getValue());
@@ -175,6 +187,8 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 			token.setType(BNFTokenType.WORD);
 		} else if (isSymbol(type)) {
 			token.setType(BNFTokenType.SYMBOL);
+		} else if (type == BNFTokenizerType.WHITESPACE_NEWLINE) { 
+			token.setType(BNFTokenType.WHITESPACE_NEWLINE);			
 		} else if (isWhitespace(type)) {
 			token.setType(BNFTokenType.WHITESPACE);
 		} else if (isQuote(type)) {
@@ -197,7 +211,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 	}
 	
 	private boolean isWhitespace(BNFTokenizerType type) {
-		return type == BNFTokenizerType.WHITESPACE || type == BNFTokenizerType.WHITESPACE_OTHER;
+		return type == BNFTokenizerType.WHITESPACE || type == BNFTokenizerType.WHITESPACE_OTHER || type == BNFTokenizerType.WHITESPACE_NEWLINE;
 	}
 	
 	private boolean isComment(BNFTokenizerType type) {
@@ -214,7 +228,9 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 	}
 	
 	private BNFTokenizerType getType(int c) {
-		 if (c >= 0 && c <= 31) { // From: 0 to: 31 From:0x00 to:0x20
+		if (c == 10 || c == 13) {
+			return BNFTokenizerType.WHITESPACE_NEWLINE;
+		} else if (c >= 0 && c <= 31) { // From: 0 to: 31 From:0x00 to:0x20
 	        return BNFTokenizerType.WHITESPACE_OTHER;
 	 	} else if (c == 32) {
 	 		return BNFTokenizerType.WHITESPACE;
