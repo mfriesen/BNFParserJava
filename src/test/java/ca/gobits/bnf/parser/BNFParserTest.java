@@ -41,7 +41,6 @@ public class BNFParserTest {
 	public void before() throws Exception {
 		map = sdf.json();
 		parser = new BNFParserImpl(map);
-		System.out.println ("KEYLS : " + map.keySet());
 	}
 	
 	@Test
