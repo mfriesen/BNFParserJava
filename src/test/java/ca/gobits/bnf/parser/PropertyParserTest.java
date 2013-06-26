@@ -14,7 +14,7 @@ public class PropertyParserTest {
 	@Test
 	public void testJson() throws Exception {
 		// given
-		InputStream is = getClass().getResourceAsStream("/ca/gobits/bnf/parser/json.bnf");
+		InputStream is = getClass().getResourceAsStream("/json.bnf");
 
 		// when
 		Map<String, String> map = parser.parse(is);

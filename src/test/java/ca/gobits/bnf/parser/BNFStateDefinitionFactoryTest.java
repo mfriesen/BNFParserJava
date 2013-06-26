@@ -90,4 +90,34 @@ public class BNFStateDefinitionFactoryTest {
 		BNFState ss = string.getStates().iterator().next();
 		assertEquals(BNFStateQuotedString.class, ss.getClass());
 	}
+	
+	public void testKeys() {
+		
+		BNFStateDefinitionFactoryImpl f = new BNFStateDefinitionFactoryImpl();
+		Map<String, BNFStateDefinition> map = f.json();
+		assertTrue(map.containsKey("@start"));
+		
+		assertTrue(map.containsKey("object"));
+		assertTrue(map.containsKey("objectContent"));
+		assertTrue(map.containsKey("actualObject"));
+		assertTrue(map.containsKey("property"));
+		assertTrue(map.containsKey("commaProperty"));
+		assertTrue(map.containsKey("propertyName"));
+		assertTrue(map.containsKey("arrayContent"));
+		assertTrue(map.containsKey("actualArray"));
+		assertTrue(map.containsKey("commaValue"));
+		assertTrue(map.containsKey("value"));
+		assertTrue(map.containsKey("string"));
+		assertTrue(map.containsKey("number"));
+		assertTrue(map.containsKey("null"));
+		assertTrue(map.containsKey("true"));
+		assertTrue(map.containsKey("false"));
+
+		assertTrue(map.containsKey("openCurly"));
+		assertTrue(map.containsKey("closeCurly"));
+		assertTrue(map.containsKey("openBracket"));
+		assertTrue(map.containsKey("closeBracket"));
+		assertTrue(map.containsKey("comma"));
+		assertTrue(map.containsKey("colon"));
+	}
 }

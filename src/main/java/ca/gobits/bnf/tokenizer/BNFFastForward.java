@@ -58,23 +58,12 @@ public class BNFFastForward {
 
 		boolean match = false;
 		
-		BNFTokenizerType[] tmpType = new BNFTokenizerType[end.length];
-		tmpType[0] = type;
-		for (int i = 1; i < end.length; i++) {
-			tmpType[i] = lastType;
+		if (end.length == 1) {
+			match = type == end[0];
+		} else if (end.length == 2) {
+			match = type == end[0] && lastType == end[1];
 		}
-		
-		if (tmpType.length == end.length) {
-			
-			match = true;
-			for (int i = 0 ; i < tmpType.length; i++) {
-				if (tmpType[i] != end[i]) {
-					match = false;
-					break;
-				}
-			}
-		}
-		
+
 		return match;
 	}
 

@@ -235,7 +235,7 @@ public class BNFTokenizerFactoryTest {
 	public void testJsonGrammar() throws Exception {
 		
 		// given
-		InputStream in = getClass().getResourceAsStream("/ca/gobits/bnf/parser/json.bnf");
+		InputStream in = getClass().getResourceAsStream("/json.bnf");
 		String s = IOUtils.toString(in, "UTF-8");
 		
 		// when

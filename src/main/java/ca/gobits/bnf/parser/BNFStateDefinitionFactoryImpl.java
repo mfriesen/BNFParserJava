@@ -72,7 +72,7 @@ public class BNFStateDefinitionFactoryImpl implements BNFStateDefinitionFactory 
 
 	private Map<String, String> loadProperties() {
 		PropertyParser parser = new PropertyParser();
-		InputStream is = getClass().getResourceAsStream("/ca/gobits/bnf/parser/json.bnf");
+		InputStream is = getClass().getResourceAsStream("/json.bnf");
 		try {
 			return parser.parse(is);
 		} catch (Exception e) {

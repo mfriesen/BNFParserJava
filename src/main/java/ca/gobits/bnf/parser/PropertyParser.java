@@ -33,8 +33,8 @@ public class PropertyParser {
 		String start = "";
 		StringBuilder sb = new StringBuilder();
 		
-		while (token.getNextToken() != null) {
-			
+		while (token != null) {
+		
 			if (token.getType() == BNFTokenType.WHITESPACE_NEWLINE) {
 				
 				if (hasText(start) && hasText(sb.toString())) {
@@ -42,12 +42,12 @@ public class PropertyParser {
 				}
 				
 				start = "";
-				sb.delete(0, sb.length());
+				sb = new StringBuilder();
 				
 			} else if (token.getValue().equals("=")) {
 				
 				start = sb.toString();
-				sb.delete(0, sb.length());
+				sb = new StringBuilder();
 				
 			} else {
 				
@@ -55,6 +55,10 @@ public class PropertyParser {
 			}
 			
 			token = token.getNextToken();
+		}
+		
+		if (hasText(start) && hasText(sb.toString())) {
+			map.put(start.trim(), sb.toString().trim());
 		}
 		
 		return map;
