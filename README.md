@@ -7,7 +7,9 @@ BNFParserJava was inspired by the framework [ParseKit](http://parsekit.com/) by 
 The BNFParserJava Framework offers 3 basic services of general interest to developers:
 
 1. String Tokenization via the BNFTokenizerFactory and BNFToken classes
+
 2. Property Key/Value mapper via PropertyParser
+
 3. Text Parsing via Grammars via BNFParser [see grammar syntax](http://parsekit.com/grammars.html)
 
 ### PropertyParser
@@ -23,8 +25,11 @@ returns a key/value mapping where "sample key" is the key and "sample value" is 
 Usage
 -----
 String text = "sample key = sample value";
+
 PropertyParser parser = new PropertyParser();
+
 Map<String, String> keyValueMap = parser.parse(text);
+
 Assert.assertNotNull(keyValueMap.get("sample key"));
 
 ### Text Parsing via Gramars
@@ -35,19 +40,28 @@ Example Valid JSON
 -------------------
 
 // Create String Tokens
+
 String text = "{ \"key\":\"value\"}";
+
 BNFTokenizerFactory tokenizerFactory = new BNFTokenizerFactoryImpl();
+
 BNFToken token = tokenizerFactory.tokens(text);
 
 // Create Backus-Naur Form State Definitions
+
 BNFStateDefinitionFactoryImpl sdf = new BNFStateDefinitionFactoryImpl();
+
 Map<String, BNFStateDefinition> map = sdf.json();
 
 // Run Tokens through Parser
+
 BNFParser parser = new BNFParserImpl(map);
+
 BNFParseResult result = parser.parse(token);
 
 // Verify results
 Assert.assertTrue(result.isSuccess()); // verify text passes grammar
+
 Assert.assertNotNull(result.getTop()); // the "first" token, same as the token returned from the tokenizer factory
+
 Assert.assertNull(result.getError());  // the "first" error token, this token and any afterwards are considered to not have passed the grammar
