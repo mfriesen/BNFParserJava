@@ -46,13 +46,11 @@ public class BNFStack extends ArrayDeque<BNFPath> {
 					nextState = state;
 				}
 				
-				System.out.println ("REWIND2 " + state.getName());
 				if (nextState != null) {
 					break;
 				}
 								
 			} else {
-				System.out.println ("REWIND2 " + sp.toString());
 				pop();
 			}
 		}
@@ -83,7 +81,6 @@ public class BNFStack extends ArrayDeque<BNFPath> {
 				}
 				
 				sp = pop();
-				System.out.println ("REWIND1 " + sp);
 				
 				if (foundRepetition && state.getNextState() != null) {
 					nextState = state.getNextState();
@@ -94,7 +91,6 @@ public class BNFStack extends ArrayDeque<BNFPath> {
 				
 				if (foundRepetition) {
 				    sp = pop();
-				    System.out.println ("REWIND1 " + sp);
 				} else {			
 					break;
 				}
@@ -115,15 +111,12 @@ public class BNFStack extends ArrayDeque<BNFPath> {
 			if (sp.isStateDefinition()) {
 				
 				BNFPathStateDefinition sd = (BNFPathStateDefinition) pop();
-				System.out.println ("NEXT SEQ " + sd.toString());
 				nextState = sd.getNextState();
 				
 			} else {
 				
 				BNFPathState bps = (BNFPathState) pop();
-				nextState = bps.getState().getNextState();			
-			
-				System.out.println ("REWIND4 " + bps.getState().getName());
+				nextState = bps.getState().getNextState();						
 			}
 			
 			if (nextState != null) {

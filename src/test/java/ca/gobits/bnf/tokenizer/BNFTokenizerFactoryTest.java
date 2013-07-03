@@ -232,6 +232,30 @@ public class BNFTokenizerFactoryTest {
 	}
 	
 	@Test
+	public void testAHrefLink() {
+		// given
+		String s = "{\"notes\":\"Different browsers have support for different video formats, see sub-features for details. \\r\\n\\r\\nThe Android browser (before 2.3) requires <a href=\\\"http://www.broken-links.com/2010/07/08/making-html5-video-work-on-android-phones/\\\">specific handling</a> to run the video element.\"}";
+		
+		// when
+		BNFToken token = factory.tokens(s);
+
+		assertEquals("{", token.getValue());
+		token = token.getNextToken();
+
+		assertEquals("\"notes\"", token.getValue());
+		token = token.getNextToken();
+
+		assertEquals(":", token.getValue());
+		token = token.getNextToken();
+		
+		assertEquals("\"Different browsers have support for different video formats, see sub-features for details. \\r\\n\\r\\nThe Android browser (before 2.3) requires <a href=\\\"http://www.broken-links.com/2010/07/08/making-html5-video-work-on-android-phones/\\\">specific handling</a> to run the video element.\"", token.getValue());
+		token = token.getNextToken();
+		
+		assertEquals("}", token.getValue());
+		token = token.getNextToken();
+	}
+	
+	@Test
 	public void testJsonGrammar() throws Exception {
 		
 		// given

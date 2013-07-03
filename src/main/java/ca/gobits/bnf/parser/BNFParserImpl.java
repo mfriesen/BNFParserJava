@@ -91,7 +91,6 @@ public class BNFParserImpl implements BNFParser {
 	private void pushToStack(BNFState state, BNFToken token) {
 		
 		if (state != null) {
-			System.out.println ("ADDING NEXT STATE " + state.getName() + " setting token " + token);
 			BNFPathState path = new BNFPathState(state, token);
 			stack.push(path);
 		}
@@ -135,8 +134,6 @@ public class BNFParserImpl implements BNFParser {
 			pushToStack(rewindState, token);
 			
 		} else if (state.match(token)) {
-
-			System.out.println ("FOUND MATCH " + state.getName() + " " + token.getValue());
 
 			token = token.getNextToken();
 			result.setMaxMatchToken(token);

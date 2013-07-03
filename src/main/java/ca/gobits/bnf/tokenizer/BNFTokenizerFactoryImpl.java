@@ -23,11 +23,12 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 	public enum BNFTokenizerType {
 		NONE, 
 		COMMENT_SINGLE_LINE, COMMENT_MULTI_LINE, 
-		QUOTE_SINGLE, QUOTE_DOUBLE,
+		QUOTE_SINGLE, QUOTE_SINGLE_ESCAPED, 
+		QUOTE_DOUBLE, QUOTE_DOUBLE_ESCAPED,
 		NUMBER, 
 		LETTER, 
 		SYMBOL, 
-		SYMBOL_HASH, SYMBOL_AT, SYMBOL_STAR, SYMBOL_SLASH_FORWARD, 
+		SYMBOL_HASH, SYMBOL_AT, SYMBOL_STAR, SYMBOL_FORWARD_SLASH, SYMBOL_BACKWARD_SLASH, 
 		WHITESPACE, WHITESPACE_OTHER, WHITESPACE_NEWLINE
 	}
 	
@@ -49,7 +50,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 		for (int i = 0; i < len; i++) {
 			
 			char c = text.charAt(i);
-			BNFTokenizerType type = getType(c);
+			BNFTokenizerType type = getType(c, lastType);
 
 			if (ff.isActive()) {
 								
@@ -102,7 +103,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 		ff.setStart(BNFTokenizerType.NONE);
 
 		// single line comment
-		if (lastType == BNFTokenizerType.SYMBOL_SLASH_FORWARD && type == BNFTokenizerType.SYMBOL_SLASH_FORWARD) { 
+		if (lastType == BNFTokenizerType.SYMBOL_FORWARD_SLASH && type == BNFTokenizerType.SYMBOL_FORWARD_SLASH) { 
 			
 			ff.setStart(BNFTokenizerType.COMMENT_SINGLE_LINE);
 			ff.setEnd(new BNFTokenizerType[] { BNFTokenizerType.WHITESPACE_NEWLINE });
@@ -111,17 +112,17 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 			ff.appendIfActive(token.getValue());
 			
 		// multi line comment
-		} else if (lastType == BNFTokenizerType.SYMBOL_SLASH_FORWARD && type == BNFTokenizerType.SYMBOL_STAR) {
+		} else if (lastType == BNFTokenizerType.SYMBOL_FORWARD_SLASH && type == BNFTokenizerType.SYMBOL_STAR) {
 			
 			ff.setStart(BNFTokenizerType.COMMENT_MULTI_LINE);
-			ff.setEnd(new BNFTokenizerType[] { BNFTokenizerType.SYMBOL_SLASH_FORWARD, BNFTokenizerType.SYMBOL_STAR });
+			ff.setEnd(new BNFTokenizerType[] { BNFTokenizerType.SYMBOL_FORWARD_SLASH, BNFTokenizerType.SYMBOL_STAR });
 			
 			BNFToken token = stack.pop();
 			ff.appendIfActive(token.getValue());
 
 		} else if (type == BNFTokenizerType.QUOTE_DOUBLE) {
 
-			ff.setStart(BNFTokenizerType.QUOTE_DOUBLE);
+			ff.setStart(BNFTokenizerType.QUOTE_DOUBLE);			
 			ff.setEnd(BNFTokenizerType.QUOTE_DOUBLE);
 		
 		} else if (type == BNFTokenizerType.QUOTE_SINGLE && !isWord(last)) {
@@ -208,7 +209,8 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 				|| type == BNFTokenizerType.SYMBOL_HASH
 				|| type == BNFTokenizerType.SYMBOL_AT
 				|| type == BNFTokenizerType.SYMBOL_STAR
-				|| type == BNFTokenizerType.SYMBOL_SLASH_FORWARD;
+				|| type == BNFTokenizerType.SYMBOL_FORWARD_SLASH
+				|| type == BNFTokenizerType.SYMBOL_BACKWARD_SLASH;
 	}
 	
 	private boolean isWhitespace(BNFTokenizerType type) {
@@ -228,7 +230,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 		return type == BNFTokenizerType.LETTER;
 	}
 	
-	private BNFTokenizerType getType(int c) {
+	private BNFTokenizerType getType(int c, BNFTokenizerType lastType) {
 		if (c == 10 || c == 13) {
 			return BNFTokenizerType.WHITESPACE_NEWLINE;
 		} else if (c >= 0 && c <= 31) { // From: 0 to: 31 From:0x00 to:0x20
@@ -238,13 +240,13 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 	    } else if (c == 33) {
 	        return BNFTokenizerType.SYMBOL;
 	    } else if (c == '"') { // From: 34 to: 34 From:0x22 to:0x22
-	        return BNFTokenizerType.QUOTE_DOUBLE;
+	    	return lastType == BNFTokenizerType.SYMBOL_BACKWARD_SLASH ? BNFTokenizerType.QUOTE_DOUBLE_ESCAPED : BNFTokenizerType.QUOTE_DOUBLE;
 	    } else if (c == '#') { // From: 35 to: 35 From:0x23 to:0x23
 	        return BNFTokenizerType.SYMBOL_HASH;
 	    } else if (c >= 36 && c <= 38) {
 	        return BNFTokenizerType.SYMBOL;
 	    } else if (c == '\'') { // From: 39 to: 39 From:0x27 to:0x27
-	        return BNFTokenizerType.QUOTE_SINGLE;
+	        return lastType == BNFTokenizerType.SYMBOL_BACKWARD_SLASH ? BNFTokenizerType.QUOTE_SINGLE_ESCAPED : BNFTokenizerType.QUOTE_SINGLE;
 	    } else if (c >= 40 && c <= 41) {
 	        return BNFTokenizerType.SYMBOL;
 	    } else if (c == 42) {
@@ -258,7 +260,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 	    } else if (c == '.') { // From: 46 to: 46 From:0x2E to:0x2E
 	        return BNFTokenizerType.NUMBER;
 	    } else if (c == '/') { // From: 47 to: 47 From:0x2F to:0x2F
-	        return BNFTokenizerType.SYMBOL_SLASH_FORWARD;
+	        return BNFTokenizerType.SYMBOL_FORWARD_SLASH;
 	    } else if (c >= '0' && c <= '9') { // From: 48 to: 57 From:0x30 to:0x39
 	        return BNFTokenizerType.NUMBER;
 	    } else if (c >= 58 && c <= 63) {
@@ -267,6 +269,8 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 	        return BNFTokenizerType.SYMBOL_AT;
 	    } else if (c >= 'A' && c <= 'Z') { // From: 65 to: 90 From:0x41 to:0x5A
 	        return BNFTokenizerType.LETTER;
+	    } else if (c == 92) { // /
+	    	return BNFTokenizerType.SYMBOL_BACKWARD_SLASH;
 	    } else if (c >= 91 && c <= 96) {
 	        return BNFTokenizerType.SYMBOL;
 	    } else if (c >= 'a' && c <= 'z') { // From: 97 to:122 From:0x61 to:0x7A
