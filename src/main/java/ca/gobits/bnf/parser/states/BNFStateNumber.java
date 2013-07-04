@@ -25,7 +25,14 @@ public class BNFStateNumber extends BNFStateTerminal {
 	
 	@Override
 	public boolean match(BNFToken token) {
-		String value = token.getValue();
-		return p.matcher(value).matches();
+		
+		boolean match = false;
+		
+		if (token != null) {
+			String value = token.getStringValue();
+			match = p.matcher(value).matches();
+		}
+		
+		return match;
 	}
 }

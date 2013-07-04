@@ -109,7 +109,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 			ff.setEnd(new BNFTokenizerType[] { BNFTokenizerType.WHITESPACE_NEWLINE });
 			
 			BNFToken token = stack.pop();
-			ff.appendIfActive(token.getValue());
+			ff.appendIfActive(token.getStringValue());
 			
 		// multi line comment
 		} else if (lastType == BNFTokenizerType.SYMBOL_FORWARD_SLASH && type == BNFTokenizerType.SYMBOL_STAR) {
@@ -118,7 +118,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 			ff.setEnd(new BNFTokenizerType[] { BNFTokenizerType.SYMBOL_FORWARD_SLASH, BNFTokenizerType.SYMBOL_STAR });
 			
 			BNFToken token = stack.pop();
-			ff.appendIfActive(token.getValue());
+			ff.appendIfActive(token.getStringValue());
 
 		} else if (type == BNFTokenizerType.QUOTE_DOUBLE) {
 
@@ -179,7 +179,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
 	
 	private BNFToken createBNFToken(String value, BNFTokenizerType type) {
 		BNFToken token = new BNFToken();
-		token.setValue(value);
+		token.setStringValue(value);
 
 		if (isComment(type)) {
 			token.setType(BNFTokenType.COMMENT);

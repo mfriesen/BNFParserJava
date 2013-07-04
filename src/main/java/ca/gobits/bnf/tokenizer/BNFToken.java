@@ -27,7 +27,7 @@ public class BNFToken {
 	}
 	
 	private int id;
-	private String value;
+	private String stringValue;
 	private BNFTokenType type;
 	private BNFToken nextToken;
 
@@ -43,19 +43,19 @@ public class BNFToken {
 	}
 
 	public BNFToken(String value) {
-		this.value = value;
+		this.stringValue = value;
 	}
 
 	public void appendValue(char c) {
-		this.value = this.value + String.valueOf(c);
+		this.stringValue = this.stringValue + String.valueOf(c);
 	}
 	
-	public String getValue() {
-		return value;
+	public String getStringValue() {
+		return stringValue;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setStringValue(String value) {
+		this.stringValue = value;
 	}
 
 	public BNFToken getNextToken() {
@@ -68,7 +68,7 @@ public class BNFToken {
 	
 	@Override
 	public String toString() {
-		return "TOKEN value: " + getValue() + " id: " + getId() + " type: " + getType();
+		return "TOKEN value: " + getStringValue() + " id: " + getId() + " type: " + getType();
 	}
 
 	public boolean isSymbol() {

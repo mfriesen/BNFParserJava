@@ -182,7 +182,7 @@ public class BNFParserTest {
 		assertFalse(result.isSuccess());
 		assertNotNull(result.getTop());
 		assertEquals(result.getError(), result.getTop());
-		assertEquals(json, result.getError().getValue());
+		assertEquals(json, result.getError().getStringValue());
 	}
 	
 	@Test
@@ -199,7 +199,7 @@ public class BNFParserTest {
 		assertNotNull(result.getTop());
 		assertNotNull(result.getError());
 		assertEquals(2, result.getError().getId());
-		assertEquals("asdasd", result.getError().getValue());
+		assertEquals("asdasd", result.getError().getStringValue());
 	}
 	
 	@Test
@@ -216,6 +216,24 @@ public class BNFParserTest {
 		assertFalse(result.isSuccess());
 		assertNotNull(result.getTop());
 		assertNotNull(result.getError());
-		assertEquals("!", result.getError().getValue());
+		assertEquals("!", result.getError().getStringValue());
 	}
+	
+	@Test
+	public void testBadSimple03() throws Exception {
+		
+		// given
+		String json = "[";
+		BNFToken token = tokenizerFactory.tokens(json);
+
+		// when		
+		BNFParseResult result = parser.parse(token);
+		
+		// then
+		assertNotNull(result.getTop());
+		assertNotNull(result.getError());
+		assertFalse(result.isSuccess());
+		assertEquals("[", result.getError().getStringValue());
+	}
+	
 }

@@ -52,7 +52,7 @@ public class BNFPathStateDefinition implements BNFPath {
 	
 	@Override
 	public String toString() {
-		return "state definition " + stateDefinition.getName() + " token " + token.getValue();
+		return "state definition " + stateDefinition.getName() + " token " + token.getStringValue();
 	}
 
 	@Override

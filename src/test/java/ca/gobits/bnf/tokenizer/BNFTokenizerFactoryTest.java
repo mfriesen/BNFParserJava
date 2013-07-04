@@ -38,7 +38,7 @@ public class BNFTokenizerFactoryTest {
 		BNFToken token = factory.tokens(s);
 		
 		// then
-		assertEquals("", token.getValue());
+		assertEquals("", token.getStringValue());
 		assertFalse(token.isWord());
 		assertFalse(token.isNumber());
 		assertFalse(token.isSymbol());
@@ -54,11 +54,11 @@ public class BNFTokenizerFactoryTest {
 		BNFToken token = factory.tokens(s);
 		
 		// then
-		assertEquals("{", token.getValue());
+		assertEquals("{", token.getStringValue());
 		assertEquals(1, token.getId());
 		assertTrue(token.isSymbol());
 		token = token.getNextToken();
-		assertEquals("}", token.getValue());
+		assertEquals("}", token.getStringValue());
 		assertEquals(2, token.getId());
 		assertTrue(token.isSymbol());
 		assertNull(token.getNextToken());
@@ -73,13 +73,13 @@ public class BNFTokenizerFactoryTest {
 		BNFToken token = factory.tokens(s);
 		
 		// then
-		assertEquals("{", token.getValue());
+		assertEquals("{", token.getStringValue());
 		assertTrue(token.isSymbol());
 		token = token.getNextToken();
-		assertEquals("}", token.getValue());
+		assertEquals("}", token.getStringValue());
 		assertTrue(token.isSymbol());
 		token = token.getNextToken();
-		assertEquals("asd", token.getValue());
+		assertEquals("asd", token.getStringValue());
 		assertNull(token.getNextToken());
 	}
 
@@ -92,13 +92,13 @@ public class BNFTokenizerFactoryTest {
 		BNFToken token = factory.tokens(s);
 		
 		// then
-		assertEquals("{", token.getValue());
+		assertEquals("{", token.getStringValue());
 		assertTrue(token.isSymbol());
 		token = token.getNextToken();
-		assertEquals("}", token.getValue());
+		assertEquals("}", token.getStringValue());
 		assertTrue(token.isSymbol());
 		token = token.getNextToken();
-		assertEquals("asd", token.getValue());
+		assertEquals("asd", token.getStringValue());
 		assertNull(token.getNextToken());
 	}
 	
@@ -111,9 +111,9 @@ public class BNFTokenizerFactoryTest {
 		BNFToken token = factory.tokens(s);
 		
 		// then
-		assertEquals("hi", token.getValue());
+		assertEquals("hi", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals("\"asd\"", token.getValue());
+		assertEquals("\"asd\"", token.getStringValue());
 		assertTrue(token.isQuotedString());
 	}
 	
@@ -126,7 +126,7 @@ public class BNFTokenizerFactoryTest {
 		BNFToken token = factory.tokens(s);
 		
 		// then
-		assertEquals("\"asd\"", token.getValue());
+		assertEquals("\"asd\"", token.getStringValue());
 		assertTrue(token.isQuotedString());
 	}
 
@@ -139,7 +139,7 @@ public class BNFTokenizerFactoryTest {
 		BNFToken token = factory.tokens(s);
 		
 		// then
-		assertEquals("\"asd's\"", token.getValue());
+		assertEquals("\"asd's\"", token.getStringValue());
 		assertTrue(token.isQuotedString());
 	}
 	
@@ -152,7 +152,7 @@ public class BNFTokenizerFactoryTest {
 		BNFToken token = factory.tokens(s);
 		
 		// then
-		assertEquals("\"asd's", token.getValue());
+		assertEquals("\"asd's", token.getStringValue());
 		assertTrue(token.isQuotedString());
 	}
 	
@@ -165,21 +165,21 @@ public class BNFTokenizerFactoryTest {
 		BNFToken token = factory.tokens(s);
 		
 		// then
-		assertEquals("{", token.getValue());
+		assertEquals("{", token.getStringValue());
 		token = token.getNextToken();
 		
-		assertEquals("\"asd\"", token.getValue());
+		assertEquals("\"asd\"", token.getStringValue());
 		assertTrue(token.isQuotedString());
 		token = token.getNextToken();
 		
-		assertEquals(":", token.getValue());
+		assertEquals(":", token.getStringValue());
 		token = token.getNextToken();
 
-		assertEquals("\"123\"", token.getValue());
+		assertEquals("\"123\"", token.getStringValue());
 		assertTrue(token.isQuotedString());
 		token = token.getNextToken();
 		
-		assertEquals("}", token.getValue());
+		assertEquals("}", token.getStringValue());
 		assertNull(token.getNextToken());
 	}
 	
@@ -192,18 +192,18 @@ public class BNFTokenizerFactoryTest {
 		BNFToken token = factory.tokens(s);
 		
 		// then
-		assertEquals("'asd'", token.getValue());
+		assertEquals("'asd'", token.getStringValue());
 		assertTrue(token.isQuotedString());
 		token = token.getNextToken();
 		
-		assertEquals(":", token.getValue());
+		assertEquals(":", token.getStringValue());
 		token = token.getNextToken();
 
-		assertEquals("'123'", token.getValue());
+		assertEquals("'123'", token.getStringValue());
 		assertTrue(token.isQuotedString());
 		token = token.getNextToken();
 		
-		assertEquals("}", token.getValue());
+		assertEquals("}", token.getStringValue());
 		assertNull(token.getNextToken());
 	}
 	
@@ -216,18 +216,18 @@ public class BNFTokenizerFactoryTest {
 		BNFToken token = factory.tokens(s);
 		
 		// then
-		assertEquals("'asd'", token.getValue());
+		assertEquals("'asd'", token.getStringValue());
 		assertTrue(token.isQuotedString());
 		token = token.getNextToken();
 		
-		assertEquals(":", token.getValue());
+		assertEquals(":", token.getStringValue());
 		token = token.getNextToken();
 
-		assertEquals("123", token.getValue());
+		assertEquals("123", token.getStringValue());
 		assertTrue(token.isNumber());
 		token = token.getNextToken();
 		
-		assertEquals("}", token.getValue());
+		assertEquals("}", token.getStringValue());
 		assertNull(token.getNextToken());
 	}
 	
@@ -239,19 +239,19 @@ public class BNFTokenizerFactoryTest {
 		// when
 		BNFToken token = factory.tokens(s);
 
-		assertEquals("{", token.getValue());
+		assertEquals("{", token.getStringValue());
 		token = token.getNextToken();
 
-		assertEquals("\"notes\"", token.getValue());
+		assertEquals("\"notes\"", token.getStringValue());
 		token = token.getNextToken();
 
-		assertEquals(":", token.getValue());
+		assertEquals(":", token.getStringValue());
 		token = token.getNextToken();
 		
-		assertEquals("\"Different browsers have support for different video formats, see sub-features for details. \\r\\n\\r\\nThe Android browser (before 2.3) requires <a href=\\\"http://www.broken-links.com/2010/07/08/making-html5-video-work-on-android-phones/\\\">specific handling</a> to run the video element.\"", token.getValue());
+		assertEquals("\"Different browsers have support for different video formats, see sub-features for details. \\r\\n\\r\\nThe Android browser (before 2.3) requires <a href=\\\"http://www.broken-links.com/2010/07/08/making-html5-video-work-on-android-phones/\\\">specific handling</a> to run the video element.\"", token.getStringValue());
 		token = token.getNextToken();
 		
-		assertEquals("}", token.getValue());
+		assertEquals("}", token.getStringValue());
 		token = token.getNextToken();
 	}
 	
@@ -266,36 +266,36 @@ public class BNFTokenizerFactoryTest {
 		BNFToken token = factory.tokens(s);
 		
 		// then
-		assertEquals("@", token.getValue());
+		assertEquals("@", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals("start", token.getValue());
+		assertEquals("start", token.getStringValue());
 		assertTrue(token.isWord());
 		token = token.getNextToken();
-		assertEquals("=", token.getValue());
+		assertEquals("=", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals("Empty", token.getValue());
+		assertEquals("Empty", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals("|", token.getValue());
+		assertEquals("|", token.getStringValue());
 		assertTrue(token.isSymbol());
 		token = token.getNextToken();
-		assertEquals("array", token.getValue());
+		assertEquals("array", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals("|", token.getValue());
+		assertEquals("|", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals("object", token.getValue());
+		assertEquals("object", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals(";", token.getValue());
+		assertEquals(";", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals("object", token.getValue());
+		assertEquals("object", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals("=", token.getValue());
+		assertEquals("=", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals("openCurly", token.getValue());
+		assertEquals("openCurly", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals("objectContent", token.getValue());
+		assertEquals("objectContent", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals("closeCurly", token.getValue());
+		assertEquals("closeCurly", token.getStringValue());
 		token = token.getNextToken();
-		assertEquals(";", token.getValue());
+		assertEquals(";", token.getStringValue());
 	}
 }

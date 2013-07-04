@@ -21,7 +21,13 @@ public class BNFStateQuotedString extends BNFStateTerminal {
 	
 	@Override
 	public boolean match(BNFToken token) {
-		String value = token.getValue();
-		return (value.startsWith("\"") && value.endsWith("\"")) || value.startsWith("'") && value.endsWith("'");
+		boolean match = false;
+		
+		if (token != null) {
+			String value = token.getStringValue();
+			match = (value.startsWith("\"") && value.endsWith("\"")) || value.startsWith("'") && value.endsWith("'");
+		}
+		
+		return match;
 	}
 }

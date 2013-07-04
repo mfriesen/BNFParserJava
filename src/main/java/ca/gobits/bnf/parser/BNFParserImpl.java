@@ -73,7 +73,7 @@ public class BNFParserImpl implements BNFParser {
 	}
 	
 	private boolean isEmpty(BNFToken token) {
-		return token == null || token.getValue() == null || token.getValue().trim().length() == 0;
+		return token == null || token.getStringValue() == null || token.getStringValue().trim().length() == 0;
 	}
 	
 	private boolean parseStateDefinition(BNFToken token) {
@@ -139,6 +139,7 @@ public class BNFParserImpl implements BNFParser {
 			result.setMaxMatchToken(token);
 			
 			BNFState rewindState = stack.rewindStackMatchedToken();
+			
 			pushToStack(rewindState, token);
 							
 		} else {

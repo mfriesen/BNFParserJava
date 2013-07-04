@@ -59,7 +59,7 @@ public class BNFState {
 	}
 	
 	public boolean match(BNFToken token) {
-		return getName().equals(token.getValue());
+		return token != null && getName().equals(token.getStringValue());
 	} 
 	
 	public boolean isEnd() {

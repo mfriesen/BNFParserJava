@@ -44,14 +44,14 @@ public class PropertyParser {
 				start = "";
 				sb = new StringBuilder();
 				
-			} else if (token.getValue().equals("=")) {
+			} else if (token.getStringValue().equals("=")) {
 				
 				start = sb.toString();
 				sb = new StringBuilder();
 				
 			} else {
 				
-				sb.append(token.getValue());
+				sb.append(token.getStringValue());
 			}
 			
 			token = token.getNextToken();
