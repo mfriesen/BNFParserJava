@@ -44,7 +44,7 @@ public class BNFParserTest {
 	}
 	
 	@Test
-	public void testOpenClose() throws Exception {
+	public void testOpenCloseBrace() throws Exception {
 		
 		// given
 		String json = "{}";
@@ -57,6 +57,22 @@ public class BNFParserTest {
 		assertNotNull(result.getTop());
 		assertNull(result.getError());
 		assertTrue(result.isSuccess());
+	}
+	
+	@Test
+	public void testOpenCloseBracket() throws Exception {
+		
+		// given
+		String json = "[]";
+		BNFToken token = tokenizerFactory.tokens(json);
+
+		// when		
+		BNFParseResult result = parser.parse(token);
+		
+		// then
+		assertTrue(result.isSuccess());
+		assertNotNull(result.getTop());
+		assertNull(result.getError());
 	}
 	
 	@Test

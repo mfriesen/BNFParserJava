@@ -60,6 +60,17 @@ public class BNFPathStateDefinition implements BNFPath {
 		return true;
 	}
 	
+	public boolean hasNextSequence()
+	{
+		BNFState state = null;
+		
+		if (position < stateDefinition.getStates().size()) {
+			state = stateDefinition.getStates().get(position);
+		}
+		
+		return state != null;
+	}
+	
 	public BNFState getNextSequence() {
 		
 		BNFState state = null;

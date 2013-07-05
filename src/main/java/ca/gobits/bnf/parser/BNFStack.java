@@ -27,7 +27,35 @@ public class BNFStack extends ArrayDeque<BNFPath> {
 	public void push(BNFPathState path) {
 		super.push(path);
 	}
+	
+	/**
+	 * Rewinds to the next Token with next sequence
+	 */
+	public void rewindToNextTokenAndNextSequence() {
 		
+		while (!isEmpty()) {
+			
+			BNFPath sp = peek();
+			
+			if (sp.isStateDefinition()) {
+				
+				BNFPathStateDefinition spd = (BNFPathStateDefinition) sp;
+				
+				if (sp.getToken() != null && spd.hasNextSequence()) {
+					break;
+				} else {
+					pop();
+				}
+				
+			} else {
+				pop();
+			}
+		}
+	}
+	
+	/**
+	 * Rewinds to next state or next Repetition
+	 */
 	public BNFState rewindStackMatchedToken() {
 		
 		BNFState nextState = null;
@@ -89,10 +117,13 @@ public class BNFStack extends ArrayDeque<BNFPath> {
 				
 			} else {
 				
+				BNFPathStateDefinition spd = (BNFPathStateDefinition) sp;
 				if (foundRepetition) {
 				    sp = pop();
-				} else {			
+				} else if (spd.hasNextSequence()) {
 					break;
+				} else {
+					pop();
 				}
 			}
 		}
@@ -126,5 +157,4 @@ public class BNFStack extends ArrayDeque<BNFPath> {
 		
 		return nextState;
 	}
-
 }

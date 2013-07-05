@@ -51,14 +51,16 @@ public class BNFParserImpl implements BNFParser {
 				sp = stack.pop();
 				
 				if (isEmpty(sp.getToken())) {
-					result.setSuccess(true);
 					break;
 				}
+			} else if (sp.getToken() == null) {
+				
+				stack.rewindToNextTokenAndNextSequence();
+
 			} else if (sp.isStateDefinition()) {
 				
 				boolean added = parseStateDefinition(sp.getToken());
 				if (!added) {
-					result.setSuccess(false);
 					break;
 				}
 				
@@ -117,7 +119,7 @@ public class BNFParserImpl implements BNFParser {
 		BNFPathState sp = (BNFPathState) stack.peek();
 		BNFState state = sp.getState();
 		BNFToken token = sp.getToken();
-
+		
 		if (!state.isTerminal()) {
 			
 			BNFStateDefinition sd = stateDefinitions.get(state.getName());
@@ -130,22 +132,27 @@ public class BNFParserImpl implements BNFParser {
 			
 		} else if (state.getClass().equals(BNFStateEmpty.class)) {
 			
+			if (isEmpty(token)) {
+				result.setSuccess(true);
+			}
+			
 			BNFState rewindState = stack.rewindStackEmptyState();
 			pushToStack(rewindState, token);
 			
 		} else if (state.match(token)) {
 
+			result.setSuccess(true);
 			token = token.getNextToken();
 			result.setMaxMatchToken(token);
 			
 			BNFState rewindState = stack.rewindStackMatchedToken();
-			
 			pushToStack(rewindState, token);
-							
+										
 		} else {
 			
+			result.setSuccess(false);
 			BNFState nextState = stack.rewindStackUnmatchedToken();
 			pushToStack(nextState, token);
-		}		
+		}
 	}
 }
