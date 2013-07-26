@@ -298,4 +298,31 @@ public class BNFTokenizerFactoryTest {
 		token = token.getNextToken();
 		assertEquals(";", token.getStringValue());
 	}
+	
+	@Test
+	public void testRussianCharacters() {
+		
+		// given
+		String s = "{\"text\":\"Й\"}";
+		
+		// when
+		BNFToken token = factory.tokens(s);
+		
+		// then
+		assertEquals("{", token.getStringValue());
+		token = token.getNextToken();
+
+		assertEquals("\"text\"", token.getStringValue());
+		token = token.getNextToken();
+		
+		assertEquals(":", token.getStringValue());
+		token = token.getNextToken();
+
+		assertEquals("\"Й\"", token.getStringValue());
+		assertTrue(token.isQuotedString());
+		token = token.getNextToken();
+		
+		assertEquals("}", token.getStringValue());
+		assertNull(token.getNextToken());
+	}
 }
