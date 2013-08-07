@@ -234,12 +234,14 @@ public class BNFTokenizerFactoryTest {
 	
 	@Test
 	public void testAHrefLink() {
+		
 		// given
 		String s = "{\"notes\":\"Different browsers have support for different video formats, see sub-features for details. \\r\\n\\r\\nThe Android browser (before 2.3) requires <a href=\\\"http://www.broken-links.com/2010/07/08/making-html5-video-work-on-android-phones/\\\">specific handling</a> to run the video element.\"}";
 		
 		// when
 		BNFToken token = factory.tokens(s);
 
+		// then
 		assertEquals("{", token.getStringValue());
 		token = token.getNextToken();
 
@@ -254,6 +256,8 @@ public class BNFTokenizerFactoryTest {
 		
 		assertEquals("}", token.getStringValue());
 		token = token.getNextToken();
+		
+		assertNull(token);
 	}
 	
 	@Test
@@ -325,5 +329,19 @@ public class BNFTokenizerFactoryTest {
 		
 		assertEquals("}", token.getStringValue());
 		assertNull(token.getNextToken());
+	}
+	
+	@Test
+	public void testUnicodeCharacter() {
+	    
+	    // given
+	    String s = "\u042d\u0442\u043e\u0440\u0443\u0441\u0441\u043a\u0438\u0439\u0442\u0435\u043a\u0441\u0442";
+	        
+	    // when
+	    BNFToken token = factory.tokens(s);
+
+	    // then
+	    assertEquals("Эторусскийтекст", token.getStringValue());
+	    assertNull(token.getNextToken());
 	}
 }
