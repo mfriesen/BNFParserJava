@@ -5,8 +5,16 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   <artifactId>bnfparser</artifactId>
   <packaging>jar</packaging>
   <name>BNF Parser</name>
-  <version>0.0.1</version>
-  <description>Backus–Naur Form engine Parser for Java</description>
+  <version>1.0</version>
+  <description>BNFParser is a Backus-Naur Form Framework (https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_Form) for Java
+
+The BNFParser Framework offers 3 basic services of general interest to developers:
+
+1. String Tokenization via the BNFTokenizerFactory and BNFToken classes
+
+2. Property Key/Value mapper via PropertyParser
+
+3. Text Parsing/Validation via Grammars</description>
   <url>https://github.com/mfriesen/BNFParserJava</url>
   <licenses>
     <license>
