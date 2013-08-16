@@ -4,45 +4,25 @@ import java.util.List;
 
 public class BNFSequence
 {
-    private int currentPipe = -1;
-    private List<BNFSymbol> pipes;
+    private List<BNFSymbol> symbols;
     
     public BNFSequence()
     {        
     }
     
-    public BNFSequence(List<BNFSymbol> pipes)
+    public BNFSequence(List<BNFSymbol> symbols)
     {        
-        this.pipes = pipes;
+        this.symbols = symbols;
     }
     
-    public BNFSymbol getNextPipe()
+    public List<BNFSymbol> getSymbols()
     {
-        BNFSymbol state = null;
-        int i = currentPipe + 1;
-        
-        if (i < pipes.size())
-        {
-            state = pipes.get(i);
-            currentPipe = i;
-        }
-        
-        return state;
-    }
-
-    public boolean isComplete()
-    {
-        return this.currentPipe >= this.pipes.size() - 1;
-    }
-
-    public List<BNFSymbol> getPipes()
-    {
-        return pipes;
+        return symbols;
     }
     
     @Override
     public String toString()
     {
-        return pipes.toString();
+        return symbols.toString();
     }
 }

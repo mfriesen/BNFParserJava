@@ -30,9 +30,9 @@ public class BNFParserTest
     {
         map.put("@start",
                 new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("Empty"))),
                         new BNFSequence(Arrays.asList(new BNFSymbol("array"))),
-                        new BNFSequence(Arrays.asList(new BNFSymbol("object"))))));
+                        new BNFSequence(Arrays.asList(new BNFSymbol("object"))),
+                        new BNFSequence(Arrays.asList(new BNFSymbol("Empty"))))));
 
         map.put("object",
                 new BNFSequences(Arrays.asList(
@@ -40,8 +40,8 @@ public class BNFParserTest
         
         map.put("objectContent",
                 new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("Empty"))),
-                        new BNFSequence(Arrays.asList(new BNFSymbol("actualObject"))))));
+                        new BNFSequence(Arrays.asList(new BNFSymbol("actualObject"))),
+                        new BNFSequence(Arrays.asList(new BNFSymbol("Empty"))))));
 
         map.put("actualObject",
                 new BNFSequences(Arrays.asList(
@@ -65,8 +65,8 @@ public class BNFParserTest
 
         map.put("arrayContent",
                 new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("Empty"))),
-                        new BNFSequence(Arrays.asList(new BNFSymbol("actualArray"))))));
+                        new BNFSequence(Arrays.asList(new BNFSymbol("actualArray"))),
+                        new BNFSequence(Arrays.asList(new BNFSymbol("Empty"))))));
         
         map.put("actualArray",
                 new BNFSequences(Arrays.asList(

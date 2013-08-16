@@ -4,41 +4,21 @@ import java.util.List;
 
 public class BNFSequences
 {
-    private int currentPipeLine = -1;
-    private List<BNFSequence> pipeLines;
+    private List<BNFSequence> sequences;
     
-    public BNFSequences(List<BNFSequence> pipeLines)
+    public BNFSequences(List<BNFSequence> sequences)
     {        
-        this.pipeLines = pipeLines;
-    }
-
-    public BNFSequence getNextPipeLine()
-    {
-        BNFSequence state = null;
-        int i = currentPipeLine + 1;
-        
-        if (i < pipeLines.size())
-        {
-            state = pipeLines.get(i);
-            currentPipeLine = i;
-        }
-        
-        return state;
-    }
-
-    public boolean isComplete()
-    {
-        return this.currentPipeLine >= this.pipeLines.size() - 1;
+        this.sequences = sequences;
     }
     
-    public List<BNFSequence> getPipeLines()
+    public List<BNFSequence> getSequences()
     {
-        return pipeLines;
+        return sequences;
     }
 
-    public void setPipeLines(List<BNFSequence> pipeLines)
+    public void setPipeLines(List<BNFSequence> sequences)
     {
-        this.pipeLines = pipeLines;
+        this.sequences = sequences;
     }
     
     @Override
@@ -46,7 +26,7 @@ public class BNFSequences
     {
         StringBuilder sb = new StringBuilder();
         
-        for (BNFSequence lines : pipeLines)
+        for (BNFSequence lines : sequences)
         {
             sb.append(lines.toString());
         }

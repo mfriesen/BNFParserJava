@@ -6,14 +6,14 @@ import java.util.Stack;
 import ca.gobits.bnf.parser.BNFParseResult;
 import ca.gobits.bnf.parser.BNFParseResultImpl;
 import ca.gobits.bnf.parser.BNFParser;
-import ca.gobits.bnf.parser2.BNFParserExpression.HolderState;
+import ca.gobits.bnf.parser2.BNFParserState.HolderState;
 import ca.gobits.bnf.parser2.BNFSymbol.BNFRepetition;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFParserImpl implements BNFParser
 {
     private Map<String, BNFSequences> stateDefinitions;
-    private Stack<BNFParserExpression> stack = new Stack<BNFParserExpression>();
+    private Stack<BNFParserState> stack = new Stack<BNFParserState>();
     
     public BNFParserImpl(Map<String, BNFSequences> stateDefinitions) 
     {
@@ -40,15 +40,15 @@ public class BNFParserImpl implements BNFParser
 
         while (!stack.isEmpty()) 
         {            
-            BNFParserExpression holder = stack.peek();
+            BNFParserState holder = stack.peek();
                    
             if (holder.getState() == HolderState.EMPTY) {
             	
             	stack.pop();
             	BNFToken token = stack.peek().getCurrentToken();
             	if (token != null) {
-            		rewindToNextSequence();
-//            		rewindToNextSymbol();
+//            		rewindToNextSequence();
+            		rewindToNextSymbol();
             	}
             	
             } 
@@ -96,7 +96,7 @@ public class BNFParserImpl implements BNFParser
 		rewindToNextSequence();
 		
 		if (!stack.isEmpty()) {
-			BNFParserExpression holder = stack.peek();
+			BNFParserState holder = stack.peek();
 			holder.resetToken();
 		}
 		
@@ -118,7 +118,7 @@ public class BNFParserImpl implements BNFParser
 		rewindToNextSymbol();
 		
 		if (!stack.isEmpty()) {
-			BNFParserExpression holder = stack.peek();
+			BNFParserState holder = stack.peek();
 			holder.advanceToken(token.getNextToken());
 		}
 		
@@ -137,7 +137,7 @@ public class BNFParserImpl implements BNFParser
 		rewindToNextSymbol(BNFRepetition.ZERO_OR_MORE);
 		
 		if (!stack.isEmpty()) {
-			BNFParserExpression holder = stack.peek();
+			BNFParserState holder = stack.peek();
 			holder.advanceToken(token);
 		}
 	}
@@ -146,8 +146,8 @@ public class BNFParserImpl implements BNFParser
     {
         while (!stack.isEmpty())
         {
-            BNFParserExpression holder = stack.peek();
-            if (holder.isPipeLine() && !holder.isComplete() && holder.getRepetition() != repetition) 
+            BNFParserState holder = stack.peek();
+            if (holder.isSequence() && !holder.isComplete() && holder.getRepetition() != repetition) 
             {
                 break;
             }
@@ -160,8 +160,8 @@ public class BNFParserImpl implements BNFParser
     {
         while (!stack.isEmpty())
         {
-            BNFParserExpression holder = stack.peek();
-            if (holder.isPipeLine() && !holder.isComplete()) 
+            BNFParserState holder = stack.peek();
+            if (holder.isSequence() && !holder.isComplete()) 
             {
                 break;
             }
@@ -174,8 +174,8 @@ public class BNFParserImpl implements BNFParser
     {
         while (!stack.isEmpty())
         {
-            BNFParserExpression holder = stack.peek();
-            if (holder.isPipeLines()) 
+            BNFParserState holder = stack.peek();
+            if (holder.isSequences()) 
             {
                 break;
             }
@@ -186,7 +186,7 @@ public class BNFParserImpl implements BNFParser
     
     private void processStack()
     {
-        BNFParserExpression holder = stack.peek();
+        BNFParserState holder = stack.peek();
         
         if (holder.isComplete())
         {
@@ -194,25 +194,22 @@ public class BNFParserImpl implements BNFParser
         }
         else
         {
-            if (holder.isPipeLines())
+            if (holder.isSequences())
             {
-                BNFSequences pipeLines = holder.getPipeLines();                
-                
-                if (pipeLines.isComplete())
+                if (holder.isComplete())
                 {
                     stack.pop();
-                }
                     
-                if (!pipeLines.isComplete())
-                {
-                    BNFSequence pipeLine = pipeLines.getNextPipeLine();
+                } else {
+                    
+                    BNFSequence pipeLine = holder.getNextSequence();
                     addPipeLine(pipeLine, holder.getCurrentToken(), BNFRepetition.NONE);
                 }
             }
-            else if (holder.isPipeLine())
+            else if (holder.isSequence())
             {
-                BNFSequence pipeLine = holder.getPipeLine();
-                BNFSymbol pipe = pipeLine.getNextPipe();
+//                BNFSequence sequence = holder.getPipeLine();
+                BNFSymbol pipe = holder.getNextSymbol();
                 String nextPipe = pipe.getName();      
                 BNFSequences sd = stateDefinitions.get(nextPipe);
              
@@ -266,29 +263,29 @@ public class BNFParserImpl implements BNFParser
     
     private void addPipeLine(HolderState state)
     {
-        stack.push(new BNFParserExpression(state));
+        stack.push(new BNFParserState(state));
     }
     
     private void addPipeLine(BNFSequences sd, BNFToken token, BNFRepetition repetition)
     {
-        if (sd.getPipeLines().size() == 1)
+        if (sd.getSequences().size() == 1)
         {
-            addPipeLine(sd.getPipeLines().get(0), token, repetition);
+            addPipeLine(sd.getSequences().get(0), token, repetition);
         }
         else
         {
             debug(sd, token, repetition);
-            stack.push(new BNFParserExpression(sd, token, repetition));
+            stack.push(new BNFParserState(sd, token, repetition));
         }
     }
 
     private void addPipeLine(BNFSequence pipeLine, BNFToken token, BNFRepetition repetition)
     {
         debug(pipeLine, token, repetition);
-        stack.push(new BNFParserExpression(pipeLine, token, repetition));        
+        stack.push(new BNFParserState(pipeLine, token, repetition));        
     }
 
-    private BNFRepetition findRepetition(BNFParserExpression holder, BNFSymbol pipe) { 
+    private BNFRepetition findRepetition(BNFParserState holder, BNFSymbol pipe) { 
         BNFRepetition repetition = pipe.getRepetition();
         
         if (repetition == BNFRepetition.NONE)
@@ -317,7 +314,7 @@ public class BNFParserImpl implements BNFParser
     private void debug(BNFSequences sd, BNFToken token, BNFRepetition repetition)
     {
         debugPrintIndents();        
-        System.out.println ("-> adding pipe lines " + sd.getPipeLines() + " for token " + token.getStringValue() + " with repetition " + repetition);
+        System.out.println ("-> adding pipe lines " + sd.getSequences() + " for token " + token.getStringValue() + " with repetition " + repetition);
     }
 }
 
