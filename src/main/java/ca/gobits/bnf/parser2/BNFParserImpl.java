@@ -46,11 +46,14 @@ public class BNFParserImpl implements BNFParser
             	
             	stack.pop();
             	BNFToken token = stack.peek().getCurrentToken();
-            	if (token != null) {
+            	if (!isEmpty(token)) {
 //            		rewindToNextSequence();
             		rewindToNextSymbol();
+            	} else {
+            		success = true;
+            		errorToken = null;
+            		rewindToNextSequence();
             	}
-            	
             } 
             else if (holder.getState() == HolderState.NO_MATCH_WITH_ZERO_REPETITION)
             {
@@ -81,6 +84,10 @@ public class BNFParserImpl implements BNFParser
         return result;
     }
 
+    private boolean isEmpty(BNFToken token) {
+    	return token == null || token.getStringValue() == null || token.getStringValue().length() == 0;
+    }
+    
     /**
      * Rewind stack to the next sequence
      */
