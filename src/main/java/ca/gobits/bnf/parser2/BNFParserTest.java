@@ -251,7 +251,7 @@ public class BNFParserTest
         assertNotNull(result.getTop());
         assertNull(result.getError());
     }
-    /*
+    
     // testNested
     @Test
     public void testParse08() throws Exception {        
@@ -318,7 +318,7 @@ public class BNFParserTest
         assertEquals(2, result.getError().getId());
         assertEquals("asdasd", result.getError().getStringValue());
     }
-    
+    /*
     // testBadSimple02
     @Test
     public void testParse12() throws Exception {
