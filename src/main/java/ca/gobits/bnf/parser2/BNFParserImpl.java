@@ -80,8 +80,8 @@ public class BNFParserImpl implements BNFParser
             }
             else if (holder.getState() == HolderState.NO_MATCH)
             {   
-                errorToken = processNoMatch();
-//                System.out.println ("ERROR " + errorToken);
+                BNFToken eToken = processNoMatch();
+                errorToken = updateErrorToken(errorToken, eToken);
                 success = false;
             }
             else
@@ -97,6 +97,13 @@ public class BNFParserImpl implements BNFParser
         return result;
     }   
 
+    /**
+     * Returns The BNFToken with the largest ID
+     * @return BNFToken
+     */
+    private BNFToken updateErrorToken(BNFToken token1, BNFToken token2) {
+    	return token1 != null && token1.getId() > token2.getId() ? token1 : token2;
+    }
 	/**
      * Rewind stack to the next sequence
      */
@@ -145,7 +152,7 @@ public class BNFParserImpl implements BNFParser
         BNFToken token = stack.peek().getCurrentToken();
 
 		debugPrintIndents();
-		System.out.println ("-> no match Zero Or More Looking for First Match token " + token.getStringValue() + " rewind outside of Repetition");				
+		System.out.println ("-> no match Zero Or More Looking for First Match token " + debug(token) + " rewind outside of Repetition");				
 		
 		rewindToOutsideOfRepetition();
 		rewindToNextSymbol();
@@ -389,8 +396,14 @@ public class BNFParserImpl implements BNFParser
 
     private boolean isMatch(String nextPipe, BNFToken token)
     {
-        String s = isQuotedString(nextPipe) ? nextPipe.substring(1, nextPipe.length() - 1) : nextPipe;
-        return s.equals(token.getStringValue()) || isQuotedString(nextPipe, token) || isNumber(nextPipe, token);
+    	boolean match = false;
+    	
+    	if (token != null) {
+    		String s = isQuotedString(nextPipe) ? nextPipe.substring(1, nextPipe.length() - 1) : nextPipe;
+    		match = s.equals(token.getStringValue()) || isQuotedString(nextPipe, token) || isNumber(nextPipe, token);
+    	}
+    	
+    	return match;
     }
     
     private boolean isQuotedString(String value)
@@ -473,48 +486,19 @@ public class BNFParserImpl implements BNFParser
         }
     }
     
+    private String debug(BNFToken token) {
+    	return token != null ? token.getStringValue() : null;
+    }
+    
     private void debug(BNFSequence pipeLine, BNFToken token, BNFParserRepetition repetition)
     {
         debugPrintIndents();        
-        System.out.println ("-> procesing pipe line " + pipeLine + " for token " + token.getStringValue() + " with repetition " + repetition);
+        System.out.println ("-> procesing pipe line " + pipeLine + " for token " + debug(token) + " with repetition " + repetition);
     }
 
     private void debug(BNFSequences sd, BNFToken token, BNFParserRepetition repetition)
     {
         debugPrintIndents();        
-        System.out.println ("-> adding pipe lines " + sd.getSequences() + " for token " + token.getStringValue() + " with repetition " + repetition);
+        System.out.println ("-> adding pipe lines " + sd.getSequences() + " for token " + debug(token) + " with repetition " + repetition);
     }
 }
-
-
-
-/*
-@start        = Empty | array | object;
-
-object        = openCurly objectContent closeCurly;
-objectContent = Empty | actualObject;
-actualObject  = property commaProperty*;
-property      = propertyName colon value;
-commaProperty = comma property;
-propertyName  = QuotedString;
-
-array         = openBracket arrayContent closeBracket;
-arrayContent  = Empty | actualArray;
-actualArray   = value commaValue*;
-commaValue    = comma value;
-
-value         = null | true | false | array | object | number | string;
-
-string        = QuotedString;
-number        = Number;
-null          = 'null';
-true          = 'true';
-false         = 'false';
-
-openCurly     = '{';
-closeCurly    = '}';
-openBracket   = '[';
-closeBracket  = ']';
-comma         = ',';
-colon         = ':';
-*/

@@ -318,7 +318,7 @@ public class BNFParserTest
         assertEquals(2, result.getError().getId());
         assertEquals("asdasd", result.getError().getStringValue());
     }
-    /*
+    
     // testBadSimple02
     @Test
     public void testParse12() throws Exception {
@@ -354,7 +354,7 @@ public class BNFParserTest
         assertFalse(result.isSuccess());
         assertEquals("[", result.getError().getStringValue());
     }
-*/
+
     // good JSON
     @Test
     public void testParse14() throws Exception 
