@@ -387,7 +387,7 @@ public class BNFParserTest
         assertFalse(result.isSuccess());
         assertNotNull(result.getTop());
         assertNotNull(result.getError());
-        assertEquals(":", result.getError().getStringValue());
+        assertEquals("}", result.getError().getStringValue());
     }
 
 }
