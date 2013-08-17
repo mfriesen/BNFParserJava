@@ -1,13 +1,17 @@
 package ca.gobits.bnf.parser2;
 
-import ca.gobits.bnf.parser2.BNFSymbol.BNFRepetition;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFParserState
 {
+    public enum BNFParserRepetition
+    {
+        NONE, ZERO_OR_MORE, ZERO_OR_MORE_LOOKING_FOR_FIRST_MATCH
+    }
+    
     public enum HolderState
     {
-        NONE, MATCH, NO_MATCH, NO_MATCH_WITH_ZERO_REPETITION, EMPTY
+        NONE, MATCH, MATCH_NO_TOKEN_ADVANCE, NO_MATCH, MATCH_WITH_ZERO_REPETITION, NO_MATCH_WITH_ZERO_REPETITION, EMPTY
     }
     
     private int currentSequence = -1;
@@ -17,11 +21,11 @@ public class BNFParserState
     private BNFToken currentToken;
     private BNFSequences sequences;
     private BNFSequence sequence;
-    private BNFRepetition repetition;
+    private BNFParserRepetition repetition;
     
     public BNFParserState(HolderState state)
     {
-        this.repetition = BNFRepetition.NONE;
+        this.repetition = BNFParserRepetition.NONE;
         setState(state);
     }
     
@@ -41,13 +45,13 @@ public class BNFParserState
         this.currentToken = this.token;
     }
 
-    public BNFParserState(BNFSequences sd, BNFToken token, BNFRepetition repetition)
+    public BNFParserState(BNFSequences sd, BNFToken token, BNFParserRepetition repetition)
     {
         this(sd, token);
         this.repetition = repetition;
     }
 
-    public BNFParserState(BNFSequence sequence, BNFToken token, BNFRepetition repetition)
+    public BNFParserState(BNFSequence sequence, BNFToken token, BNFParserRepetition repetition)
     {
         this(sequence, token);
         this.repetition = repetition;
@@ -122,10 +126,14 @@ public class BNFParserState
         return "status " + this.state;
     }
 
-    public BNFRepetition getRepetition()
+    public BNFParserRepetition getRepetition()
     {
         return repetition;
     }
+    
+	public void setRepetition(BNFParserRepetition repetition) {
+		this.repetition = repetition;	
+	}
 
     public BNFSequence getNextSequence()
     {
