@@ -74,6 +74,7 @@ public class BNFParserImpl implements BNFParser {
         result.setTop(startToken);
 
         while (!stack.isEmpty()) {
+
             BNFParserState holder = stack.peek();
 
             if (holder.getState() == ParserState.EMPTY) {
@@ -87,22 +88,33 @@ public class BNFParserImpl implements BNFParser {
                     errorToken = null;
                     rewindToNextSequence();
                 }
+
             } else if (holder.getState() == ParserState.NO_MATCH_WITH_ZERO_REPETITION) {
+
                 processNoMatchWithZeroRepetition();
+
             } else if (holder.getState() == ParserState.MATCH_WITH_ZERO_REPETITION) {
+
                 processMatchWithZeroRepetition();
+
             } else if (holder.getState() == ParserState.NO_MATCH_WITH_ZERO_REPETITION_LOOKING_FOR_FIRST_MATCH) {
+
                 maxMatchToken = processNoMatchWithZeroRepetitionLookingForFirstMatch();
                 errorToken = null;
                 success = true;
+
             } else if (holder.getState() == ParserState.MATCH) {
+
                 maxMatchToken = processMatch();
                 errorToken = null;
                 success = true;
+
             } else if (holder.getState() == ParserState.NO_MATCH) {
+
                 BNFToken eToken = processNoMatch();
                 errorToken = updateErrorToken(errorToken, eToken);
                 success = false;
+
             } else {
                 processStack();
             }
@@ -363,44 +375,65 @@ public class BNFParserImpl implements BNFParser {
         if (holder.isComplete()) {
             stack.pop();
         } else {
+
+            BNFToken currentToken = holder.getCurrentToken();
+
             if (holder.isSequences()) {
-                if (holder.isComplete()) {
-                    stack.pop();
 
-                } else {
+                BNFSequence sequence = holder.getNextSequence();
+                addParserState(sequence, currentToken, holder.getParserRepetition(), BNFRepetition.NONE);
 
-                    BNFSequence pipeLine = holder.getNextSequence();
-                    addParserState(pipeLine, holder.getCurrentToken(), holder.getParserRepetition(), BNFRepetition.NONE);
-                }
             } else if (holder.isSequence()) {
-                BNFSymbol pipe = holder.getNextSymbol();
-                String nextPipe = pipe.getName();
-                BNFSequences sd = stateDefinitions.get(nextPipe);
 
-                BNFParserRepetition repetition = getParserRepetition(holder,
-                        pipe);
+                BNFSymbol symbol = holder.getNextSymbol();
+                BNFSequences sd = stateDefinitions.get(symbol.getName());
+
+                BNFParserRepetition repetition = getParserRepetition(holder, symbol);
 
                 if (sd != null) {
-                    addParserState(sd, holder.getCurrentToken(), repetition,
-                            pipe.getRepetition());
+
+                    addParserState(sd, currentToken, repetition, symbol.getRepetition());
+
                 } else {
-                    if (nextPipe.equals("Empty")) {
-                        addParserState(ParserState.EMPTY);
-                    } else if (isMatch(nextPipe, holder.getCurrentToken())) {
-                        addParserState(ParserState.MATCH);
-                    } else if (repetition == BNFParserRepetition.ZERO_OR_MORE_LOOKING_FOR_FIRST_MATCH) {
 
-                        addParserState(ParserState.NO_MATCH_WITH_ZERO_REPETITION_LOOKING_FOR_FIRST_MATCH);
-
-                    } else if (repetition == BNFParserRepetition.ZERO_OR_MORE) {
-                        addParserState(ParserState.NO_MATCH_WITH_ZERO_REPETITION);
-                    } else {
-                        addParserState(ParserState.NO_MATCH);
-                    }
-
+                    ParserState state = getParserState(symbol, currentToken, repetition);
+                    addParserState(state);
                 }
             }
         }
+    }
+
+    /**
+     * Gets the Parser State.
+     * @param symbol -
+     * @param token -
+     * @param repetition -
+     * @return ParserState
+     */
+    private ParserState getParserState(final BNFSymbol symbol, final BNFToken token, final BNFParserRepetition repetition) {
+
+        ParserState state = ParserState.NO_MATCH;
+
+        String symbolName = symbol.getName();
+
+        if (symbolName.equals("Empty")) {
+
+            state = ParserState.EMPTY;
+
+        } else if (isMatch(symbolName, token)) {
+
+            state = ParserState.MATCH;
+
+        } else if (repetition == BNFParserRepetition.ZERO_OR_MORE_LOOKING_FOR_FIRST_MATCH) {
+
+            state = ParserState.NO_MATCH_WITH_ZERO_REPETITION_LOOKING_FOR_FIRST_MATCH;
+
+        } else if (repetition == BNFParserRepetition.ZERO_OR_MORE) {
+
+            state = ParserState.NO_MATCH_WITH_ZERO_REPETITION;
+        }
+
+        return state;
     }
 
     /**
@@ -472,15 +505,14 @@ public class BNFParserImpl implements BNFParser {
      * @param parserRepetition -
      * @param repetition -
      */
-    private void addParserState(final BNFSequences sd, final BNFToken token, final BNFParserRepetition parserRepetition, final BNFRepetition repetition) {
+    private void addParserState(final BNFSequences sd, final BNFToken token,
+            final BNFParserRepetition parserRepetition, final BNFRepetition repetition) {
 
         if (sd.getSequences().size() == 1) {
-            addParserState(sd.getSequences().get(0), token, parserRepetition,
-                    repetition);
+            addParserState(sd.getSequences().get(0), token, parserRepetition, repetition);
         } else {
             debug(sd, token, parserRepetition);
-            stack.push(new BNFParserState(sd, token, parserRepetition,
-                    repetition));
+            stack.push(new BNFParserState(sd, token, parserRepetition, repetition));
         }
     }
 
@@ -505,11 +537,9 @@ public class BNFParserImpl implements BNFParser {
         BNFRepetition symbolRepetition = symbol.getRepetition();
         BNFParserRepetition holderRepetition = holder.getParserRepetition();
 
-        if (symbolRepetition != BNFRepetition.NONE
-                && holderRepetition == BNFParserRepetition.NONE) {
+        if (symbolRepetition != BNFRepetition.NONE && holderRepetition == BNFParserRepetition.NONE) {
             holderRepetition = BNFParserRepetition.ZERO_OR_MORE_LOOKING_FOR_FIRST_MATCH;
-        } else if (symbolRepetition != BNFRepetition.NONE
-                && holderRepetition != BNFParserRepetition.NONE) {
+        } else if (symbolRepetition != BNFRepetition.NONE && holderRepetition != BNFParserRepetition.NONE) {
             holderRepetition = BNFParserRepetition.ZERO_OR_MORE;
         }
 
