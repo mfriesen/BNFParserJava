@@ -16,6 +16,7 @@
 
 package ca.gobits.bnf.parser;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,7 +25,7 @@ import java.util.Map;
 public interface BNFSequenceFactory {
 
     /**
-     * @return Map<String, BNFSequences> - for JSON grammar
+     * @return Map<String, List<BNFSequence>> - for JSON grammar
      */
-    Map<String, BNFSequences> json();
+    Map<String, List<BNFSequence>> json();
 }

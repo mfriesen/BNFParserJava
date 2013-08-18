@@ -16,6 +16,8 @@
 
 package ca.gobits.bnf.parser;
 
+import java.util.List;
+
 import ca.gobits.bnf.parser.BNFSymbol.BNFRepetition;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
@@ -64,8 +66,8 @@ public class BNFParserState {
     /** current token. */
     private BNFToken currentToken;
 
-    /** BNFSequences. */
-    private BNFSequences sequences;
+    /** List<BNFSequence>. */
+    private List<BNFSequence> sequences;
 
     /** BNFSequence. */
     private BNFSequence sequence;
@@ -99,7 +101,7 @@ public class BNFParserState {
      * @param token
      *            -
      */
-    public BNFParserState(final BNFSequences seqs, final BNFToken token) {
+    public BNFParserState(final List<BNFSequence> seqs, final BNFToken token) {
         this(token);
         this.sequences = seqs;
     }
@@ -131,7 +133,7 @@ public class BNFParserState {
      * @param parserRep -
      * @param rep -
      */
-    public BNFParserState(final BNFSequences sd, final BNFToken token, final BNFParserRepetition parserRep, final BNFRepetition rep) {
+    public BNFParserState(final List<BNFSequence> sd, final BNFToken token, final BNFParserRepetition parserRep, final BNFRepetition rep) {
         this(sd, token);
         this.parserRepetition = parserRep;
         this.repetition = rep;
@@ -195,7 +197,7 @@ public class BNFParserState {
     /**
      * @return BNFSequences
      */
-    public BNFSequences getSequences() {
+    public List<BNFSequence> getSequences() {
         return sequences;
     }
 
@@ -262,8 +264,8 @@ public class BNFParserState {
         BNFSequence seq = null;
         int i = currentPosition + 1;
 
-        if (i < this.sequences.getSequences().size()) {
-            seq = this.sequences.getSequences().get(i);
+        if (i < this.getSequences().size()) {
+            seq = this.getSequences().get(i);
             currentPosition = i;
         }
 
@@ -275,7 +277,7 @@ public class BNFParserState {
      */
     public boolean isCompleteSequence() {
         return this.sequences != null
-                && this.currentPosition >= this.sequences.getSequences().size() - 1;
+                && this.currentPosition >= this.getSequences().size() - 1;
     }
 
     /**

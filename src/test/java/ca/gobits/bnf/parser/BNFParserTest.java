@@ -22,6 +22,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
@@ -43,7 +44,7 @@ public class BNFParserTest {
     private BNFTokenizerFactory tokenizerFactory;
 
     /** Map of BNFSequences instance. */
-    private Map<String, BNFSequences> map;
+    private Map<String, List<BNFSequence>> map;
 
     /** BNFParser instance. */
     private BNFParser parser;

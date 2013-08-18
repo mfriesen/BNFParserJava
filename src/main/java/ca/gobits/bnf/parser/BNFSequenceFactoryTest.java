@@ -48,7 +48,7 @@ public class BNFSequenceFactoryTest {
 
         // given
         // when
-        Map<String, BNFSequences> result = factory.json();
+        Map<String, List<BNFSequence>> result = factory.json();
 
         // then
         assertEquals(NUMBER_OF_JSON_SEQUENCES, result.size());
@@ -65,9 +65,9 @@ public class BNFSequenceFactoryTest {
     /**
      * @param s -
      */
-    private void verifyAtStart(final BNFSequences s) {
+    private void verifyAtStart(final List<BNFSequence> s) {
 
-        assertEquals(THREE, s.getSequences().size());
+        assertEquals(THREE, s.size());
 
         assertEquals(1, getSymbols(s, 0).size());
         assertEquals("array", getSymbolsName(s, 0, 0));
@@ -85,9 +85,9 @@ public class BNFSequenceFactoryTest {
     /**
      * @param s -
      */
-    private void verifyObject(final BNFSequences s) {
+    private void verifyObject(final List<BNFSequence> s) {
 
-        assertEquals(1, s.getSequences().size());
+        assertEquals(1, s.size());
         assertEquals(THREE, getSymbols(s, 0).size());
 
         assertEquals("openCurly", getSymbolsName(s, 0, 0));
@@ -103,8 +103,8 @@ public class BNFSequenceFactoryTest {
     /**
      * @param s -
      */
-    private void verifyActualObject(final BNFSequences s) {
-        assertEquals(1, s.getSequences().size());
+    private void verifyActualObject(final List<BNFSequence> s) {
+        assertEquals(1, s.size());
         assertEquals(2, getSymbols(s, 0).size());
 
         assertEquals("property", getSymbolsName(s, 0, 0));
@@ -117,9 +117,9 @@ public class BNFSequenceFactoryTest {
     /**
      * @param s -
      */
-    private void verifyColon(final BNFSequences s) {
+    private void verifyColon(final List<BNFSequence> s) {
 
-        assertEquals(1, s.getSequences().size());
+        assertEquals(1, s.size());
         assertEquals(1, getSymbols(s, 0).size());
 
         assertEquals("':'", getSymbolsName(s, 0, 0));
@@ -132,7 +132,7 @@ public class BNFSequenceFactoryTest {
      * @param index -
      * @return String
      */
-    private String getSymbolsName(final BNFSequences s, final int position, final int index) {
+    private String getSymbolsName(final List<BNFSequence> s, final int position, final int index) {
         List<BNFSymbol> symbols = getSymbols(s, position);
         return symbols.get(index).getName();
     }
@@ -143,7 +143,7 @@ public class BNFSequenceFactoryTest {
      * @param index -
      * @return BNFRepetition
      */
-    private BNFRepetition getSymbolsRepetition(final BNFSequences s, final int position, final int index) {
+    private BNFRepetition getSymbolsRepetition(final List<BNFSequence> s, final int position, final int index) {
         List<BNFSymbol> symbols = getSymbols(s, position);
         return symbols.get(index).getRepetition();
     }
@@ -153,7 +153,7 @@ public class BNFSequenceFactoryTest {
      * @param position -
      * @return List<BNFSymbol>
      */
-    private List<BNFSymbol> getSymbols(final BNFSequences s, final int position) {
-        return s.getSequences().get(position).getSymbols();
+    private List<BNFSymbol> getSymbols(final List<BNFSequence> s, final int position) {
+        return s.get(position).getSymbols();
     }
 }

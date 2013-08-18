@@ -16,6 +16,7 @@
 
 package ca.gobits.bnf.parser;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,7 +30,7 @@ public class BNFParserFactoryImpl implements BNFParserFactory {
     @Override
     public BNFParser json() {
 
-        Map<String, BNFSequences> map = df.json();
+        Map<String, List<BNFSequence>> map = df.json();
         BNFParser parser = new BNFParserImpl(map);
 
         return parser;

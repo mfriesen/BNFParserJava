@@ -16,6 +16,7 @@
 
 package ca.gobits.bnf.parser;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.logging.Logger;
@@ -35,7 +36,7 @@ public class BNFParserImpl implements BNFParser {
     private final Pattern numberPattern = Pattern.compile("^[\\d\\-\\.]+$");
 
     /** Holder for BNFSequences map. */
-    private final Map<String, BNFSequences> stateDefinitions;
+    private final Map<String, List<BNFSequence>> stateDefinitions;
 
     /** BNF processing stack. */
     private final Stack<BNFParserState> stack = new Stack<BNFParserState>();
@@ -47,13 +48,13 @@ public class BNFParserImpl implements BNFParser {
      * constructor.
      * @param map -
      */
-    public BNFParserImpl(final Map<String, BNFSequences> map) {
+    public BNFParserImpl(final Map<String, List<BNFSequence>> map) {
         this.stateDefinitions = map;
     }
 
     @Override
     public BNFParseResult parse(final BNFToken token) {
-        BNFSequences sd = stateDefinitions.get("@start");
+        List<BNFSequence> sd = stateDefinitions.get("@start");
         addParserState(sd, token, BNFParserRepetition.NONE, BNFRepetition.NONE);
 
         return parseSequences(token);
@@ -386,7 +387,7 @@ public class BNFParserImpl implements BNFParser {
             } else if (holder.isSequence()) {
 
                 BNFSymbol symbol = holder.getNextSymbol();
-                BNFSequences sd = stateDefinitions.get(symbol.getName());
+                List<BNFSequence> sd = stateDefinitions.get(symbol.getName());
 
                 BNFParserRepetition repetition = getParserRepetition(holder, symbol);
 
@@ -500,19 +501,19 @@ public class BNFParserImpl implements BNFParser {
     }
 
     /**
-     * @param sd -
+     * @param sequences -
      * @param token -
      * @param parserRepetition -
      * @param repetition -
      */
-    private void addParserState(final BNFSequences sd, final BNFToken token,
+    private void addParserState(final List<BNFSequence> sequences, final BNFToken token,
             final BNFParserRepetition parserRepetition, final BNFRepetition repetition) {
 
-        if (sd.getSequences().size() == 1) {
-            addParserState(sd.getSequences().get(0), token, parserRepetition, repetition);
+        if (sequences.size() == 1) {
+            addParserState(sequences.get(0), token, parserRepetition, repetition);
         } else {
-            debug(sd, token, parserRepetition);
-            stack.push(new BNFParserState(sd, token, parserRepetition, repetition));
+            debug(sequences, token, parserRepetition);
+            stack.push(new BNFParserState(sequences, token, parserRepetition, repetition));
         }
     }
 
@@ -591,9 +592,9 @@ public class BNFParserImpl implements BNFParser {
      * @param token -
      * @param repetition -
      */
-    private void debug(final BNFSequences sd, final BNFToken token, final BNFParserRepetition repetition) {
+    private void debug(final List<BNFSequence> sd, final BNFToken token, final BNFParserRepetition repetition) {
         debugPrintIndents();
-        LOGGER.finer("-> adding pipe lines " + sd.getSequences()
+        LOGGER.finer("-> adding pipe lines " + sd
                 + " for token " + debug(token) + " with repetition "
                 + repetition);
     }

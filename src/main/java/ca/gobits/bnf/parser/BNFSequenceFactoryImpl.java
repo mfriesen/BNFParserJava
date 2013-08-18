@@ -33,7 +33,7 @@ import ca.gobits.bnf.parser.BNFSymbol.BNFRepetition;
 public class BNFSequenceFactoryImpl implements BNFSequenceFactory {
 
     @Override
-    public Map<String, BNFSequences> json() {
+    public Map<String, List<BNFSequence>> json() {
 
         Map<String, String> prop = getGrammarJSON();
 
@@ -44,9 +44,9 @@ public class BNFSequenceFactoryImpl implements BNFSequenceFactory {
      * @param prop - grammar property map
      * @return Map<String, BNFSequences>
      */
-    private Map<String, BNFSequences> buildMap(final Map<String, String> prop) {
+    private Map<String, List<BNFSequence>> buildMap(final Map<String, String> prop) {
 
-        Map<String, BNFSequences> result = new HashMap<String, BNFSequences>();
+        Map<String, List<BNFSequence>> result = new HashMap<String, List<BNFSequence>>();
 
         for (Map.Entry<String, String> e : prop.entrySet()) {
 
@@ -56,7 +56,7 @@ public class BNFSequenceFactoryImpl implements BNFSequenceFactory {
 
             List<String> sequenceNames = createSequenceNames(value);
 
-            BNFSequences sequences = createBNFSequences(sequenceNames);
+            List<BNFSequence> sequences = createBNFSequences(sequenceNames);
             result.put(name, sequences);
         }
 
@@ -67,9 +67,9 @@ public class BNFSequenceFactoryImpl implements BNFSequenceFactory {
      * @param sequenceNames -
      * @return BNFSequences
      */
-    private BNFSequences createBNFSequences(final List<String> sequenceNames) {
+    private List<BNFSequence> createBNFSequences(final List<String> sequenceNames) {
         List<BNFSequence> list = createBNFSequenceList(sequenceNames);
-        return new BNFSequences(list);
+        return list;
     }
 
     /**
