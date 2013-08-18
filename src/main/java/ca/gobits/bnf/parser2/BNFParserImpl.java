@@ -51,7 +51,6 @@ public class BNFParserImpl implements BNFParser
             	stack.pop();
             	BNFToken token = stack.peek().getCurrentToken();
             	if (!isEmpty(token)) {
-//            		rewindToNextSequence();
             		rewindToNextSymbol();
             	} else {
             		success = true;
@@ -159,12 +158,6 @@ public class BNFParserImpl implements BNFParser
 		
 		if (!stack.isEmpty()) {
 			BNFParserState holder = stack.peek();
-
-			// TODO REMOVE?
-//			if (holder.getRepetition() == BNFParserRepetition.ZERO_OR_MORE_LOOKING_FOR_FIRST_MATCH) {
-//				holder.setRepetition(BNFParserRepetition.NONE);
-//			}
-//			
 			holder.advanceToken(token);
 		}
 		
@@ -204,7 +197,6 @@ public class BNFParserImpl implements BNFParser
 		
 		BNFToken token = stack.peek().getCurrentToken();
 		
-//		rewindToNextSequence();
 		rewindToNextSymbol(BNFParserRepetition.ZERO_OR_MORE);
 		
 		if (!stack.isEmpty()) {
@@ -350,7 +342,6 @@ public class BNFParserImpl implements BNFParser
             }
             else if (holder.isSequence())
             {
-//                BNFSequence sequence = holder.getPipeLine();
                 BNFSymbol pipe = holder.getNextSymbol();
                 String nextPipe = pipe.getName();      
                 BNFSequences sd = stateDefinitions.get(nextPipe);
@@ -368,12 +359,7 @@ public class BNFParserImpl implements BNFParser
                 	}
                 	else if (isMatch(nextPipe, holder.getCurrentToken()))
                     {
-//                	    if (repetition != BNFRepetition.NONE && holder.isComplete()) {
-//                	        addPipeLine(HolderState.MATCH_WITH_ZERO_REPETITION);
-//                	    } else {
-//                        System.out.println("MATCHED COMPARING " + nextPipe + " WITH TOKEN " + holder.getCurrentToken().getStringValue());
-                	        addPipeLine(HolderState.MATCH);
-//                	    }
+                		addPipeLine(HolderState.MATCH);
                     }
                 	else if (repetition == BNFParserRepetition.ZERO_OR_MORE_LOOKING_FOR_FIRST_MATCH) {
                 		
@@ -385,7 +371,6 @@ public class BNFParserImpl implements BNFParser
                     }
                     else
                     {
-//                        System.out.println("NO MATCH COMPARING " + nextPipe + " WITH TOKEN " + holder.getCurrentToken().getStringValue());
                         addPipeLine(HolderState.NO_MATCH);
                     }
                     
@@ -464,11 +449,6 @@ public class BNFParserImpl implements BNFParser
         } else if (symbolRepetition != BNFRepetition.NONE && holderRepetition != BNFParserRepetition.NONE) {
             holderRepetition = BNFParserRepetition.ZERO_OR_MORE;
         }
-        
-//        if (repetition == BNFRepetition.NONE)
-//        {
-//            repetition = holder.getRepetition();
-//        }
         
         return holderRepetition;
     }
