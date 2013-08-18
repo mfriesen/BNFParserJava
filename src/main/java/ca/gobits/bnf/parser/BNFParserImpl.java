@@ -135,8 +135,7 @@ public class BNFParserImpl implements BNFParser {
      * @return BNFToken
      */
     private BNFToken updateErrorToken(final BNFToken token1, final BNFToken token2) {
-        return token1 != null && token1.getId() > token2.getId() ? token1
-                : token2;
+        return token1 != null && token1.getId() > token2.getId() ? token1 : token2;
     }
 
     /**
@@ -173,7 +172,7 @@ public class BNFParserImpl implements BNFParser {
         debugPrintIndents();
         LOGGER.finer("-> matched token " + token.getStringValue() + " rewind to start of repetition");
 
-        rewindToStartOfRepetition();
+        rewindToOutsideOfRepetition();
 
         if (!stack.isEmpty()) {
             BNFParserState holder = stack.peek();
@@ -218,8 +217,7 @@ public class BNFParserImpl implements BNFParser {
         BNFToken token = stack.peek().getCurrentToken();
 
         debugPrintIndents();
-        LOGGER.finer("-> matched token " + token.getStringValue()
-                + " rewind to next symbol");
+        LOGGER.finer("-> matched token " + token.getStringValue() + " rewind to next symbol");
 
         rewindToNextSymbolOrRepetition();
 
@@ -239,33 +237,17 @@ public class BNFParserImpl implements BNFParser {
     private void processNoMatchWithZeroRepetition() {
 
         debugPrintIndents();
-        LOGGER.finer("-> " + ParserState.NO_MATCH_WITH_ZERO_REPETITION
-                + ", rewind to next symbol");
+        LOGGER.finer("-> " + ParserState.NO_MATCH_WITH_ZERO_REPETITION + ", rewind to next symbol");
 
         stack.pop();
 
         BNFToken token = stack.peek().getCurrentToken();
 
-        rewindToNextSymbol(BNFParserRepetition.ZERO_OR_MORE);
+        rewindToNextSymbol();
 
         if (!stack.isEmpty()) {
             BNFParserState holder = stack.peek();
             holder.advanceToken(token);
-        }
-    }
-
-    /**
-     * @param repetition -
-     */
-    private void rewindToNextSymbol(final BNFParserRepetition repetition) {
-        while (!stack.isEmpty()) {
-            BNFParserState holder = stack.peek();
-            if (holder.isSequence() && !holder.isComplete()
-                    && holder.getParserRepetition() != repetition) {
-                break;
-            }
-
-            stack.pop();
         }
     }
 
@@ -286,29 +268,6 @@ public class BNFParserImpl implements BNFParser {
     }
 
     /**
-     * rewindToStartOfRepetition.
-     */
-    private void rewindToStartOfRepetition() {
-
-        BNFParserState startOfRepetition = null;
-
-        while (!stack.isEmpty()) {
-            BNFParserState holder = stack.peek();
-
-            if (holder.getParserRepetition() != BNFParserRepetition.NONE) {
-                startOfRepetition = holder;
-                stack.pop();
-            } else {
-                break;
-            }
-        }
-
-        if (startOfRepetition != null) {
-            this.stack.push(startOfRepetition);
-        }
-    }
-
-    /**
      * Rewinds to next incomplete sequence or to ZERO_OR_MORE repetition which
      * ever one is first.
      */
@@ -316,8 +275,7 @@ public class BNFParserImpl implements BNFParser {
         while (!stack.isEmpty()) {
             BNFParserState holder = stack.peek();
 
-            if (holder.getRepetition() == BNFRepetition.ZERO_OR_MORE
-                    && holder.isComplete()) {
+            if (holder.getRepetition() == BNFRepetition.ZERO_OR_MORE && holder.isComplete()) {
                 holder.reset();
                 if (holder.getRepetition() != BNFRepetition.NONE) {
                     holder.setParserRepetition(BNFParserRepetition.ZERO_OR_MORE_LOOKING_FOR_FIRST_MATCH);
@@ -447,10 +405,8 @@ public class BNFParserImpl implements BNFParser {
         boolean match = false;
 
         if (token != null) {
-            String s = isQuotedString(symbolName) ? symbolName.substring(1,
-                    symbolName.length() - 1) : symbolName;
-            match = s.equals(token.getStringValue())
-                    || isQuotedString(symbolName, token)
+            String s = isQuotedString(symbolName) ? symbolName.substring(1, symbolName.length() - 1) : symbolName;
+            match = s.equals(token.getStringValue()) || isQuotedString(symbolName, token)
                     || isNumber(symbolName, token);
         }
 
@@ -462,8 +418,7 @@ public class BNFParserImpl implements BNFParser {
      * @return boolean
      */
     private boolean isQuotedString(final String value) {
-        return (value.startsWith("\"") && value.endsWith("\""))
-                || value.startsWith("'") && value.endsWith("'");
+        return (value.startsWith("\"") && value.endsWith("\"")) || value.startsWith("'") && value.endsWith("'");
     }
 
     /**
