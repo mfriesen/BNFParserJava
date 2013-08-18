@@ -43,7 +43,7 @@ public class BNFFastForward {
      * @return BNFTokenizerType
      */
     public BNFTokenizerType getStart() {
-        return start;
+        return this.start;
     }
 
     /**
@@ -57,7 +57,7 @@ public class BNFFastForward {
      * @return BNFTokenizerType[]
      */
     public BNFTokenizerType[] getEnd() {
-        return end;
+        return this.end;
     }
 
     /**
@@ -78,7 +78,7 @@ public class BNFFastForward {
      * @return boolean
      */
     public boolean isActive() {
-        return start != BNFTokenizerType.NONE;
+        return this.start != BNFTokenizerType.NONE;
     }
 
     /**
@@ -101,10 +101,10 @@ public class BNFFastForward {
 
         boolean match = false;
 
-        if (end.length == 1) {
-            match = type == end[0];
-        } else if (end.length == 2) {
-            match = type == end[0] && lastType == end[1];
+        if (this.end.length == 1) {
+            match = type == this.end[0];
+        } else if (this.end.length == 2) {
+            match = type == this.end[0] && lastType == this.end[1];
         }
 
         return match;
@@ -116,7 +116,7 @@ public class BNFFastForward {
     public void complete() {
         this.start = BNFTokenizerType.NONE;
         setEnd(BNFTokenizerType.NONE);
-        sb.delete(0, sb.length());
+        this.sb.delete(0, this.sb.length());
     }
 
     /**
@@ -125,7 +125,7 @@ public class BNFFastForward {
      */
     public void appendIfActive(final char c) {
         if (isActive()) {
-            sb.append(String.valueOf(c));
+            this.sb.append(String.valueOf(c));
         }
     }
 
@@ -135,7 +135,7 @@ public class BNFFastForward {
      */
     public void appendIfActive(final String s) {
         if (isActive()) {
-            sb.append(s);
+            this.sb.append(s);
         }
     }
 
@@ -143,6 +143,6 @@ public class BNFFastForward {
      * @return String
      */
     public String getString() {
-        return sb.toString();
+        return this.sb.toString();
     }
 }

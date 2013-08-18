@@ -30,7 +30,7 @@ public class BNFParserFactoryImpl implements BNFParserFactory {
     @Override
     public BNFParser json() {
 
-        Map<String, List<BNFSequence>> map = df.json();
+        Map<String, List<BNFSequence>> map = this.df.json();
         BNFParser parser = new BNFParserImpl(map);
 
         return parser;

@@ -41,11 +41,11 @@ public class BNFSequence {
      * @return List<BNFSymbol>
      */
     public List<BNFSymbol> getSymbols() {
-        return symbols;
+        return this.symbols;
     }
 
     @Override
     public String toString() {
-        return symbols.toString();
+        return this.symbols.toString();
     }
 }

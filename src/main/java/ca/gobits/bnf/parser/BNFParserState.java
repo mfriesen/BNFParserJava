@@ -191,14 +191,14 @@ public class BNFParserState {
      * @return BNFToken
      */
     public BNFToken getCurrentToken() {
-        return currentToken;
+        return this.currentToken;
     }
 
     /**
      * @return BNFSequences
      */
     public List<BNFSequence> getSequences() {
-        return sequences;
+        return this.sequences;
     }
 
     /**
@@ -212,14 +212,14 @@ public class BNFParserState {
      * @return BNFSequence
      */
     public BNFSequence getSequence() {
-        return sequence;
+        return this.sequence;
     }
 
     /**
      * @return HolderState
      */
     public ParserState getState() {
-        return state;
+        return this.state;
     }
 
     /**
@@ -231,7 +231,7 @@ public class BNFParserState {
 
     @Override
     public String toString() {
-        if (sequences != null) {
+        if (this.sequences != null) {
             return this.sequences.toString();
         }
 
@@ -246,7 +246,7 @@ public class BNFParserState {
      * @return BNFParserRepetition
      */
     public BNFParserRepetition getParserRepetition() {
-        return parserRepetition;
+        return this.parserRepetition;
     }
 
     /**
@@ -262,11 +262,11 @@ public class BNFParserState {
     public BNFSequence getNextSequence() {
 
         BNFSequence seq = null;
-        int i = currentPosition + 1;
+        int i = this.currentPosition + 1;
 
         if (i < this.getSequences().size()) {
             seq = this.getSequences().get(i);
-            currentPosition = i;
+            this.currentPosition = i;
         }
 
         return seq;

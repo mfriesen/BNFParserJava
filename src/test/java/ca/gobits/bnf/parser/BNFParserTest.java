@@ -57,10 +57,10 @@ public class BNFParserTest {
     @Before
     public void before() throws Exception {
 
-        sequenceFactory = new BNFSequenceFactoryImpl();
-        tokenizerFactory = new BNFTokenizerFactoryImpl();
-        map = sequenceFactory.json();
-        parser = new BNFParserImpl(map);
+        this.sequenceFactory = new BNFSequenceFactoryImpl();
+        this.tokenizerFactory = new BNFTokenizerFactoryImpl();
+        this.map = this.sequenceFactory.json();
+        this.parser = new BNFParserImpl(this.map);
     }
 
     /**
@@ -73,10 +73,10 @@ public class BNFParserTest {
 
         // given
         String json = "{}";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertNotNull(result.getTop());
@@ -94,10 +94,10 @@ public class BNFParserTest {
 
         // given
         String json = "[]";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertTrue(result.isSuccess());
@@ -115,10 +115,10 @@ public class BNFParserTest {
 
         // given
         String json = "";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertTrue(result.isSuccess());
@@ -136,10 +136,10 @@ public class BNFParserTest {
 
         // given
         String json = "{ \"asd\":\"123\"}";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertTrue(result.isSuccess());
@@ -157,10 +157,10 @@ public class BNFParserTest {
 
         // given
         String json = "{ \"asd\":123}";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertTrue(result.isSuccess());
@@ -178,10 +178,10 @@ public class BNFParserTest {
 
         // given
         String json = "{\"id\": \"118019484951173_228591\",\"message\": \"test test\"}";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertTrue(result.isSuccess());
@@ -199,10 +199,10 @@ public class BNFParserTest {
 
         // given
         String json = "{\"id\": \"118019484951173_228591\",\"message\": \"test test\",\"created_time\": \"2011-06-19T09:14:16+0000\"}";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertTrue(result.isSuccess());
@@ -219,10 +219,10 @@ public class BNFParserTest {
     public void testParse08() throws Exception {
         // given
         String json = "{\"card\":\"2\",\"numbers\":{\"Conway\":[1,11,21,1211,111221,312211],\"Fibonacci\":[0,1,1,2,3,5,8,13,21,34]}}";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertTrue(result.isSuccess());
@@ -239,10 +239,10 @@ public class BNFParserTest {
     public void testParse09() throws Exception {
         // given
         String json = "[1,11,21,1211,111221,312211]";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertTrue(result.isSuccess());
@@ -259,10 +259,10 @@ public class BNFParserTest {
     public void testParse10() throws Exception {
         // given
         String json = "asdasd";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertFalse(result.isSuccess());
@@ -280,10 +280,10 @@ public class BNFParserTest {
     public void testParse11() throws Exception {
         // given
         String json = "{ asdasd";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertFalse(result.isSuccess());
@@ -303,10 +303,10 @@ public class BNFParserTest {
 
         // given
         String json = "{\"id\": \"118019484951173_228591\",\"message\": \"test test\",\"created_time\"! \"2011-06-19T09:14:16+0000\"}";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertFalse(result.isSuccess());
@@ -325,10 +325,10 @@ public class BNFParserTest {
 
         // given
         String json = "[";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertNotNull(result.getTop());
@@ -346,10 +346,10 @@ public class BNFParserTest {
     public void testParse14() throws Exception {
         // given
         String json = "{\"A\":null}";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertNotNull(result.getTop());
@@ -366,10 +366,10 @@ public class BNFParserTest {
     public void testParse15() throws Exception {
         // given
         String json = "{\"A\":\"B\",\"C\":}";
-        BNFToken token = tokenizerFactory.tokens(json);
+        BNFToken token = this.tokenizerFactory.tokens(json);
 
         // when
-        BNFParseResult result = parser.parse(token);
+        BNFParseResult result = this.parser.parse(token);
 
         // then
         assertFalse(result.isSuccess());

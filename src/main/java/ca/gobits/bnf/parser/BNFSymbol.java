@@ -63,18 +63,18 @@ public class BNFSymbol {
      * @return String - name of symbol
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
      * @return BNFRepetition - repetition of symbol
      */
     public BNFRepetition getRepetition() {
-        return repetition;
+        return this.repetition;
     }
 
     @Override
     public String toString() {
-        return name;
+        return this.name;
     }
 }

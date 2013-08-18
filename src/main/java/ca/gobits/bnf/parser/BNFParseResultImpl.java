@@ -47,7 +47,7 @@ public class BNFParseResultImpl implements BNFParseResult {
      * @return boolean
      */
     public boolean isSuccess() {
-        return success;
+        return this.success;
     }
 
     /**
@@ -62,7 +62,7 @@ public class BNFParseResultImpl implements BNFParseResult {
      * @return BNFToken
      */
     public BNFToken getTop() {
-        return top;
+        return this.top;
     }
 
     /**
@@ -77,7 +77,7 @@ public class BNFParseResultImpl implements BNFParseResult {
      * @return BNFToken
      */
     public BNFToken getError() {
-        return error;
+        return this.error;
     }
 
     /**
@@ -103,7 +103,7 @@ public class BNFParseResultImpl implements BNFParseResult {
     public void complete() {
 
         if (!isSuccess()) {
-            setError(maxToken);
+            setError(this.maxToken);
         }
     }
 }

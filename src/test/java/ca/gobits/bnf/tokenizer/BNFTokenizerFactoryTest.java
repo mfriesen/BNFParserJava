@@ -42,7 +42,7 @@ public class BNFTokenizerFactoryTest {
         String s = "";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("", token.getStringValue());
@@ -61,7 +61,7 @@ public class BNFTokenizerFactoryTest {
         String s = "{ \n}";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("{", token.getStringValue());
@@ -83,7 +83,7 @@ public class BNFTokenizerFactoryTest {
         String s = "{ }//bleh\nasd";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("{", token.getStringValue());
@@ -105,7 +105,7 @@ public class BNFTokenizerFactoryTest {
         String s = "{ }/*bleh\n\nffsdf\n*/asd";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("{", token.getStringValue());
@@ -127,7 +127,7 @@ public class BNFTokenizerFactoryTest {
         String s = "hi \"asd\"";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("hi", token.getStringValue());
@@ -145,7 +145,7 @@ public class BNFTokenizerFactoryTest {
         String s = "\"asd\"";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("\"asd\"", token.getStringValue());
@@ -161,7 +161,7 @@ public class BNFTokenizerFactoryTest {
         String s = "\"asd's\"";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("\"asd's\"", token.getStringValue());
@@ -177,7 +177,7 @@ public class BNFTokenizerFactoryTest {
         String s = "\"asd's";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("\"asd's", token.getStringValue());
@@ -193,7 +193,7 @@ public class BNFTokenizerFactoryTest {
         String s = "{ \"asd\":\"123\"}";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("{", token.getStringValue());
@@ -223,7 +223,7 @@ public class BNFTokenizerFactoryTest {
         String s = "'asd':'123'}";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("'asd'", token.getStringValue());
@@ -250,7 +250,7 @@ public class BNFTokenizerFactoryTest {
         String s = "'asd':123}";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("'asd'", token.getStringValue());
@@ -278,7 +278,7 @@ public class BNFTokenizerFactoryTest {
         String s = "{\"notes\":\"Different browsers have support for different video formats, see sub-features for details. \\r\\n\\r\\nThe Android browser (before 2.3) requires <a href=\\\"http://www.broken-links.com/2010/07/08/making-html5-video-work-on-android-phones/\\\">specific handling</a> to run the video element.\"}";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("{", token.getStringValue());
@@ -313,7 +313,7 @@ public class BNFTokenizerFactoryTest {
         String s = IOUtils.toString(in, "UTF-8");
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("@", token.getStringValue());
@@ -359,7 +359,7 @@ public class BNFTokenizerFactoryTest {
         String s = "{\"text\":\"Й\"}";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("{", token.getStringValue());
@@ -389,7 +389,7 @@ public class BNFTokenizerFactoryTest {
         String s = "\u042d\u0442\u043e\u0440\u0443\u0441\u0441\u043a\u0438\u0439\u0442\u0435\u043a\u0441\u0442";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("Эторусскийтекст", token.getStringValue());
@@ -406,7 +406,7 @@ public class BNFTokenizerFactoryTest {
         String s = "\u042d\u0442\u043e\u0440\u0443\u0441\u0441\u043a\u0438\u0439\u0442\u0435\u043a\u0441\u0442";
 
         // when
-        BNFToken token = factory.tokens(s);
+        BNFToken token = this.factory.tokens(s);
 
         // then
         assertEquals("Эторусскийтекст", token.getStringValue());

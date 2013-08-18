@@ -41,7 +41,7 @@ public class PropertyParserTest {
         InputStream is = getClass().getResourceAsStream("/json.bnf");
 
         // when
-        Map<String, String> map = parser.parse(is);
+        Map<String, String> map = this.parser.parse(is);
 
         // then
         assertEquals("propertyName colon value;", map.get("property"));

@@ -57,7 +57,7 @@ public class PropertyParser {
         BNFTokenizerParams params = new BNFTokenizerParams();
         params.setIncludeWhitespace(true);
         params.setIncludeWhitespaceNewlines(true);
-        BNFToken token = tokenizer.tokens(str, params);
+        BNFToken token = this.tokenizer.tokens(str, params);
 
         String start = "";
         StringBuilder sb = new StringBuilder();

@@ -79,7 +79,7 @@ public class BNFToken {
      * @return String
      */
     public String getStringValue() {
-        return stringValue;
+        return this.stringValue;
     }
 
     /**
@@ -93,7 +93,7 @@ public class BNFToken {
      * @return BNFToken
      */
     public BNFToken getNextToken() {
-        return nextToken;
+        return this.nextToken;
     }
 
     /**
@@ -113,49 +113,49 @@ public class BNFToken {
      * @return boolean
      */
     public boolean isSymbol() {
-        return tokenType == BNFTokenType.SYMBOL;
+        return this.tokenType == BNFTokenType.SYMBOL;
     }
 
     /**
      * @return boolean
      */
     public boolean isWord() {
-        return tokenType == BNFTokenType.WORD;
+        return this.tokenType == BNFTokenType.WORD;
     }
 
     /**
      * @return boolean
      */
     public boolean isQuotedString() {
-        return tokenType == BNFTokenType.QUOTED_STRING;
+        return this.tokenType == BNFTokenType.QUOTED_STRING;
     }
 
     /**
      * @return boolean
      */
     public boolean isNumber() {
-        return tokenType == BNFTokenType.NUMBER;
+        return this.tokenType == BNFTokenType.NUMBER;
     }
 
     /**
      * @return boolean
      */
     public boolean isComment() {
-        return tokenType == BNFTokenType.COMMENT;
+        return this.tokenType == BNFTokenType.COMMENT;
     }
 
     /**
      * @return boolean
      */
     public boolean isWhitespace() {
-        return tokenType == BNFTokenType.WHITESPACE;
+        return this.tokenType == BNFTokenType.WHITESPACE;
     }
 
     /**
      * @return int
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -169,7 +169,7 @@ public class BNFToken {
      * @return BNFTokenType
      */
     public BNFTokenType getType() {
-        return tokenType;
+        return this.tokenType;
     }
 
     /**

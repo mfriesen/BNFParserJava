@@ -48,7 +48,7 @@ public class BNFSequenceFactoryTest {
 
         // given
         // when
-        Map<String, List<BNFSequence>> result = factory.json();
+        Map<String, List<BNFSequence>> result = this.factory.json();
 
         // then
         assertEquals(NUMBER_OF_JSON_SEQUENCES, result.size());
