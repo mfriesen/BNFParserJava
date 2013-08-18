@@ -6,130 +6,29 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import ca.gobits.bnf.parser.BNFParseResult;
-import ca.gobits.bnf.parser2.BNFSymbol.BNFRepetition;
 import ca.gobits.bnf.tokenizer.BNFToken;
 import ca.gobits.bnf.tokenizer.BNFTokenizerFactory;
 import ca.gobits.bnf.tokenizer.BNFTokenizerFactoryImpl;
 
 public class BNFParserTest
 {
-    private BNFTokenizerFactory tokenizerFactory = new BNFTokenizerFactoryImpl();
-    private Map<String, BNFSequences> map = new HashMap<String, BNFSequences>();
+	private BNFSequenceFactory sequenceFactory;
+    private BNFTokenizerFactory tokenizerFactory;
+    private Map<String, BNFSequences> map;
     private BNFParserImpl parser;
     
     @Before
     public void before() throws Exception 
     {
-        map.put("@start",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("array"))),
-                        new BNFSequence(Arrays.asList(new BNFSymbol("object"))),
-                        new BNFSequence(Arrays.asList(new BNFSymbol("Empty"))))));
-
-        map.put("object",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("openCurly"), new BNFSymbol("objectContent"), new BNFSymbol("closeCurly"))))));
-        
-        map.put("objectContent",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("actualObject"))),
-                        new BNFSequence(Arrays.asList(new BNFSymbol("Empty"))))));
-
-        map.put("actualObject",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("property"), new BNFSymbol("commaProperty", BNFRepetition.ZERO_OR_MORE))))));
-        
-        map.put("property",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("propertyName"), new BNFSymbol("colon"), new BNFSymbol("value"))))));
-
-        map.put("commaProperty",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("comma"), new BNFSymbol("property"))))));
-
-        map.put("propertyName",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("QuotedString"))))));
-
-        map.put("array",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("openBracket"), new BNFSymbol("arrayContent"), new BNFSymbol("closeBracket"))))));
-
-        map.put("arrayContent",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("actualArray"))),
-                        new BNFSequence(Arrays.asList(new BNFSymbol("Empty"))))));
-        
-        map.put("actualArray",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("value"), new BNFSymbol("commaValue", BNFRepetition.ZERO_OR_MORE))))));
-
-        map.put("commaValue",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("comma"), new BNFSymbol("value"))))));
-
-        map.put("value",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("null"))),
-                        new BNFSequence(Arrays.asList(new BNFSymbol("true"))),
-                        new BNFSequence(Arrays.asList(new BNFSymbol("false"))),
-                        new BNFSequence(Arrays.asList(new BNFSymbol("array"))),
-                        new BNFSequence(Arrays.asList(new BNFSymbol("object"))),
-                        new BNFSequence(Arrays.asList(new BNFSymbol("number"))),                        
-                        new BNFSequence(Arrays.asList(new BNFSymbol("string"))))));
-
-        map.put("string",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("QuotedString"))))));
-
-        map.put("number",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("Number"))))));
-
-        map.put("null",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("'null'"))))));
-
-        map.put("true",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("'true'"))))));
-
-        map.put("false",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("'false'"))))));
-
-        map.put("openCurly",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("'{'"))))));
-
-        map.put("closeCurly",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("'}'"))))));
-        
-        map.put("openBracket",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("'['"))))));
-
-        map.put("closeBracket",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("']'"))))));
-
-        map.put("comma",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("','"))))));
-
-        map.put("colon",
-                new BNFSequences(Arrays.asList(
-                        new BNFSequence(Arrays.asList(new BNFSymbol("':'"))))));
-        
+    	sequenceFactory = new BNFSequenceFactoryImpl();
+        tokenizerFactory = new BNFTokenizerFactoryImpl();
+        map = sequenceFactory.json();
         parser = new BNFParserImpl(map);
     }
     
@@ -389,5 +288,4 @@ public class BNFParserTest
         assertNotNull(result.getError());
         assertEquals("}", result.getError().getStringValue());
     }
-
 }
