@@ -18,35 +18,37 @@ package ca.gobits.bnf.parser;
 
 import java.util.List;
 
-public class BNFSequences
-{
-    private List<BNFSequence> sequences;
-    
-    public BNFSequences(List<BNFSequence> sequences)
-    {        
-        this.sequences = sequences;
+/**
+ * BNFSequences holder class for a List of BNFSequence objects.
+ */
+public class BNFSequences {
+
+    /** List of BNFSequences. */
+    private final List<BNFSequence> sequences;
+
+    /**
+     * constructor.
+     * @param sequenceList - List<BNFSequence>
+     */
+    public BNFSequences(final List<BNFSequence> sequenceList) {
+        this.sequences = sequenceList;
     }
-    
-    public List<BNFSequence> getSequences()
-    {
+
+    /**
+     * @return List<BNFSequence>
+     */
+    public List<BNFSequence> getSequences() {
         return sequences;
     }
 
-    public void setPipeLines(List<BNFSequence> sequences)
-    {
-        this.sequences = sequences;
-    }
-    
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        
-        for (BNFSequence lines : sequences)
-        {
+
+        for (BNFSequence lines : sequences) {
             sb.append(lines.toString());
         }
-        
+
         return sb.toString();
     }
 }

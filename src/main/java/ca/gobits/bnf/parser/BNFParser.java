@@ -19,6 +19,6 @@ package ca.gobits.bnf.parser;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 public interface BNFParser {
-	
-	BNFParseResult parse(BNFToken token);
+
+    BNFParseResult parse(BNFToken token);
 }

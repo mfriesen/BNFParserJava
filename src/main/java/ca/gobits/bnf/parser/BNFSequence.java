@@ -18,27 +18,34 @@ package ca.gobits.bnf.parser;
 
 import java.util.List;
 
-public class BNFSequence
-{
+/**
+ * BNFSequence contains a list of BNFSymbol objects.
+ */
+public class BNFSequence {
+
+    /** List of BNFSymbols. */
     private List<BNFSymbol> symbols;
-    
-    public BNFSequence()
-    {        
+
+    /** default constructor. */
+    public BNFSequence() {
     }
-    
-    public BNFSequence(List<BNFSymbol> symbols)
-    {        
-        this.symbols = symbols;
+
+    /**
+     * @param list - list of BNF Symbols
+     */
+    public BNFSequence(final List<BNFSymbol> list) {
+        this.symbols = list;
     }
-    
-    public List<BNFSymbol> getSymbols()
-    {
+
+    /**
+     * @return List<BNFSymbol>
+     */
+    public List<BNFSymbol> getSymbols() {
         return symbols;
     }
-    
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return symbols.toString();
     }
 }

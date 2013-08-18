@@ -25,18 +25,18 @@ import org.junit.Test;
 
 public class PropertyParserTest {
 
-	private PropertyParser parser = new PropertyParser();
-	
-	@Test
-	public void testJson() throws Exception {
-		// given
-		InputStream is = getClass().getResourceAsStream("/json.bnf");
+    private final PropertyParser parser = new PropertyParser();
 
-		// when
-		Map<String, String> map = parser.parse(is);
-		
-		// then
-		assertEquals("propertyName colon value;", map.get("property"));
-	}
+    @Test
+    public void testJson() throws Exception {
+        // given
+        InputStream is = getClass().getResourceAsStream("/json.bnf");
+
+        // when
+        Map<String, String> map = parser.parse(is);
+
+        // then
+        assertEquals("propertyName colon value;", map.get("property"));
+    }
 
 }

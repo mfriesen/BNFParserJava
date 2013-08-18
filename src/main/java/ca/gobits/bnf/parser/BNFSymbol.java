@@ -16,53 +16,65 @@
 
 package ca.gobits.bnf.parser;
 
-public class BNFSymbol
-{
-    public enum BNFRepetition { NONE, ZERO_OR_MORE }
-    
-    private String name;
-    private BNFRepetition repetition;
-    
-    public BNFSymbol()
-    {        
-        this.repetition = BNFRepetition.NONE;
-    }
-    
-    public BNFSymbol(String name)
-    {
-        this();
-        this.name = name;
-    }
-    
-    public BNFSymbol(String name, BNFRepetition repetition)
-    {
-        this(name);
-        this.repetition = repetition;
+/**
+ * BNFSymbol - holder class for name or repetition.
+ */
+public class BNFSymbol {
+
+    /** BNF Repetition. */
+    public enum BNFRepetition {
+        /** NONE, ZERO_OR_MORE. */
+        NONE, ZERO_OR_MORE
     }
 
-    public String getName()
-    {
+    /** name of symbol. */
+    private String name;
+
+    /** repetition of symbol. */
+    private BNFRepetition repetition;
+
+    /**
+     * default constructor.
+     */
+    public BNFSymbol() {
+        this.repetition = BNFRepetition.NONE;
+    }
+
+    /**
+     * constructor with name.
+     * @param original - name of symbol
+     */
+    public BNFSymbol(final String original) {
+        this();
+        this.name = original;
+    }
+
+    /**
+     * constructor.
+     * @param original - name of symbol
+     * @param rep - repetition of symbol
+     */
+    public BNFSymbol(final String original, final BNFRepetition rep) {
+        this(original);
+        this.repetition = rep;
+    }
+
+    /**
+     * @return String - name of symbol
+     */
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public BNFRepetition getRepetition()
-    {
+    /**
+     * @return BNFRepetition - repetition of symbol
+     */
+    public BNFRepetition getRepetition() {
         return repetition;
     }
 
-    public void setRepetition(BNFRepetition repetition)
-    {
-        this.repetition = repetition;
-    }
-        
     @Override
-    public String toString()
-    {
+    public String toString() {
         return name;
     }
 }

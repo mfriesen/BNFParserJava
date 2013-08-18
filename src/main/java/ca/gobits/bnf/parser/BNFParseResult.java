@@ -18,12 +18,11 @@ package ca.gobits.bnf.parser;
 
 import ca.gobits.bnf.tokenizer.BNFToken;
 
-
 public interface BNFParseResult {
 
-	BNFToken getTop();
-	
-	BNFToken getError();
-	
-	boolean isSuccess();
+    BNFToken getTop();
+
+    BNFToken getError();
+
+    boolean isSuccess();
 }

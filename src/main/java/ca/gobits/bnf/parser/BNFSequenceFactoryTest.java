@@ -25,91 +25,135 @@ import org.junit.Test;
 
 import ca.gobits.bnf.parser.BNFSymbol.BNFRepetition;
 
+
+/**
+ * BNFSequenceFactoryTest Unit Tests.
+ */
 public class BNFSequenceFactoryTest {
 
-	private BNFSequenceFactory factory = new BNFSequenceFactoryImpl();
-	
-	@Test
-	public void testJson01() {
-		
-		// given		
-		// when
-		Map<String, BNFSequences> result = factory.json();
-		
-		// then
-		assertEquals(23, result.size());
-		
-		verifyAtStart(result.get("@start"));
-		
-		verifyObject(result.get("object"));
-		
-		verifyActualObject(result.get("actualObject"));
-		
-		verifyColon(result.get("colon"));
-	}
+    /** THREE. */
+    private static final int THREE = 3;
 
-	private void verifyAtStart(BNFSequences s) {
-		
-		assertEquals(3, s.getSequences().size());
-		
-		assertEquals(1, getSymbols(s, 0).size());		
-		assertEquals("array", getSymbolsName(s, 0, 0));
-		assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 0, 0));
-		
-		assertEquals(1, getSymbols(s, 1).size());
-		assertEquals("object", getSymbolsName(s, 1, 0));
-		assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 1, 0));
+    /** NUMBER_OF_JSON_SEQUENCES. */
+    private static final int NUMBER_OF_JSON_SEQUENCES = 23;
 
-		assertEquals(1, getSymbols(s, 2).size());
-		assertEquals("Empty", getSymbolsName(s, 2, 0));
-		assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 2, 0));
-	}
-	
-	private void verifyObject(BNFSequences s) {
-		assertEquals(1, s.getSequences().size());
-		assertEquals(3, getSymbols(s, 0).size());
-		
-		assertEquals("openCurly", getSymbolsName(s, 0, 0));
-		assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 0, 0));
+    /** instance of BNFSequenceFactory. */
+    private final BNFSequenceFactory factory = new BNFSequenceFactoryImpl();
 
-		assertEquals("objectContent", getSymbolsName(s, 0, 1));
-		assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 0, 1));
+    /**
+     * Test creating JSON Sequence Factory.
+     */
+    @Test
+    public void testJson01() {
 
-		assertEquals("closeCurly", getSymbolsName(s, 0, 2));
-		assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 0, 2));
-	}
+        // given
+        // when
+        Map<String, BNFSequences> result = factory.json();
 
-	private void verifyActualObject(BNFSequences s) {
-		assertEquals(1, s.getSequences().size());
-		assertEquals(2, getSymbols(s, 0).size());
+        // then
+        assertEquals(NUMBER_OF_JSON_SEQUENCES, result.size());
 
-		assertEquals("property", getSymbolsName(s, 0, 0));
-		assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 0, 0));
+        verifyAtStart(result.get("@start"));
 
-		assertEquals("commaProperty", getSymbolsName(s, 0, 1));
-		assertEquals(BNFRepetition.ZERO_OR_MORE, getSymbolsRepetition(s, 0, 1));
-	}
+        verifyObject(result.get("object"));
 
-	private void verifyColon(BNFSequences s) {
-		
-		assertEquals(1, s.getSequences().size());
-		assertEquals(1, getSymbols(s, 0).size());
+        verifyActualObject(result.get("actualObject"));
 
-		assertEquals("':'", getSymbolsName(s, 0, 0));
-		assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 0, 0));		
-	}
-	
-	private String getSymbolsName(BNFSequences s, int position, int index) {
-		List<BNFSymbol> symbols = getSymbols(s, position);
-		return symbols.get(index).getName();
-	}
+        verifyColon(result.get("colon"));
+    }
 
-	private BNFRepetition getSymbolsRepetition(BNFSequences s, int position, int index) {
-		List<BNFSymbol> symbols = getSymbols(s, position);
-		return symbols.get(index).getRepetition();
-	}
-	
-	private List<BNFSymbol> getSymbols(BNFSequences s, int position) {
-		return s.getSequences().get(position).getSymbols();
-	}
+    /**
+     * @param s -
+     */
+    private void verifyAtStart(final BNFSequences s) {
+
+        assertEquals(THREE, s.getSequences().size());
+
+        assertEquals(1, getSymbols(s, 0).size());
+        assertEquals("array", getSymbolsName(s, 0, 0));
+        assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 0, 0));
+
+        assertEquals(1, getSymbols(s, 1).size());
+        assertEquals("object", getSymbolsName(s, 1, 0));
+        assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 1, 0));
+
+        assertEquals(1, getSymbols(s, 2).size());
+        assertEquals("Empty", getSymbolsName(s, 2, 0));
+        assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 2, 0));
+    }
+
+    /**
+     * @param s -
+     */
+    private void verifyObject(final BNFSequences s) {
+
+        assertEquals(1, s.getSequences().size());
+        assertEquals(THREE, getSymbols(s, 0).size());
+
+        assertEquals("openCurly", getSymbolsName(s, 0, 0));
+        assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 0, 0));
+
+        assertEquals("objectContent", getSymbolsName(s, 0, 1));
+        assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 0, 1));
+
+        assertEquals("closeCurly", getSymbolsName(s, 0, 2));
+        assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 0, 2));
+    }
+
+    /**
+     * @param s -
+     */
+    private void verifyActualObject(final BNFSequences s) {
+        assertEquals(1, s.getSequences().size());
+        assertEquals(2, getSymbols(s, 0).size());
+
+        assertEquals("property", getSymbolsName(s, 0, 0));
+        assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 0, 0));
+
+        assertEquals("commaProperty", getSymbolsName(s, 0, 1));
+        assertEquals(BNFRepetition.ZERO_OR_MORE, getSymbolsRepetition(s, 0, 1));
+    }
+
+    /**
+     * @param s -
+     */
+    private void verifyColon(final BNFSequences s) {
+
+        assertEquals(1, s.getSequences().size());
+        assertEquals(1, getSymbols(s, 0).size());
+
+        assertEquals("':'", getSymbolsName(s, 0, 0));
+        assertEquals(BNFRepetition.NONE, getSymbolsRepetition(s, 0, 0));
+    }
+
+    /**
+     * @param s -
+     * @param position -
+     * @param index -
+     * @return String
+     */
+    private String getSymbolsName(final BNFSequences s, final int position, final int index) {
+        List<BNFSymbol> symbols = getSymbols(s, position);
+        return symbols.get(index).getName();
+    }
+
+    /**
+     * @param s -
+     * @param position -
+     * @param index -
+     * @return BNFRepetition
+     */
+    private BNFRepetition getSymbolsRepetition(final BNFSequences s, final int position, final int index) {
+        List<BNFSymbol> symbols = getSymbols(s, position);
+        return symbols.get(index).getRepetition();
+    }
+
+    /**
+     * @param s -
+     * @param position -
+     * @return List<BNFSymbol>
+     */
+    private List<BNFSymbol> getSymbols(final BNFSequences s, final int position) {
+        return s.getSequences().get(position).getSymbols();
+    }
 }

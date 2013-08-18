@@ -20,73 +20,74 @@ import ca.gobits.bnf.tokenizer.BNFTokenizerFactoryImpl.BNFTokenizerType;
 
 public class BNFFastForward {
 
-	private BNFTokenizerType start = BNFTokenizerType.NONE;
-	private BNFTokenizerType[] end = new BNFTokenizerType[] { BNFTokenizerType.NONE };
-	private StringBuilder sb = new StringBuilder();
-	
-	public BNFFastForward() {		
-	}
+    private BNFTokenizerType start = BNFTokenizerType.NONE;
+    private BNFTokenizerType[] end = new BNFTokenizerType[] { BNFTokenizerType.NONE };
+    private final StringBuilder sb = new StringBuilder();
 
-	public BNFTokenizerType getStart() {
-		return start;
-	}
+    public BNFFastForward() {
+    }
 
-	public void setStart(BNFTokenizerType start) {
-		this.start = start;
-	}
+    public BNFTokenizerType getStart() {
+        return start;
+    }
 
-	public BNFTokenizerType[] getEnd() {
-		return end;
-	}
+    public void setStart(final BNFTokenizerType type) {
+        this.start = type;
+    }
 
-	public void setEnd(BNFTokenizerType[] end) {
-		this.end = end;
-	}
+    public BNFTokenizerType[] getEnd() {
+        return end;
+    }
 
-	public void setEnd(BNFTokenizerType type) {
-		this.end = new BNFTokenizerType[] { type };
-	}
-	
-	public boolean isActive() {
-		return start != BNFTokenizerType.NONE;
-	}
-	
-	public boolean isComplete(BNFTokenizerType type, BNFTokenizerType lastType, int i, int len) {		
-		return isMatch(type, lastType)  || (i == len - 1);
-	}
-	
-	private boolean isMatch(BNFTokenizerType type, BNFTokenizerType lastType) {
+    public void setEnd(BNFTokenizerType[] end) {
+        this.end = end;
+    }
 
-		boolean match = false;
-		
-		if (end.length == 1) {
-			match = type == end[0];
-		} else if (end.length == 2) {
-			match = type == end[0] && lastType == end[1];
-		}
+    public void setEnd(BNFTokenizerType type) {
+        this.end = new BNFTokenizerType[] { type };
+    }
 
-		return match;
-	}
+    public boolean isActive() {
+        return start != BNFTokenizerType.NONE;
+    }
 
-	public void complete() {
-		this.start = BNFTokenizerType.NONE;
-		setEnd(BNFTokenizerType.NONE);
-		sb.delete(0, sb.length());
-	}
+    public boolean isComplete(BNFTokenizerType type, BNFTokenizerType lastType,
+            int i, int len) {
+        return isMatch(type, lastType) || (i == len - 1);
+    }
 
-	public void appendIfActive(char c) {
-		if (isActive()) {
-			sb.append(String.valueOf(c));
-		}
-	}
+    private boolean isMatch(BNFTokenizerType type, BNFTokenizerType lastType) {
 
-	public void appendIfActive(String s) {
-		if (isActive()) {
-			sb.append(s);
-		}
-	}
+        boolean match = false;
 
-	public String getString() {
-		return sb.toString();
-	}
+        if (end.length == 1) {
+            match = type == end[0];
+        } else if (end.length == 2) {
+            match = type == end[0] && lastType == end[1];
+        }
+
+        return match;
+    }
+
+    public void complete() {
+        this.start = BNFTokenizerType.NONE;
+        setEnd(BNFTokenizerType.NONE);
+        sb.delete(0, sb.length());
+    }
+
+    public void appendIfActive(char c) {
+        if (isActive()) {
+            sb.append(String.valueOf(c));
+        }
+    }
+
+    public void appendIfActive(String s) {
+        if (isActive()) {
+            sb.append(s);
+        }
+    }
+
+    public String getString() {
+        return sb.toString();
+    }
 }

@@ -16,22 +16,21 @@
 
 package ca.gobits.bnf.parser.states;
 
-
 public class BNFStateNumberTest {
 
-//	private BNFStateNumber state = new BNFStateNumber();
-//	
-//	@Test
-//	public void testNumber() {
-//		assertTrue(state.match(new BNFToken("1")));
-//		assertTrue(state.match(new BNFToken("-1")));
-//		assertTrue(state.match(new BNFToken("1.34")));
-//		assertTrue(state.match(new BNFToken("123")));
-//	}
-//
-//	@Test
-//	public void testString() {
-//		assertFalse(state.match(new BNFToken("1a")));
-//		assertFalse(state.match(new BNFToken("a1")));
-//	}
+    // private BNFStateNumber state = new BNFStateNumber();
+    //
+    // @Test
+    // public void testNumber() {
+    // assertTrue(state.match(new BNFToken("1")));
+    // assertTrue(state.match(new BNFToken("-1")));
+    // assertTrue(state.match(new BNFToken("1.34")));
+    // assertTrue(state.match(new BNFToken("123")));
+    // }
+    //
+    // @Test
+    // public void testString() {
+    // assertFalse(state.match(new BNFToken("1a")));
+    // assertFalse(state.match(new BNFToken("a1")));
+    // }
 }

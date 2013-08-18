@@ -20,15 +20,15 @@ import java.util.Map;
 
 public class BNFParserFactoryImpl implements BNFParserFactory {
 
-	private BNFSequenceFactory df = new BNFSequenceFactoryImpl();
-	
-	@Override
-	public BNFParser json() {
-		
-		Map<String, BNFSequences> map = df.json();
-		BNFParser parser = new BNFParserImpl(map);
-		
-		return parser;
-	}
+    private final BNFSequenceFactory df = new BNFSequenceFactoryImpl();
+
+    @Override
+    public BNFParser json() {
+
+        Map<String, BNFSequences> map = df.json();
+        BNFParser parser = new BNFParserImpl(map);
+
+        return parser;
+    }
 
 }

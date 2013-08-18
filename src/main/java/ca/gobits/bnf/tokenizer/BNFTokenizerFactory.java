@@ -16,7 +16,23 @@
 
 package ca.gobits.bnf.tokenizer;
 
+/**
+ * BNFTokenizerFactory creates BNFTokens from strings.
+ */
 public interface BNFTokenizerFactory {
-	BNFToken tokens(String text);
-	BNFToken tokens(String text, BNFTokenizerParams params);
+
+    /**
+     * creates BNFTokens from a string.
+     * @param text - string
+     * @return BNFToken - token
+     */
+    BNFToken tokens(String text);
+
+    /**
+     * creates BNFTokens from a string with BNFTokenizerParams.
+     * @param text - string
+     * @param params - BNFTokenizerParams
+     * @return BNFToken - token
+     */
+    BNFToken tokens(String text, BNFTokenizerParams params);
 }
