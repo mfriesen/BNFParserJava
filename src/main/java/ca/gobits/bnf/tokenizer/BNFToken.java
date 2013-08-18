@@ -16,50 +16,91 @@
 
 package ca.gobits.bnf.tokenizer;
 
+/**
+ * BNFToken holder for the result from the tokenizer.
+ */
 public class BNFToken {
 
+    /**
+     * Type of tokens.
+     */
     public enum BNFTokenType {
-        COMMENT, QUOTED_STRING, NUMBER, WORD, SYMBOL, WHITESPACE, WHITESPACE_NEWLINE
+        /** COMMENT. */
+        COMMENT,
+        /** QUOTED_STRING. */
+        QUOTED_STRING,
+        /** NUMBER. */
+        NUMBER,
+        /** WORD. */
+        WORD,
+        /** SYMBOL. */
+        SYMBOL,
+        /** WHITESPACE. */
+        WHITESPACE,
+        /** WHITESPACE_NEWLINE. */
+        WHITESPACE_NEWLINE
     }
 
+    /** unique token identifier. */
     private int id;
+
+    /** string value of token. */
     private String stringValue;
-    private BNFTokenType type;
+
+    /** type of token. */
+    private BNFTokenType tokenType;
+
+    /** next token in line. */
     private BNFToken nextToken;
 
-    public BNFTokenType getType() {
-        return type;
-    }
-
-    public void setType(BNFTokenType type) {
-        this.type = type;
-    }
-
+    /**
+     * default constructor.
+     */
     public BNFToken() {
     }
 
-    public BNFToken(String value) {
+    /**
+     * constructor with string.
+     * @param value -
+     */
+    public BNFToken(final String value) {
         this.stringValue = value;
     }
 
-    public void appendValue(char c) {
+    /**
+     * Append value to token.
+     * @param c -
+     */
+    public void appendValue(final char c) {
         this.stringValue = this.stringValue + String.valueOf(c);
     }
 
+    /**
+     * @return String
+     */
     public String getStringValue() {
         return stringValue;
     }
 
-    public void setStringValue(String value) {
+    /**
+     * @param value -
+     */
+    public void setStringValue(final String value) {
         this.stringValue = value;
     }
 
+    /**
+     * @return BNFToken
+     */
     public BNFToken getNextToken() {
         return nextToken;
     }
 
-    public void setNextToken(BNFToken nextToken) {
-        this.nextToken = nextToken;
+    /**
+     * @param token -
+     */
+    public void setNextToken(final BNFToken token) {
+        this.nextToken = token;
     }
 
     @Override
@@ -68,35 +109,74 @@ public class BNFToken {
                 + " type: " + getType();
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isSymbol() {
-        return type == BNFTokenType.SYMBOL;
+        return tokenType == BNFTokenType.SYMBOL;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isWord() {
-        return type == BNFTokenType.WORD;
+        return tokenType == BNFTokenType.WORD;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isQuotedString() {
-        return type == BNFTokenType.QUOTED_STRING;
+        return tokenType == BNFTokenType.QUOTED_STRING;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isNumber() {
-        return type == BNFTokenType.NUMBER;
+        return tokenType == BNFTokenType.NUMBER;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isComment() {
-        return type == BNFTokenType.COMMENT;
+        return tokenType == BNFTokenType.COMMENT;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isWhitespace() {
-        return type == BNFTokenType.WHITESPACE;
+        return tokenType == BNFTokenType.WHITESPACE;
     }
 
+    /**
+     * @return int
+     */
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    /**
+     * @param identifier -
+     */
+    public void setId(final int identifier) {
+        this.id = identifier;
     }
+
+    /**
+     * @return BNFTokenType
+     */
+    public BNFTokenType getType() {
+        return tokenType;
+    }
+
+    /**
+     * @param type -
+     */
+    public void setType(final BNFTokenType type) {
+        this.tokenType = type;
+    }
+
 }

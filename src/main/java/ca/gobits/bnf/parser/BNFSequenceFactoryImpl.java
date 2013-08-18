@@ -26,17 +26,25 @@ import java.util.Map;
 
 import ca.gobits.bnf.parser.BNFSymbol.BNFRepetition;
 
+/**
+ * BNF Sequence Factory implementation.
+ *
+ */
 public class BNFSequenceFactoryImpl implements BNFSequenceFactory {
 
     @Override
     public Map<String, BNFSequences> json() {
 
-        Map<String, String> prop = loadProperties();
+        Map<String, String> prop = getGrammarJSON();
 
         return buildMap(prop);
     }
 
-    private Map<String, BNFSequences> buildMap(Map<String, String> prop) {
+    /**
+     * @param prop - grammar property map
+     * @return Map<String, BNFSequences>
+     */
+    private Map<String, BNFSequences> buildMap(final Map<String, String> prop) {
 
         Map<String, BNFSequences> result = new HashMap<String, BNFSequences>();
 
@@ -55,12 +63,20 @@ public class BNFSequenceFactoryImpl implements BNFSequenceFactory {
         return result;
     }
 
-    private BNFSequences createBNFSequences(List<String> sequenceNames) {
+    /**
+     * @param sequenceNames -
+     * @return BNFSequences
+     */
+    private BNFSequences createBNFSequences(final List<String> sequenceNames) {
         List<BNFSequence> list = createBNFSequenceList(sequenceNames);
         return new BNFSequences(list);
     }
 
-    private List<BNFSequence> createBNFSequenceList(List<String> sequenceNames) {
+    /**
+     * @param sequenceNames -
+     * @return List<BNFSequence>
+     */
+    private List<BNFSequence> createBNFSequenceList(final List<String> sequenceNames) {
 
         List<BNFSequence> list = new ArrayList<BNFSequence>(
                 sequenceNames.size());
@@ -73,13 +89,21 @@ public class BNFSequenceFactoryImpl implements BNFSequenceFactory {
         return list;
     }
 
-    private BNFSequence createSequence(String s) {
+    /**
+     * @param s -
+     * @return BNFSequence
+     */
+    private BNFSequence createSequence(final String s) {
 
         List<BNFSymbol> symbols = createSymbols(s);
         return new BNFSequence(symbols);
     }
 
-    private List<BNFSymbol> createSymbols(String s) {
+    /**
+     * @param s -
+     * @return List<BNFSymbol>
+     */
+    private List<BNFSymbol> createSymbols(final String s) {
 
         String[] split = s.trim().split(" ");
 
@@ -93,7 +117,11 @@ public class BNFSequenceFactoryImpl implements BNFSequenceFactory {
         return symbols;
     }
 
-    private BNFSymbol createSymbol(String s) {
+    /**
+     * @param s -
+     * @return BNFSymbol
+     */
+    private BNFSymbol createSymbol(final String s) {
 
         String ss = s;
         BNFRepetition repetition = BNFRepetition.NONE;
@@ -106,7 +134,11 @@ public class BNFSequenceFactoryImpl implements BNFSequenceFactory {
         return new BNFSymbol(ss, repetition);
     }
 
-    private List<String> createSequenceNames(String value) {
+    /**
+     * @param value -
+     * @return List<String>
+     */
+    private List<String> createSequenceNames(final String value) {
 
         String[] values = value.split("[|]");
         List<String> list = new ArrayList<>(values.length);
@@ -125,10 +157,13 @@ public class BNFSequenceFactoryImpl implements BNFSequenceFactory {
         return list;
     }
 
-    private void sortSequenceNames(List<String> list) {
+    /**
+     * @param list -
+     */
+    private void sortSequenceNames(final List<String> list) {
         Collections.sort(list, new Comparator<String>() {
             @Override
-            public int compare(String o1, String o2) {
+            public int compare(final String o1, final String o2) {
                 if (o1.equals("Empty")) {
                     return 1;
                 } else if (o2.equals("Empty")) {
@@ -139,7 +174,11 @@ public class BNFSequenceFactoryImpl implements BNFSequenceFactory {
         });
     }
 
-    private Map<String, String> loadProperties() {
+    /**
+     * Load JSON grammar.
+     * @return Map<String, String>
+     */
+    private Map<String, String> getGrammarJSON() {
         PropertyParser parser = new PropertyParser();
         InputStream is = getClass().getResourceAsStream("/json.bnf");
         try {

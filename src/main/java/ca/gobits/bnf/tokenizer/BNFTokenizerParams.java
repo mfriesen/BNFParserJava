@@ -16,36 +16,67 @@
 
 package ca.gobits.bnf.tokenizer;
 
+/**
+ * BNFTokenizerParams.
+ *
+ * Parameters you can pass into the tokenizer
+ */
 public class BNFTokenizerParams {
 
+    /** whether to include whitespace. */
     private boolean includeWhitespace;
+
+    /** whether to include other whitespace. */
     private boolean includeWhitespaceOther;
+
+    /** whether to include whitespace newlines. */
     private boolean includeWhitespaceNewlines;
 
+    /**
+     * default constructor.
+     */
     public BNFTokenizerParams() {
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isIncludeWhitespace() {
         return this.includeWhitespace;
     }
 
-    public void setIncludeWhitespace(boolean includeWhitespace) {
-        this.includeWhitespace = includeWhitespace;
+    /**
+     * @param include -
+     */
+    public void setIncludeWhitespace(final boolean include) {
+        this.includeWhitespace = include;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isIncludeWhitespaceOther() {
         return this.includeWhitespaceOther;
     }
 
-    public void setIncludeWhitespaceOther(boolean includeWhitespaceOther) {
-        this.includeWhitespaceOther = includeWhitespaceOther;
+    /**
+     * @param include -
+     */
+    public void setIncludeWhitespaceOther(final boolean include) {
+        this.includeWhitespaceOther = include;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isIncludeWhitespaceNewlines() {
         return this.includeWhitespaceNewlines;
     }
 
-    public void setIncludeWhitespaceNewlines(boolean includeWhitespaceNewlines) {
-        this.includeWhitespaceNewlines = includeWhitespaceNewlines;
+    /**
+     * @param include -
+     */
+    public void setIncludeWhitespaceNewlines(final boolean include) {
+        this.includeWhitespaceNewlines = include;
     }
 }

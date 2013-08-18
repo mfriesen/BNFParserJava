@@ -18,45 +18,86 @@ package ca.gobits.bnf.tokenizer;
 
 import ca.gobits.bnf.tokenizer.BNFTokenizerFactoryImpl.BNFTokenizerType;
 
+/**
+ * BNFFastForward class.
+ *
+ */
 public class BNFFastForward {
 
+    /** Start Token Match. */
     private BNFTokenizerType start = BNFTokenizerType.NONE;
-    private BNFTokenizerType[] end = new BNFTokenizerType[] { BNFTokenizerType.NONE };
+
+    /** End Tokens Match. */
+    private BNFTokenizerType[] end = new BNFTokenizerType[] {BNFTokenizerType.NONE};
+
+    /** String holder. */
     private final StringBuilder sb = new StringBuilder();
 
+    /**
+     * default constructor.
+     */
     public BNFFastForward() {
     }
 
+    /**
+     * @return BNFTokenizerType
+     */
     public BNFTokenizerType getStart() {
         return start;
     }
 
+    /**
+     * @param type - start BNFTokenizerType
+     */
     public void setStart(final BNFTokenizerType type) {
         this.start = type;
     }
 
+    /**
+     * @return BNFTokenizerType[]
+     */
     public BNFTokenizerType[] getEnd() {
         return end;
     }
 
-    public void setEnd(BNFTokenizerType[] end) {
-        this.end = end;
+    /**
+     * @param type -
+     */
+    public void setEnd(final BNFTokenizerType[] type) {
+        this.end = type;
     }
 
-    public void setEnd(BNFTokenizerType type) {
-        this.end = new BNFTokenizerType[] { type };
+    /**
+     * @param type -
+     */
+    public void setEnd(final BNFTokenizerType type) {
+        this.end = new BNFTokenizerType[] {type};
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isActive() {
         return start != BNFTokenizerType.NONE;
     }
 
-    public boolean isComplete(BNFTokenizerType type, BNFTokenizerType lastType,
-            int i, int len) {
+    /**
+     * @param type -
+     * @param lastType -
+     * @param i -
+     * @param len -
+     * @return boolean
+     */
+    public boolean isComplete(final BNFTokenizerType type, final BNFTokenizerType lastType, final int i, final int len) {
         return isMatch(type, lastType) || (i == len - 1);
     }
 
-    private boolean isMatch(BNFTokenizerType type, BNFTokenizerType lastType) {
+    /**
+     * @param type -
+     * @param lastType -
+     * @return boolean
+     */
+    private boolean isMatch(final BNFTokenizerType type, final BNFTokenizerType lastType) {
 
         boolean match = false;
 
@@ -69,24 +110,38 @@ public class BNFFastForward {
         return match;
     }
 
+    /**
+     * complete fast forward.
+     */
     public void complete() {
         this.start = BNFTokenizerType.NONE;
         setEnd(BNFTokenizerType.NONE);
         sb.delete(0, sb.length());
     }
 
-    public void appendIfActive(char c) {
+    /**
+     * Append character if fastforward is active.
+     * @param c -
+     */
+    public void appendIfActive(final char c) {
         if (isActive()) {
             sb.append(String.valueOf(c));
         }
     }
 
-    public void appendIfActive(String s) {
+    /**
+     * Append stirng if fastforward is active.
+     * @param s -
+     */
+    public void appendIfActive(final String s) {
         if (isActive()) {
             sb.append(s);
         }
     }
 
+    /**
+     * @return String
+     */
     public String getString() {
         return sb.toString();
     }

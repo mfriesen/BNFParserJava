@@ -18,11 +18,26 @@ package ca.gobits.bnf.parser;
 
 import ca.gobits.bnf.tokenizer.BNFToken;
 
+/**
+ * Result from the BNF Parser.
+ */
 public interface BNFParseResult {
 
+    /**
+     * First token of result.
+     * @return BNFToken
+     */
     BNFToken getTop();
 
+    /**
+     * First error token.
+     * @return BNFToken
+     */
     BNFToken getError();
 
+    /**
+     * Was Parse successful or not.
+     * @return boolean
+     */
     boolean isSuccess();
 }

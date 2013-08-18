@@ -18,6 +18,13 @@ package ca.gobits.bnf.parser;
 
 import java.util.Map;
 
+/**
+ * BNF Sequence Factory.
+ */
 public interface BNFSequenceFactory {
-	Map<String, BNFSequences> json();
+
+    /**
+     * @return Map<String, BNFSequences> - for JSON grammar
+     */
+    Map<String, BNFSequences> json();
 }
