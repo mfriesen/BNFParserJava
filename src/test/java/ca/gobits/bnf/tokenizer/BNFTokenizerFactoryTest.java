@@ -37,7 +37,7 @@ public class BNFTokenizerFactoryTest {
      * testEmpty.
      */
     @Test
-    public void testEmpty() {
+    public void testTokens01() {
         // given
         String s = "";
 
@@ -56,7 +56,7 @@ public class BNFTokenizerFactoryTest {
      * testSymbolAndWhiteSpace.
      */
     @Test
-    public void testSymbolAndWhiteSpace() {
+    public void testTokens02() {
         // given
         String s = "{ \n}";
 
@@ -78,7 +78,7 @@ public class BNFTokenizerFactoryTest {
      * testSingleLineComment.
      */
     @Test
-    public void testSingleLineComment() {
+    public void testTokens03() {
         // given
         String s = "{ }//bleh\nasd";
 
@@ -100,7 +100,7 @@ public class BNFTokenizerFactoryTest {
      * testMultiLineComment.
      */
     @Test
-    public void testMultiLineComment() {
+    public void testTokens04() {
         // given
         String s = "{ }/*bleh\n\nffsdf\n*/asd";
 
@@ -122,7 +122,7 @@ public class BNFTokenizerFactoryTest {
      * testQuotedString01.
      */
     @Test
-    public void testQuotedString01() {
+    public void testTokens05() {
         // given
         String s = "hi \"asd\"";
 
@@ -140,7 +140,7 @@ public class BNFTokenizerFactoryTest {
      * testQuotedString02.
      */
     @Test
-    public void testQuotedString02() {
+    public void testTokens06() {
         // given
         String s = "\"asd\"";
 
@@ -156,7 +156,7 @@ public class BNFTokenizerFactoryTest {
      * testQuotedString03.
      */
     @Test
-    public void testQuotedString03() {
+    public void testTokens07() {
         // given
         String s = "\"asd's\"";
 
@@ -172,7 +172,7 @@ public class BNFTokenizerFactoryTest {
      * testQuotedString04.
      */
     @Test
-    public void testQuotedString04() {
+    public void testTokens08() {
         // given
         String s = "\"asd's";
 
@@ -188,7 +188,7 @@ public class BNFTokenizerFactoryTest {
      * testQuotedString05.
      */
     @Test
-    public void testQuotedString05() {
+    public void testTokens09() {
         // given
         String s = "{ \"asd\":\"123\"}";
 
@@ -218,7 +218,7 @@ public class BNFTokenizerFactoryTest {
      * testQuotedString06.
      */
     @Test
-    public void testQuotedString06() {
+    public void testTokens10() {
         // given
         String s = "'asd':'123'}";
 
@@ -245,7 +245,7 @@ public class BNFTokenizerFactoryTest {
      * testQuotedNumber01.
      */
     @Test
-    public void testQuotedNumber01() {
+    public void testTokens11() {
         // given
         String s = "'asd':123}";
 
@@ -272,7 +272,7 @@ public class BNFTokenizerFactoryTest {
      * testAHrefLink.
      */
     @Test
-    public void testAHrefLink() {
+    public void testTokens12() {
 
         // given
         String s = "{\"notes\":\"Different browsers have support for different video formats, see sub-features for details. \\r\\n\\r\\nThe Android browser (before 2.3) requires <a href=\\\"http://www.broken-links.com/2010/07/08/making-html5-video-work-on-android-phones/\\\">specific handling</a> to run the video element.\"}";
@@ -306,7 +306,7 @@ public class BNFTokenizerFactoryTest {
      * @throws Exception -
      */
     @Test
-    public void testJsonGrammar() throws Exception {
+    public void testTokens13() throws Exception {
 
         // given
         InputStream in = getClass().getResourceAsStream("/json.bnf");
@@ -353,7 +353,7 @@ public class BNFTokenizerFactoryTest {
      * testRussianCharacters.
      */
     @Test
-    public void testRussianCharacters() {
+    public void testTokens14() {
 
         // given
         String s = "{\"text\":\"Й\"}";
@@ -383,7 +383,24 @@ public class BNFTokenizerFactoryTest {
      * testUnicodeCharacter.
      */
     @Test
-    public void testUnicodeCharacter() {
+    public void testTokens15() {
+
+        // given
+        String s = "\u042d\u0442\u043e\u0440\u0443\u0441\u0441\u043a\u0438\u0439\u0442\u0435\u043a\u0441\u0442";
+
+        // when
+        BNFToken token = factory.tokens(s);
+
+        // then
+        assertEquals("Эторусскийтекст", token.getStringValue());
+        assertNull(token.getNextToken());
+    }
+
+    /**
+     * testUnicodeCharacter.
+     */
+    @Test
+    public void testTokens16() {
 
         // given
         String s = "\u042d\u0442\u043e\u0440\u0443\u0441\u0441\u043a\u0438\u0439\u0442\u0435\u043a\u0441\u0442";
