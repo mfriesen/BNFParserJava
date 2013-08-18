@@ -18,6 +18,7 @@ package ca.gobits.bnf.parser;
 
 import java.util.Map;
 import java.util.Stack;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import ca.gobits.bnf.parser.BNFParserState.BNFParserRepetition;
@@ -38,6 +39,9 @@ public class BNFParserImpl implements BNFParser {
 
     /** BNF processing stack. */
     private final Stack<BNFParserState> stack = new Stack<BNFParserState>();
+
+    /** Parser Logger. */
+    private static final Logger LOGGER = Logger.getLogger(BNFParser.class.getName());
 
     /**
      * constructor.
@@ -129,7 +133,7 @@ public class BNFParserImpl implements BNFParser {
     private BNFToken processNoMatch() {
 
         debugPrintIndents();
-        System.out.println("-> no match, rewinding to next sequence");
+        LOGGER.finer("-> no match, rewinding to next sequence");
 
         stack.pop();
 
@@ -154,7 +158,7 @@ public class BNFParserImpl implements BNFParser {
         BNFToken token = stack.peek().getCurrentToken();
 
         debugPrintIndents();
-        System.out.println("-> matched token " + token.getStringValue() + " rewind to start of repetition");
+        LOGGER.finer("-> matched token " + token.getStringValue() + " rewind to start of repetition");
 
         rewindToStartOfRepetition();
 
@@ -202,7 +206,7 @@ public class BNFParserImpl implements BNFParser {
         BNFToken token = stack.peek().getCurrentToken();
 
         debugPrintIndents();
-        System.out.println("-> matched token " + token.getStringValue()
+        LOGGER.finer("-> matched token " + token.getStringValue()
                 + " rewind to next symbol");
 
         rewindToNextSymbolOrRepetition();
@@ -223,7 +227,7 @@ public class BNFParserImpl implements BNFParser {
     private void processNoMatchWithZeroRepetition() {
 
         debugPrintIndents();
-        System.out.println("-> " + ParserState.NO_MATCH_WITH_ZERO_REPETITION
+        LOGGER.finer("-> " + ParserState.NO_MATCH_WITH_ZERO_REPETITION
                 + ", rewind to next symbol");
 
         stack.pop();
@@ -527,7 +531,7 @@ public class BNFParserImpl implements BNFParser {
     private void debugPrintIndents() {
         int size = this.stack.size() - 1;
         for (int i = 0; i < size; i++) {
-            System.out.print(" ");
+            LOGGER.finer(" ");
         }
     }
 
@@ -548,7 +552,7 @@ public class BNFParserImpl implements BNFParser {
      */
     private void debug(final BNFSequence sequence, final BNFToken token, final BNFParserRepetition repetition) {
         debugPrintIndents();
-        System.out.println("-> procesing pipe line " + sequence + " for token "
+        LOGGER.finer("-> procesing pipe line " + sequence + " for token "
                 + debug(token) + " with repetition " + repetition);
     }
 
@@ -560,7 +564,7 @@ public class BNFParserImpl implements BNFParser {
      */
     private void debug(final BNFSequences sd, final BNFToken token, final BNFParserRepetition repetition) {
         debugPrintIndents();
-        System.out.println("-> adding pipe lines " + sd.getSequences()
+        LOGGER.finer("-> adding pipe lines " + sd.getSequences()
                 + " for token " + debug(token) + " with repetition "
                 + repetition);
     }

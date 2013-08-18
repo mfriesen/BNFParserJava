@@ -94,8 +94,14 @@
     <property name="format" value="\s+$"/>
     <property name="message" value="Line has trailing spaces."/>
   </module>
+  <module name="RegexpSingleline">
+    <!-- . matches any character, so we need to escape it and use \. to match dots. -->
+    <property name="format" value="System\.out\.print"/>
+    <property name="message" value="System.out.print is not allowed."/>
+</module>
   
   <module name="SuppressionFilter">
     <property name="file" value="${checkstyle.suppressionsFile}"/>
-</module>
+  </module>
+ 
 </module>
