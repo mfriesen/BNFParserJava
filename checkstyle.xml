@@ -96,8 +96,8 @@
   </module>
   <module name="RegexpSingleline">
     <!-- . matches any character, so we need to escape it and use \. to match dots. -->
-    <property name="format" value="System\.out\.print"/>
-    <property name="message" value="System.out.print is not allowed."/>
+    <property name="format" value="System\.out"/>
+    <property name="message" value="System.out is not allowed."/>
 </module>
   
   <module name="SuppressionFilter">

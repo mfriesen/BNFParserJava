@@ -180,8 +180,7 @@ public class BNFParserImpl implements BNFParser {
         BNFToken token = stack.peek().getCurrentToken();
 
         debugPrintIndents();
-        System.out
-        .println("-> no match Zero Or More Looking for First Match token "
+        LOGGER.finer("-> no match Zero Or More Looking for First Match token "
                 + debug(token) + " rewind outside of Repetition");
 
         rewindToOutsideOfRepetition();
