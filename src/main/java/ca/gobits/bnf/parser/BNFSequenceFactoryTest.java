@@ -1,4 +1,4 @@
-package ca.gobits.bnf.parser2;
+package ca.gobits.bnf.parser;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import ca.gobits.bnf.parser2.BNFSymbol.BNFRepetition;
+import ca.gobits.bnf.parser.BNFSymbol.BNFRepetition;
 
 public class BNFSequenceFactoryTest {
 

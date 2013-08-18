@@ -20,12 +20,12 @@ import java.util.Map;
 
 public class BNFParserFactoryImpl implements BNFParserFactory {
 
-	private BNFStateDefinitionFactory df = new BNFStateDefinitionFactoryImpl();
+	private BNFSequenceFactory df = new BNFSequenceFactoryImpl();
 	
 	@Override
 	public BNFParser json() {
 		
-		Map<String, BNFStateDefinition> map = df.json();
+		Map<String, BNFSequences> map = df.json();
 		BNFParser parser = new BNFParserImpl(map);
 		
 		return parser;

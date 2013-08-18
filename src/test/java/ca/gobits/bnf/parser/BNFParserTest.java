@@ -33,16 +33,19 @@ import ca.gobits.bnf.tokenizer.BNFTokenizerFactoryImpl;
 
 public class BNFParserTest {
 
-	private BNFTokenizerFactory tokenizerFactory = new BNFTokenizerFactoryImpl();
-	private BNFStateDefinitionFactoryImpl sdf = new BNFStateDefinitionFactoryImpl();
-	private Map<String, BNFStateDefinition> map;
-	private BNFParser parser;
-	
-	@Before
-	public void before() throws Exception {
-		map = sdf.json();
-		parser = new BNFParserImpl(map);
-	}
+	private BNFSequenceFactory sequenceFactory;
+    private BNFTokenizerFactory tokenizerFactory;
+    private Map<String, BNFSequences> map;
+    private BNFParserImpl parser;
+    
+    @Before
+    public void before() throws Exception 
+    {
+    	sequenceFactory = new BNFSequenceFactoryImpl();
+        tokenizerFactory = new BNFTokenizerFactoryImpl();
+        map = sequenceFactory.json();
+        parser = new BNFParserImpl(map);
+    }
 	
 	// testOpenCloseBrace
 	@Test
@@ -265,5 +268,39 @@ public class BNFParserTest {
 		assertFalse(result.isSuccess());
 		assertEquals("[", result.getError().getStringValue());
 	}
-	
+
+    // good JSON
+    @Test
+    public void testParse14() throws Exception 
+    {
+        // given
+        String json = "{\"A\":null}";
+        BNFToken token = tokenizerFactory.tokens(json);
+
+        // when       
+        BNFParseResult result = parser.parse(token);
+       
+        // then
+        assertNotNull(result.getTop());
+        assertNull(result.getError());
+        assertTrue(result.isSuccess());
+    }
+    
+    // bad JSON
+    @Test
+    public void testParse15() throws Exception 
+    {
+        // given
+        String json = "{\"A\":\"B\",\"C\":}";
+        BNFToken token = tokenizerFactory.tokens(json);
+
+        // when       
+        BNFParseResult result = parser.parse(token);
+       
+        // then
+        assertFalse(result.isSuccess());
+        assertNotNull(result.getTop());
+        assertNotNull(result.getError());
+        assertEquals("}", result.getError().getStringValue());
+    }
 }

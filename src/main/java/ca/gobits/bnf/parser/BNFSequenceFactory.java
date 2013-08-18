@@ -1,4 +1,4 @@
-package ca.gobits.bnf.parser2;
+package ca.gobits.bnf.parser;
 
 import java.util.Map;
 

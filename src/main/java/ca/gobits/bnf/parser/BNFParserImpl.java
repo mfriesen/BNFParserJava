@@ -17,143 +17,481 @@
 package ca.gobits.bnf.parser;
 
 import java.util.Map;
+import java.util.Stack;
+import java.util.regex.Pattern;
 
-import ca.gobits.bnf.parser.states.BNFState;
-import ca.gobits.bnf.parser.states.BNFStateEmpty;
+import ca.gobits.bnf.parser.BNFParserState.BNFParserRepetition;
+import ca.gobits.bnf.parser.BNFParserState.HolderState;
+import ca.gobits.bnf.parser.BNFSymbol.BNFRepetition;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFParserImpl implements BNFParser {
 
-	private Map<String, BNFStateDefinition> stateDefinitions;
-	private BNFStack stack = new BNFStack();
-	
-	public BNFParserImpl(Map<String, BNFStateDefinition> stateDefinitions) {
-		this.stateDefinitions = stateDefinitions; 
-	}
-	
-	@Override
-	public BNFParseResult parse(BNFToken token) {
-		
-		stack.clear();
-		
-		BNFParseResultImpl result = new BNFParseResultImpl();
-		result.setTop(token);
-		result.setMaxMatchToken(token);
-		
-		BNFStateDefinition sd = stateDefinitions.get("@start");
-		pushToStackOrFirstState(token, sd);
-	
-		while (!stack.isEmpty()) {
-			
-			BNFPath sp = stack.peek();
-			
-			if (sp.isStateEnd()) {
-				
-				sp = stack.pop();
-				
-				if (isEmpty(sp.getToken())) {
-					break;
-				}
-			} else if (sp.getToken() == null) {
-				
-				stack.rewindToNextTokenAndNextSequence();
+    private Pattern numberPattern = Pattern.compile("^[\\d\\-\\.]+$");
+    
+    private Map<String, BNFSequences> stateDefinitions;
+    private Stack<BNFParserState> stack = new Stack<BNFParserState>();
+    
+    public BNFParserImpl(Map<String, BNFSequences> stateDefinitions) 
+    {
+        this.stateDefinitions = stateDefinitions; 
+    }
+    
+    @Override
+    public BNFParseResult parse(BNFToken token)
+    {        
+        BNFSequences sd = stateDefinitions.get("@start");
+        addPipeLine(sd, token, BNFParserRepetition.NONE, BNFRepetition.NONE);
 
-			} else if (sp.isStateDefinition()) {
-				
-				boolean added = parseStateDefinition(sp.getToken());
-				if (!added) {
-					break;
-				}
-				
-			} else {
-				parseState(result);
-			}
+        return parseSequences(token);
+    }
+
+    private BNFParseResultImpl parseSequences(BNFToken startToken)
+    {
+    	boolean success = false;
+    	BNFToken maxMatchToken = startToken;
+    	BNFToken errorToken = null;
+    	
+        BNFParseResultImpl result = new BNFParseResultImpl();
+        result.setTop(startToken);
+
+        while (!stack.isEmpty()) 
+        {            
+            BNFParserState holder = stack.peek();
+                   
+            if (holder.getState() == HolderState.EMPTY) {
+            	
+            	stack.pop();
+            	BNFToken token = stack.peek().getCurrentToken();
+            	if (!isEmpty(token)) {
+            		rewindToNextSymbol();
+            	} else {
+            		success = true;
+            		errorToken = null;
+            		rewindToNextSequence();
+            	}
+            } 
+            else if (holder.getState() == HolderState.NO_MATCH_WITH_ZERO_REPETITION)
+            {
+                processNoMatchWithZeroRepetition();
+            }
+            else if (holder.getState() == HolderState.MATCH_WITH_ZERO_REPETITION)
+            {
+                processMatchWithZeroRepetition();
+            }
+            else if (holder.getState() == HolderState.NO_MATCH_WITH_ZERO_REPETITION_LOOKING_FOR_FIRST_MATCH) {
+            	maxMatchToken = processNoMatchWithZeroRepetitionLookingForFirstMatch();
+            	errorToken = null;
+                success = true;            	
+            }
+            else if (holder.getState() == HolderState.MATCH)
+            {
+            	maxMatchToken = processMatch();
+            	errorToken = null;
+                success = true;
+            }
+            else if (holder.getState() == HolderState.NO_MATCH)
+            {   
+                BNFToken eToken = processNoMatch();
+                errorToken = updateErrorToken(errorToken, eToken);
+                success = false;
+            }
+            else
+            {
+                processStack();
+            }
+        }
+        
+        result.setError(errorToken);
+        result.setMaxMatchToken(maxMatchToken);
+        result.setSuccess(success);
+        
+        return result;
+    }   
+
+    /**
+     * Returns The BNFToken with the largest ID
+     * @return BNFToken
+     */
+    private BNFToken updateErrorToken(BNFToken token1, BNFToken token2) {
+    	return token1 != null && token1.getId() > token2.getId() ? token1 : token2;
+    }
+	/**
+     * Rewind stack to the next sequence
+     */
+	private BNFToken processNoMatch() {
+		
+		debugPrintIndents();
+		System.out.println ("-> no match, rewinding to next sequence");
+		
+		stack.pop();
+		
+		BNFToken token = stack.peek().getCurrentToken();
+
+		rewindToNextSequence();
+		
+		if (!stack.isEmpty()) {
+			BNFParserState holder = stack.peek();
+			holder.resetToken();
 		}
 		
-		result.complete();
-		
-		return result;
-	}
-	
-	private boolean isEmpty(BNFToken token) {
-		return token == null || token.getStringValue() == null || token.getStringValue().trim().length() == 0;
-	}
-	
-	private boolean parseStateDefinition(BNFToken token) {
-		boolean success = false;
-		BNFPathStateDefinition sd = (BNFPathStateDefinition) stack.peek();
-		BNFState state = sd.getNextSequence();
-		if (state != null) {
-			success = true;
-			pushToStack(state, token);
-		}
-		
-		return success;
+		return token;
 	}
 
-	private void pushToStack(BNFState state, BNFToken token) {
-		
-		if (state != null) {
-			BNFPathState path = new BNFPathState(state, token);
-			stack.push(path);
-		}
-	}
-	
-	private void pushToStack(BNFToken token, BNFStateDefinition sd) {
-		BNFPathStateDefinition path = new BNFPathStateDefinition();
-		path.setToken(token);
-		path.setStateDefinition(sd);
-		stack.push(path);
-	}
-	
-	private void pushToStackOrFirstState(BNFToken token, BNFStateDefinition sd) {		
-		
-		if (sd.hasSequences()) {
-			pushToStack(token, sd);
-		} else {
-			pushToStack(sd.getFirstState(), token);
-		}
-	}
-	
-	private void parseState(BNFParseResultImpl result) {
-		
-		BNFPathState sp = (BNFPathState) stack.peek();
-		BNFState state = sp.getState();
-		BNFToken token = sp.getToken();
-		
-		if (!state.isTerminal()) {
-			
-			BNFStateDefinition sd = stateDefinitions.get(state.getName());
-			
-			if (sd == null) {
-				throw new RuntimeException("unknown state " + state.getName());
-			}
-			
-			pushToStackOrFirstState(token, sd);
-			
-		} else if (state.getClass().equals(BNFStateEmpty.class)) {
-			
-			if (isEmpty(token)) {
-				result.setSuccess(true);
-			}
-			
-			BNFState rewindState = stack.rewindStackEmptyState();
-			pushToStack(rewindState, token);
-			
-		} else if (state.match(token)) {
+    private BNFToken processMatchWithZeroRepetition()
+    {
+        stack.pop();
+        
+        BNFToken token = stack.peek().getCurrentToken();
 
-			result.setSuccess(true);
-			token = token.getNextToken();
-			result.setMaxMatchToken(token);
+        debugPrintIndents();
+        System.out.println ("-> matched token " + token.getStringValue() + " rewind to start of repetition");
+        
+        rewindToStartOfRepetition();
+        
+        if (!stack.isEmpty()) {
+            BNFParserState holder = stack.peek();
+            holder.advanceToken(token.getNextToken());
+        }
+        
+        return token;
+    }
+    
+    private BNFToken processNoMatchWithZeroRepetitionLookingForFirstMatch() {
+    	
+        stack.pop();
+        
+        BNFToken token = stack.peek().getCurrentToken();
+
+		debugPrintIndents();
+		System.out.println ("-> no match Zero Or More Looking for First Match token " + debug(token) + " rewind outside of Repetition");				
+		
+		rewindToOutsideOfRepetition();
+		rewindToNextSymbol();
+		
+		if (!stack.isEmpty()) {
+			BNFParserState holder = stack.peek();
+			holder.advanceToken(token);
+		}
+		
+		return token;
+	}
+
+	/**
+	 * Rewind stack to next symbol
+	 */
+	private BNFToken processMatch() {
+		
+        stack.pop();
+	        
+        BNFToken token = stack.peek().getCurrentToken();
+
+		debugPrintIndents();
+		System.out.println ("-> matched token " + token.getStringValue() + " rewind to next symbol");
+				
+		rewindToNextSymbolOrRepetition();
+		
+		if (!stack.isEmpty()) {
+			BNFParserState holder = stack.peek(); 
 			
-			BNFState rewindState = stack.rewindStackMatchedToken();
-			pushToStack(rewindState, token);
-										
-		} else {
-			
-			result.setSuccess(false);
-			BNFState nextState = stack.rewindStackUnmatchedToken();
-			pushToStack(nextState, token);
+			token = token.getNextToken();			
+			holder.advanceToken(token);
+		}
+		
+		return token;
+	}
+
+	private void processNoMatchWithZeroRepetition() {
+		
+		debugPrintIndents();
+		System.out.println ("-> " + HolderState.NO_MATCH_WITH_ZERO_REPETITION + ", rewind to next symbol");
+		
+		stack.pop();
+		
+		BNFToken token = stack.peek().getCurrentToken();
+		
+		rewindToNextSymbol(BNFParserRepetition.ZERO_OR_MORE);
+		
+		if (!stack.isEmpty()) {
+			BNFParserState holder = stack.peek();
+			holder.advanceToken(token);
 		}
 	}
+    
+    private void rewindToNextSymbol(BNFParserRepetition repetition)
+    {
+        while (!stack.isEmpty())
+        {
+            BNFParserState holder = stack.peek();
+            if (holder.isSequence() && !holder.isComplete() && holder.getParserRepetition() != repetition) 
+            {
+                break;
+            }
+
+            stack.pop();
+        }
+    }
+    
+	private void rewindToOutsideOfRepetition() {
+		
+        while (!stack.isEmpty())
+        {
+            BNFParserState holder = stack.peek();
+            
+            if (holder.getParserRepetition() != BNFParserRepetition.NONE) 
+            {
+                stack.pop();
+            } else {
+                break;
+            }
+        }
+	}
+	
+    private void rewindToStartOfRepetition()
+    {
+        BNFParserState startOfRepetition = null;
+        
+        while (!stack.isEmpty())
+        {
+            BNFParserState holder = stack.peek();
+            
+            if (holder.getParserRepetition() != BNFParserRepetition.NONE) 
+            {
+                startOfRepetition = holder;
+                stack.pop();
+            } else {
+                break;
+            }
+        }
+        
+        if (startOfRepetition != null) {
+            this.stack.push(startOfRepetition);
+        }
+    }
+    
+    /**
+     * Rewinds to next incomplete sequence or to ZERO_OR_MORE repetition which ever one is first
+     */
+    private void rewindToNextSymbolOrRepetition()
+    {
+        while (!stack.isEmpty())
+        {
+            BNFParserState holder = stack.peek();
+                        
+            if (holder.getRepetition() == BNFRepetition.ZERO_OR_MORE && holder.isComplete()) {
+            	holder.reset();
+            	if (holder.getRepetition() != BNFRepetition.NONE) {
+            		holder.setParserRepetition(BNFParserRepetition.ZERO_OR_MORE_LOOKING_FOR_FIRST_MATCH);
+            	}
+            	break;
+            }
+            else 
+            	if (holder.isSequence() && !holder.isComplete()) 
+            {
+                	if (holder.getParserRepetition() == BNFParserRepetition.ZERO_OR_MORE_LOOKING_FOR_FIRST_MATCH) {
+        				holder.setParserRepetition(BNFParserRepetition.NONE);
+        			}
+
+                break;
+            }
+
+            stack.pop();
+        }
+    }
+
+    /**
+     * Rewinds to next incomplete sequence or to ZERO_OR_MORE repetition which ever one is first
+     */
+    private void rewindToNextSymbol()
+    {
+        while (!stack.isEmpty())
+        {
+            BNFParserState holder = stack.peek();
+                        
+            if (holder.isSequence() && !holder.isComplete()) 
+            {
+                break;
+            }
+
+            stack.pop();
+        }
+    }
+
+    private void rewindToNextSequence()
+    {
+        while (!stack.isEmpty())
+        {
+            BNFParserState holder = stack.peek();
+            if (holder.isSequences()) 
+            {
+                break;
+            }
+
+            stack.pop();
+        }
+    }
+    
+    private void processStack()
+    {
+        BNFParserState holder = stack.peek();
+        
+        if (holder.isComplete())
+        {
+            stack.pop();
+        }
+        else
+        {
+            if (holder.isSequences())
+            {
+                if (holder.isComplete())
+                {
+                    stack.pop();
+                    
+                } else {
+                    
+                    BNFSequence pipeLine = holder.getNextSequence();
+                    addPipeLine(pipeLine, holder.getCurrentToken(), holder.getParserRepetition(), BNFRepetition.NONE);
+                }
+            }
+            else if (holder.isSequence())
+            {
+                BNFSymbol pipe = holder.getNextSymbol();
+                String nextPipe = pipe.getName();      
+                BNFSequences sd = stateDefinitions.get(nextPipe);
+             
+                BNFParserRepetition repetition = getParserRepetition(holder, pipe);
+                
+                if (sd != null)
+                {
+                    addPipeLine(sd, holder.getCurrentToken(), repetition, pipe.getRepetition());
+                }
+                else
+                {
+                	if (nextPipe.equals("Empty")) {
+                		addPipeLine(HolderState.EMPTY);
+                	}
+                	else if (isMatch(nextPipe, holder.getCurrentToken()))
+                    {
+                		addPipeLine(HolderState.MATCH);
+                    }
+                	else if (repetition == BNFParserRepetition.ZERO_OR_MORE_LOOKING_FOR_FIRST_MATCH) {
+                		
+                		addPipeLine(HolderState.NO_MATCH_WITH_ZERO_REPETITION_LOOKING_FOR_FIRST_MATCH);
+                		
+                	} else if (repetition == BNFParserRepetition.ZERO_OR_MORE)
+                    {
+                        addPipeLine(HolderState.NO_MATCH_WITH_ZERO_REPETITION);
+                    }
+                    else
+                    {
+                        addPipeLine(HolderState.NO_MATCH);
+                    }
+                    
+                }
+            }
+        }
+    }
+
+    private boolean isMatch(String nextPipe, BNFToken token)
+    {
+    	boolean match = false;
+    	
+    	if (token != null) {
+    		String s = isQuotedString(nextPipe) ? nextPipe.substring(1, nextPipe.length() - 1) : nextPipe;
+    		match = s.equals(token.getStringValue()) || isQuotedString(nextPipe, token) || isNumber(nextPipe, token);
+    	}
+    	
+    	return match;
+    }
+    
+    private boolean isQuotedString(String value)
+    {
+        return (value.startsWith("\"") && value.endsWith("\"")) || value.startsWith("'") && value.endsWith("'");
+    }
+    
+    private boolean isQuotedString(String nextPipe, BNFToken token)
+    {
+        String value = token.getStringValue();
+        return nextPipe.equals("QuotedString") && isQuotedString(value);
+    }
+    
+    private boolean isNumber(String nextPipe, BNFToken token)
+    {
+        boolean match = false;
+        
+        if (token != null && nextPipe.equals("Number")) {
+            String value = token.getStringValue();
+            match = numberPattern.matcher(value).matches();
+        }
+        
+        return match;
+    }
+    
+    private void addPipeLine(HolderState state)
+    {
+        stack.push(new BNFParserState(state));
+    }
+    
+    private void addPipeLine(BNFSequences sd, BNFToken token, BNFParserRepetition parserRepetition, BNFRepetition repetition)
+    {
+        if (sd.getSequences().size() == 1)
+        {
+            addPipeLine(sd.getSequences().get(0), token, parserRepetition, repetition);
+        }
+        else
+        {
+            debug(sd, token, parserRepetition);
+            stack.push(new BNFParserState(sd, token, parserRepetition, repetition));
+        }
+    }
+
+    private void addPipeLine(BNFSequence pipeLine, BNFToken token, BNFParserRepetition parserRepetition, BNFRepetition repetition)
+    {
+        debug(pipeLine, token, parserRepetition);
+        stack.push(new BNFParserState(pipeLine, token, parserRepetition, repetition));        
+    }
+
+    private BNFParserRepetition getParserRepetition(BNFParserState holder, BNFSymbol symbol) {
+        
+        BNFRepetition symbolRepetition = symbol.getRepetition();
+        BNFParserRepetition holderRepetition = holder.getParserRepetition();
+        
+        if (symbolRepetition != BNFRepetition.NONE && holderRepetition == BNFParserRepetition.NONE)
+        {
+            holderRepetition = BNFParserRepetition.ZERO_OR_MORE_LOOKING_FOR_FIRST_MATCH;
+        } else if (symbolRepetition != BNFRepetition.NONE && holderRepetition != BNFParserRepetition.NONE) {
+            holderRepetition = BNFParserRepetition.ZERO_OR_MORE;
+        }
+        
+        return holderRepetition;
+    }
+    
+    private boolean isEmpty(BNFToken token) {
+        return token == null || token.getStringValue() == null || token.getStringValue().length() == 0;
+    }
+    
+    private void debugPrintIndents()
+    {
+        int size = this.stack.size() - 1;
+        for (int i = 0; i < size; i++)
+        {
+            System.out.print (" ");
+        }
+    }
+    
+    private String debug(BNFToken token) {
+    	return token != null ? token.getStringValue() : null;
+    }
+    
+    private void debug(BNFSequence pipeLine, BNFToken token, BNFParserRepetition repetition)
+    {
+        debugPrintIndents();        
+        System.out.println ("-> procesing pipe line " + pipeLine + " for token " + debug(token) + " with repetition " + repetition);
+    }
+
+    private void debug(BNFSequences sd, BNFToken token, BNFParserRepetition repetition)
+    {
+        debugPrintIndents();        
+        System.out.println ("-> adding pipe lines " + sd.getSequences() + " for token " + debug(token) + " with repetition " + repetition);
+    }
 }

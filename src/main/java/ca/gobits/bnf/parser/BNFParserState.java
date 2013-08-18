@@ -1,6 +1,6 @@
-package ca.gobits.bnf.parser2;
+package ca.gobits.bnf.parser;
 
-import ca.gobits.bnf.parser2.BNFSymbol.BNFRepetition;
+import ca.gobits.bnf.parser.BNFSymbol.BNFRepetition;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
 public class BNFParserState

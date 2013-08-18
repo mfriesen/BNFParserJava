@@ -1,4 +1,4 @@
-package ca.gobits.bnf.parser2;
+package ca.gobits.bnf.parser;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -8,8 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ca.gobits.bnf.parser.PropertyParser;
-import ca.gobits.bnf.parser2.BNFSymbol.BNFRepetition;
+import ca.gobits.bnf.parser.BNFSymbol.BNFRepetition;
 
 public class BNFSequenceFactoryImpl implements BNFSequenceFactory {
 
