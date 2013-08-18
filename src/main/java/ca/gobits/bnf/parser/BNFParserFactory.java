@@ -16,7 +16,14 @@
 
 package ca.gobits.bnf.parser;
 
+/**
+ * BNFParser Factory.
+ */
 public interface BNFParserFactory {
 
-	BNFParser json();
+    /**
+     * Create BNFParser for JSON strings.
+     * @return BNFParser
+     */
+    BNFParser json();
 }

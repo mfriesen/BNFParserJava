@@ -23,10 +23,18 @@ import java.util.Map;
 
 import org.junit.Test;
 
+/**
+ * PropertyParserTest Unit Tests.
+ */
 public class PropertyParserTest {
 
+    /** instance of PropertyParser. */
     private final PropertyParser parser = new PropertyParser();
 
+    /**
+     * testJson.
+     * @throws Exception -
+     */
     @Test
     public void testJson() throws Exception {
         // given

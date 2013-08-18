@@ -18,8 +18,12 @@ package ca.gobits.bnf.parser;
 
 import java.util.Map;
 
+/**
+ * BNFParser Factory implementation.
+ */
 public class BNFParserFactoryImpl implements BNFParserFactory {
 
+    /** instance of BNF Sequence Factory. */
     private final BNFSequenceFactory df = new BNFSequenceFactoryImpl();
 
     @Override

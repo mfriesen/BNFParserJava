@@ -21,7 +21,7 @@ import java.util.Stack;
 import java.util.regex.Pattern;
 
 import ca.gobits.bnf.parser.BNFParserState.BNFParserRepetition;
-import ca.gobits.bnf.parser.BNFParserState.HolderState;
+import ca.gobits.bnf.parser.BNFParserState.ParserState;
 import ca.gobits.bnf.parser.BNFSymbol.BNFRepetition;
 import ca.gobits.bnf.tokenizer.BNFToken;
 
@@ -72,7 +72,7 @@ public class BNFParserImpl implements BNFParser {
         while (!stack.isEmpty()) {
             BNFParserState holder = stack.peek();
 
-            if (holder.getState() == HolderState.EMPTY) {
+            if (holder.getState() == ParserState.EMPTY) {
 
                 stack.pop();
                 BNFToken token = stack.peek().getCurrentToken();
@@ -83,19 +83,19 @@ public class BNFParserImpl implements BNFParser {
                     errorToken = null;
                     rewindToNextSequence();
                 }
-            } else if (holder.getState() == HolderState.NO_MATCH_WITH_ZERO_REPETITION) {
+            } else if (holder.getState() == ParserState.NO_MATCH_WITH_ZERO_REPETITION) {
                 processNoMatchWithZeroRepetition();
-            } else if (holder.getState() == HolderState.MATCH_WITH_ZERO_REPETITION) {
+            } else if (holder.getState() == ParserState.MATCH_WITH_ZERO_REPETITION) {
                 processMatchWithZeroRepetition();
-            } else if (holder.getState() == HolderState.NO_MATCH_WITH_ZERO_REPETITION_LOOKING_FOR_FIRST_MATCH) {
+            } else if (holder.getState() == ParserState.NO_MATCH_WITH_ZERO_REPETITION_LOOKING_FOR_FIRST_MATCH) {
                 maxMatchToken = processNoMatchWithZeroRepetitionLookingForFirstMatch();
                 errorToken = null;
                 success = true;
-            } else if (holder.getState() == HolderState.MATCH) {
+            } else if (holder.getState() == ParserState.MATCH) {
                 maxMatchToken = processMatch();
                 errorToken = null;
                 success = true;
-            } else if (holder.getState() == HolderState.NO_MATCH) {
+            } else if (holder.getState() == ParserState.NO_MATCH) {
                 BNFToken eToken = processNoMatch();
                 errorToken = updateErrorToken(errorToken, eToken);
                 success = false;
@@ -223,7 +223,7 @@ public class BNFParserImpl implements BNFParser {
     private void processNoMatchWithZeroRepetition() {
 
         debugPrintIndents();
-        System.out.println("-> " + HolderState.NO_MATCH_WITH_ZERO_REPETITION
+        System.out.println("-> " + ParserState.NO_MATCH_WITH_ZERO_REPETITION
                 + ", rewind to next symbol");
 
         stack.pop();
@@ -382,17 +382,17 @@ public class BNFParserImpl implements BNFParser {
                             pipe.getRepetition());
                 } else {
                     if (nextPipe.equals("Empty")) {
-                        addParserState(HolderState.EMPTY);
+                        addParserState(ParserState.EMPTY);
                     } else if (isMatch(nextPipe, holder.getCurrentToken())) {
-                        addParserState(HolderState.MATCH);
+                        addParserState(ParserState.MATCH);
                     } else if (repetition == BNFParserRepetition.ZERO_OR_MORE_LOOKING_FOR_FIRST_MATCH) {
 
-                        addParserState(HolderState.NO_MATCH_WITH_ZERO_REPETITION_LOOKING_FOR_FIRST_MATCH);
+                        addParserState(ParserState.NO_MATCH_WITH_ZERO_REPETITION_LOOKING_FOR_FIRST_MATCH);
 
                     } else if (repetition == BNFParserRepetition.ZERO_OR_MORE) {
-                        addParserState(HolderState.NO_MATCH_WITH_ZERO_REPETITION);
+                        addParserState(ParserState.NO_MATCH_WITH_ZERO_REPETITION);
                     } else {
-                        addParserState(HolderState.NO_MATCH);
+                        addParserState(ParserState.NO_MATCH);
                     }
 
                 }
@@ -459,7 +459,7 @@ public class BNFParserImpl implements BNFParser {
     /**
      * @param state -
      */
-    private void addParserState(final HolderState state) {
+    private void addParserState(final ParserState state) {
         stack.push(new BNFParserState(state));
     }
 

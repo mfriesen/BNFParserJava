@@ -16,6 +16,9 @@
 
 package ca.gobits.bnf.parser.states;
 
+/**
+ * BNFStateNumber Unit Test.
+ */
 public class BNFStateNumberTest {
 
     // private BNFStateNumber state = new BNFStateNumber();

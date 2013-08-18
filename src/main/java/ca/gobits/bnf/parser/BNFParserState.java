@@ -35,7 +35,7 @@ public class BNFParserState {
     }
 
     /** BNFParser State. */
-    public enum HolderState {
+    public enum ParserState {
         /** NONE. */
         NONE,
         /** MATCH. */
@@ -56,7 +56,7 @@ public class BNFParserState {
     private int currentPosition = -1;
 
     /** current state. */
-    private HolderState state;
+    private ParserState state;
 
     /** original token. */
     private BNFToken originalToken;
@@ -80,7 +80,7 @@ public class BNFParserState {
      * default constructor.
      */
     private BNFParserState() {
-        setState(HolderState.NONE);
+        setState(ParserState.NONE);
         this.parserRepetition = BNFParserRepetition.NONE;
     }
 
@@ -88,7 +88,7 @@ public class BNFParserState {
      * constructor.
      * @param parserState -
      */
-    public BNFParserState(final HolderState parserState) {
+    public BNFParserState(final ParserState parserState) {
         this();
         setState(parserState);
     }
@@ -96,7 +96,8 @@ public class BNFParserState {
     /**
      * constructor.
      * @param seqs -
-     * @param token -
+     * @param token
+     *            -
      */
     public BNFParserState(final BNFSequences seqs, final BNFToken token) {
         this(token);
@@ -136,54 +137,94 @@ public class BNFParserState {
         this.repetition = rep;
     }
 
-    public BNFParserState(BNFSequence sequence, BNFToken token, BNFParserRepetition parserRepetition, BNFRepetition repetition) {
-        this(sequence, token);
-        this.parserRepetition = parserRepetition;
-        this.repetition = repetition;
+    /**
+     * constructor.
+     *
+     * @param seq
+     *            -
+     * @param token
+     *            -
+     * @param parserRep
+     *            -
+     * @param rep
+     *            -
+     */
+    public BNFParserState(final BNFSequence seq, final BNFToken token,
+            final BNFParserRepetition parserRep, final BNFRepetition rep) {
+        this(seq, token);
+        this.parserRepetition = parserRep;
+        this.repetition = rep;
     }
 
-    public void advanceToken(BNFToken token2) {
-        this.currentToken = token2;
+    /**
+     * @param token
+     *            -
+     */
+    public void advanceToken(final BNFToken token) {
+        this.currentToken = token;
     }
 
+    /**
+     * reset token value to original.
+     */
     public void resetToken() {
         this.currentToken = this.originalToken;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isSequences() {
         return this.sequences != null;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isSequence() {
         return this.sequence != null;
     }
 
+    /**
+     * @return BNFToken
+     */
     public BNFToken getCurrentToken() {
         return currentToken;
     }
 
-    public BNFSequences getPipeLines() {
+    /**
+     * @return BNFSequences
+     */
+    public BNFSequences getSequences() {
         return sequences;
     }
 
-    public void setPipeLines(BNFSequences pipeLines) {
-        this.sequences = pipeLines;
-    }
-
+    /**
+     * @return boolean
+     */
     public boolean isComplete() {
         return this.isCompleteSequence() || isCompleteSymbol();
     }
 
-    public BNFSequence getPipeLine() {
+    /**
+     * @return BNFSequence
+     */
+    public BNFSequence getSequence() {
         return sequence;
     }
 
-    public HolderState getState() {
+    /**
+     * @return HolderState
+     */
+    public ParserState getState() {
         return state;
     }
 
-    public void setState(HolderState state) {
-        this.state = state;
+    /**
+     * @param parserState -
+     */
+    public void setState(final ParserState parserState) {
+        this.state = parserState;
     }
 
     @Override
@@ -199,15 +240,25 @@ public class BNFParserState {
         return "status " + this.state;
     }
 
+    /**
+     * @return BNFParserRepetition
+     */
     public BNFParserRepetition getParserRepetition() {
         return parserRepetition;
     }
 
-    public void setParserRepetition(BNFParserRepetition parserRepetition) {
-        this.parserRepetition = parserRepetition;
+    /**
+     * @param rep -
+     */
+    public void setParserRepetition(final BNFParserRepetition rep) {
+        this.parserRepetition = rep;
     }
 
+    /**
+     * @return BNFSequence
+     */
     public BNFSequence getNextSequence() {
+
         BNFSequence seq = null;
         int i = currentPosition + 1;
 
@@ -219,11 +270,17 @@ public class BNFParserState {
         return seq;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isCompleteSequence() {
         return this.sequences != null
                 && this.currentPosition >= this.sequences.getSequences().size() - 1;
     }
 
+    /**
+     * @return boolean
+     */
     public BNFSymbol getNextSymbol() {
 
         BNFSymbol symbol = null;
@@ -237,15 +294,24 @@ public class BNFParserState {
         return symbol;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isCompleteSymbol() {
         return this.sequence != null
                 && this.currentPosition >= this.sequence.getSymbols().size() - 1;
     }
 
+    /**
+     * @return BNFRepetition
+     */
     public BNFRepetition getRepetition() {
         return this.repetition;
     }
 
+    /**
+     * reset parser position.
+     */
     public void reset() {
         this.currentPosition = -1;
     }

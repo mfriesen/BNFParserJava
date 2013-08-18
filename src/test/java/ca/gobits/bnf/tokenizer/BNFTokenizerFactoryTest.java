@@ -25,11 +25,17 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-
+/**
+ * BNFTokenizerFactory Unit Test.
+ */
 public class BNFTokenizerFactoryTest {
 
+    /** instance of BNFTokenizerFactory. */
     private final BNFTokenizerFactory factory = new BNFTokenizerFactoryImpl();
 
+    /**
+     * testEmpty.
+     */
     @Test
     public void testEmpty() {
         // given
@@ -46,6 +52,9 @@ public class BNFTokenizerFactoryTest {
         assertNull(token.getNextToken());
     }
 
+    /**
+     * testSymbolAndWhiteSpace.
+     */
     @Test
     public void testSymbolAndWhiteSpace() {
         // given
@@ -65,6 +74,9 @@ public class BNFTokenizerFactoryTest {
         assertNull(token.getNextToken());
     }
 
+    /**
+     * testSingleLineComment.
+     */
     @Test
     public void testSingleLineComment() {
         // given
@@ -84,6 +96,9 @@ public class BNFTokenizerFactoryTest {
         assertNull(token.getNextToken());
     }
 
+    /**
+     * testMultiLineComment.
+     */
     @Test
     public void testMultiLineComment() {
         // given
@@ -103,6 +118,9 @@ public class BNFTokenizerFactoryTest {
         assertNull(token.getNextToken());
     }
 
+    /**
+     * testQuotedString01.
+     */
     @Test
     public void testQuotedString01() {
         // given
@@ -118,6 +136,9 @@ public class BNFTokenizerFactoryTest {
         assertTrue(token.isQuotedString());
     }
 
+    /**
+     * testQuotedString02.
+     */
     @Test
     public void testQuotedString02() {
         // given
@@ -131,6 +152,9 @@ public class BNFTokenizerFactoryTest {
         assertTrue(token.isQuotedString());
     }
 
+    /**
+     * testQuotedString03.
+     */
     @Test
     public void testQuotedString03() {
         // given
@@ -144,6 +168,9 @@ public class BNFTokenizerFactoryTest {
         assertTrue(token.isQuotedString());
     }
 
+    /**
+     * testQuotedString04.
+     */
     @Test
     public void testQuotedString04() {
         // given
@@ -157,6 +184,9 @@ public class BNFTokenizerFactoryTest {
         assertTrue(token.isQuotedString());
     }
 
+    /**
+     * testQuotedString05.
+     */
     @Test
     public void testQuotedString05() {
         // given
@@ -184,6 +214,9 @@ public class BNFTokenizerFactoryTest {
         assertNull(token.getNextToken());
     }
 
+    /**
+     * testQuotedString06.
+     */
     @Test
     public void testQuotedString06() {
         // given
@@ -208,6 +241,9 @@ public class BNFTokenizerFactoryTest {
         assertNull(token.getNextToken());
     }
 
+    /**
+     * testQuotedNumber01.
+     */
     @Test
     public void testQuotedNumber01() {
         // given
@@ -232,6 +268,9 @@ public class BNFTokenizerFactoryTest {
         assertNull(token.getNextToken());
     }
 
+    /**
+     * testAHrefLink.
+     */
     @Test
     public void testAHrefLink() {
 
@@ -262,6 +301,10 @@ public class BNFTokenizerFactoryTest {
         assertNull(token);
     }
 
+    /**
+     * testJsonGrammar.
+     * @throws Exception -
+     */
     @Test
     public void testJsonGrammar() throws Exception {
 
@@ -306,6 +349,9 @@ public class BNFTokenizerFactoryTest {
         assertEquals(";", token.getStringValue());
     }
 
+    /**
+     * testRussianCharacters.
+     */
     @Test
     public void testRussianCharacters() {
 
@@ -333,6 +379,9 @@ public class BNFTokenizerFactoryTest {
         assertNull(token.getNextToken());
     }
 
+    /**
+     * testUnicodeCharacter.
+     */
     @Test
     public void testUnicodeCharacter() {
 

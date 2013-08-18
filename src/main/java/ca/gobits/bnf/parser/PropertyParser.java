@@ -29,16 +29,29 @@ import ca.gobits.bnf.tokenizer.BNFTokenizerFactory;
 import ca.gobits.bnf.tokenizer.BNFTokenizerFactoryImpl;
 import ca.gobits.bnf.tokenizer.BNFTokenizerParams;
 
+/**
+ * PropertyParser.
+ */
 public class PropertyParser {
 
+    /** instance of BNFTokenizerFactory. */
     private final BNFTokenizerFactory tokenizer = new BNFTokenizerFactoryImpl();
 
-    public Map<String, String> parse(InputStream is) throws IOException {
+    /**
+     * @param is -
+     * @return Map<String, String>
+     * @throws IOException -
+     */
+    public Map<String, String> parse(final InputStream is) throws IOException {
         String str = IOUtils.toString(is);
         return parse(str);
     }
 
-    public Map<String, String> parse(String str) {
+    /**
+     * @param str -
+     * @return Map<String, String>
+     */
+    public Map<String, String> parse(final String str) {
 
         Map<String, String> map = new HashMap<String, String>();
         BNFTokenizerParams params = new BNFTokenizerParams();
@@ -80,7 +93,11 @@ public class PropertyParser {
         return map;
     }
 
-    private boolean hasText(String s) {
+    /**
+     * @param s -
+     * @return boolean
+     */
+    private boolean hasText(final String s) {
         return s != null && s.length() > 0;
     }
 }
