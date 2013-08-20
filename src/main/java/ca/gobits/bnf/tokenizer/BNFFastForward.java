@@ -16,7 +16,7 @@
 
 package ca.gobits.bnf.tokenizer;
 
-import ca.gobits.bnf.tokenizer.BNFTokenizerFactoryImpl.BNFTokenizerType;
+import ca.gobits.bnf.tokenizer.BNFTokenizerFactory.BNFTokenizerType;
 
 /**
  * BNFFastForward class.

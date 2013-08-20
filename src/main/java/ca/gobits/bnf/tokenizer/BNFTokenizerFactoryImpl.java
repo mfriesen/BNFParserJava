@@ -100,46 +100,6 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
     /** CHARACTER_NEWLINE. */
     private static final int CHARACTER_NEWLINE = 10;
 
-    /** BNFTokenizerTypes. */
-    public enum BNFTokenizerType {
-        /** NONE. */
-        NONE,
-        /** COMMENT_SINGLE_LINE. */
-        COMMENT_SINGLE_LINE,
-        /** COMMENT_MULTI_LINE. */
-        COMMENT_MULTI_LINE,
-        /** QUOTE_SINGLE. */
-        QUOTE_SINGLE,
-        /** QUOTE_SINGLE_ESCAPED. */
-        QUOTE_SINGLE_ESCAPED,
-        /** QUOTE_DOUBLE. */
-        QUOTE_DOUBLE,
-        /** QUOTE_DOUBLE_ESCAPED. */
-        QUOTE_DOUBLE_ESCAPED,
-        /** NUMBER. */
-        NUMBER,
-        /** LETTER. */
-        LETTER,
-        /** SYMBOL. */
-        SYMBOL,
-        /** SYMBOL_HASH. */
-        SYMBOL_HASH,
-        /** SYMBOL_AT. */
-        SYMBOL_AT,
-        /** SYMBOL_STAR. */
-        SYMBOL_STAR,
-        /** SYMBOL_FORWARD_SLASH. */
-        SYMBOL_FORWARD_SLASH,
-        /** SYMBOL_BACKWARD_SLASH. */
-        SYMBOL_BACKWARD_SLASH,
-        /** WHITESPACE. */
-        WHITESPACE,
-        /** WHITESPACE_OTHER. */
-        WHITESPACE_OTHER,
-        /** WHITESPACE_NEWLINE. */
-        WHITESPACE_NEWLINE
-    }
-
     /**
      * @param text - string
      * @return BNFToken - token;

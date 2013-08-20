@@ -78,6 +78,9 @@
     <module name="FinalParameters"/>
     <module name="TodoComment"/>
     <module name="UpperEll"/>
+    <module name="ImportControl">
+    	<property name="file" value="${checkstyle.importControlFile}"/>
+	</module>
   </module>
   <module name="JavadocPackage">
     <property name="severity" value="ignore"/>

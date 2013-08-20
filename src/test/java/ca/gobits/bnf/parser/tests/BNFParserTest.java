@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package ca.gobits.bnf.parser;
+package ca.gobits.bnf.parser.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,6 +28,12 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import ca.gobits.bnf.parser.BNFParseResult;
+import ca.gobits.bnf.parser.BNFParser;
+import ca.gobits.bnf.parser.BNFParserImpl;
+import ca.gobits.bnf.parser.BNFSequence;
+import ca.gobits.bnf.parser.BNFSequenceFactory;
+import ca.gobits.bnf.parser.BNFSequenceFactoryImpl;
 import ca.gobits.bnf.tokenizer.BNFToken;
 import ca.gobits.bnf.tokenizer.BNFTokenizerFactory;
 import ca.gobits.bnf.tokenizer.BNFTokenizerFactoryImpl;

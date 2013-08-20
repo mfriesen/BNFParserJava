@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package ca.gobits.bnf.tokenizer;
+package ca.gobits.bnf.tokenizer.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,6 +25,10 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+
+import ca.gobits.bnf.tokenizer.BNFToken;
+import ca.gobits.bnf.tokenizer.BNFTokenizerFactory;
+import ca.gobits.bnf.tokenizer.BNFTokenizerFactoryImpl;
 /**
  * BNFTokenizerFactory Unit Test.
  */

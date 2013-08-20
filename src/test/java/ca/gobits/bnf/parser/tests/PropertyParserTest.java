@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package ca.gobits.bnf.parser;
+package ca.gobits.bnf.parser.tests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.util.Map;
 
 import org.junit.Test;
+
+import ca.gobits.bnf.parser.PropertyParser;
 
 /**
  * PropertyParserTest Unit Tests.

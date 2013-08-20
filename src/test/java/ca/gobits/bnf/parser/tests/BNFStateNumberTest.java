@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package ca.gobits.bnf.parser.states;
+package ca.gobits.bnf.parser.tests;
 
 /**
  * BNFStateNumber Unit Test.
