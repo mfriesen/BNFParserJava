@@ -36,7 +36,7 @@ public class BNFParserImpl implements BNFParser {
     private final Pattern numberPattern = Pattern.compile("^[\\d\\-\\.]+$");
 
     /** Holder for BNFSequences map. */
-    private final Map<String, List<BNFSequence>> stateDefinitions;
+    private final Map<String, List<BNFSequence>> sequenceMap;
 
     /** BNF processing stack. */
     private final Stack<BNFParserState> stack = new Stack<BNFParserState>();
@@ -49,12 +49,12 @@ public class BNFParserImpl implements BNFParser {
      * @param map -
      */
     public BNFParserImpl(final Map<String, List<BNFSequence>> map) {
-        this.stateDefinitions = map;
+        this.sequenceMap = map;
     }
 
     @Override
     public BNFParseResult parse(final BNFToken token) {
-        List<BNFSequence> sd = this.stateDefinitions.get("@start");
+        List<BNFSequence> sd = this.sequenceMap.get("@start");
         addParserState(sd, token, BNFParserRepetition.NONE, BNFRepetition.NONE);
 
         return parseSequences(token);
@@ -345,7 +345,7 @@ public class BNFParserImpl implements BNFParser {
             } else if (holder.isSequence()) {
 
                 BNFSymbol symbol = holder.getNextSymbol();
-                List<BNFSequence> sd = this.stateDefinitions.get(symbol.getName());
+                List<BNFSequence> sd = this.sequenceMap.get(symbol.getName());
 
                 BNFParserRepetition repetition = getParserRepetition(holder, symbol);
 
