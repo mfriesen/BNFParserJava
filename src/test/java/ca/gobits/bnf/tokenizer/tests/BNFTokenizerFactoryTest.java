@@ -399,21 +399,4 @@ public class BNFTokenizerFactoryTest {
         assertEquals("Эторусскийтекст", token.getStringValue());
         assertNull(token.getNextToken());
     }
-
-    /**
-     * testUnicodeCharacter.
-     */
-    @Test
-    public void testTokens16() {
-
-        // given
-        String s = "\u042d\u0442\u043e\u0440\u0443\u0441\u0441\u043a\u0438\u0439\u0442\u0435\u043a\u0441\u0442";
-
-        // when
-        BNFToken token = this.factory.tokens(s);
-
-        // then
-        assertEquals("Эторусскийтекст", token.getStringValue());
-        assertNull(token.getNextToken());
-    }
 }
