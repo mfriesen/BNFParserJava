@@ -50,8 +50,8 @@ Uses the string tokenizer to parse a string and create key/value mapping based o
     BNFToken token = tokenizerFactory.tokens(text);
     
     // Create Backus-Naur Form State Definitions
-    BNFStateDefinitionFactoryImpl sdf = new BNFStateDefinitionFactoryImpl();
-    Map<String, BNFStateDefinition> map = sdf.json();
+    BNFSequenceFactory factory = new BNFSequenceFactoryImpl();
+    Map<String, List<BNFSequence>> map = sdf.json();
     
     // Run Tokens through Parser
     BNFParser parser = new BNFParserImpl(map);

@@ -16,36 +16,67 @@
 
 package ca.gobits.bnf.tokenizer;
 
+/**
+ * BNFTokenizerParams.
+ *
+ * Parameters you can pass into the tokenizer
+ */
 public class BNFTokenizerParams {
 
-	private boolean includeWhitespace;
-	private boolean includeWhitespaceOther;
-	private boolean includeWhitespaceNewlines;
-	
-	public BNFTokenizerParams() {		
-	}
+    /** whether to include whitespace. */
+    private boolean includeWhitespace;
 
-	public boolean isIncludeWhitespace() {
-		return this.includeWhitespace;
-	}
+    /** whether to include other whitespace. */
+    private boolean includeWhitespaceOther;
 
-	public void setIncludeWhitespace(boolean includeWhitespace) {
-		this.includeWhitespace = includeWhitespace;
-	}
+    /** whether to include whitespace newlines. */
+    private boolean includeWhitespaceNewlines;
 
-	public boolean isIncludeWhitespaceOther() {
-		return this.includeWhitespaceOther;
-	}
+    /**
+     * default constructor.
+     */
+    public BNFTokenizerParams() {
+    }
 
-	public void setIncludeWhitespaceOther(boolean includeWhitespaceOther) {
-		this.includeWhitespaceOther = includeWhitespaceOther;
-	}
+    /**
+     * @return boolean
+     */
+    public boolean isIncludeWhitespace() {
+        return this.includeWhitespace;
+    }
 
-	public boolean isIncludeWhitespaceNewlines() {
-		return this.includeWhitespaceNewlines;
-	}
+    /**
+     * @param include -
+     */
+    public void setIncludeWhitespace(final boolean include) {
+        this.includeWhitespace = include;
+    }
 
-	public void setIncludeWhitespaceNewlines(boolean includeWhitespaceNewlines) {
-		this.includeWhitespaceNewlines = includeWhitespaceNewlines;
-	}
+    /**
+     * @return boolean
+     */
+    public boolean isIncludeWhitespaceOther() {
+        return this.includeWhitespaceOther;
+    }
+
+    /**
+     * @param include -
+     */
+    public void setIncludeWhitespaceOther(final boolean include) {
+        this.includeWhitespaceOther = include;
+    }
+
+    /**
+     * @return boolean
+     */
+    public boolean isIncludeWhitespaceNewlines() {
+        return this.includeWhitespaceNewlines;
+    }
+
+    /**
+     * @param include -
+     */
+    public void setIncludeWhitespaceNewlines(final boolean include) {
+        this.includeWhitespaceNewlines = include;
+    }
 }

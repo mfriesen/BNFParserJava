@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package ca.gobits.bnf.parser;
+package ca.gobits.bnf.parser.tests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,20 +23,30 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import ca.gobits.bnf.parser.PropertyParser;
+
+/**
+ * PropertyParserTest Unit Tests.
+ */
 public class PropertyParserTest {
 
-	private PropertyParser parser = new PropertyParser();
-	
-	@Test
-	public void testJson() throws Exception {
-		// given
-		InputStream is = getClass().getResourceAsStream("/json.bnf");
+    /** instance of PropertyParser. */
+    private final PropertyParser parser = new PropertyParser();
 
-		// when
-		Map<String, String> map = parser.parse(is);
-		
-		// then
-		assertEquals("propertyName colon value;", map.get("property"));
-	}
+    /**
+     * testJson.
+     * @throws Exception -
+     */
+    @Test
+    public void testJson() throws Exception {
+        // given
+        InputStream is = getClass().getResourceAsStream("/json.bnf");
+
+        // when
+        Map<String, String> map = this.parser.parse(is);
+
+        // then
+        assertEquals("propertyName colon value;", map.get("property"));
+    }
 
 }

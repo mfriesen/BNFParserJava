@@ -4,7 +4,7 @@
   <artifactId>bnfparser</artifactId>
   <packaging>jar</packaging>
   <name>BNF Parser</name>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.2-SNAPSHOT</version>
   <description>BNFParser is a Backus-Naur Form Framework (https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_Form) for Java
 
 The BNFParser Framework offers 3 basic services of general interest to developers:
@@ -55,4 +55,49 @@ The BNFParser Framework offers 3 basic services of general interest to developer
     <artifactId>oss-parent</artifactId>
     <version>7</version>
   </parent>
+  
+  <!-- Fix version 1.7 of java compiler in all submodules: -->
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <source>1.7</source>
+            <target>1.7</target>
+          </configuration>
+        </plugin>
+
+        <!--
+        This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the
+        Maven build itself.
+        -->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+            <configuration>
+              <lifecycleMappingMetadata>
+                <pluginExecutions>
+                  <pluginExecution>
+                    <pluginExecutionFilter>
+                      <groupId>org.apache.maven.plugins</groupId>
+                      <artifactId>maven-enforcer-plugin</artifactId>
+                      <versionRange>[1.0,)</versionRange>
+                      <goals>
+                        <goal>enforce</goal>
+                      </goals>
+                    </pluginExecutionFilter>
+                    <action>
+                      <ignore />
+                    </action>
+                  </pluginExecution>
+                </pluginExecutions>
+              </lifecycleMappingMetadata>
+            </configuration>
+          </plugin>
+        </plugins>
+      </pluginManagement>
+    </build>  
 </project>

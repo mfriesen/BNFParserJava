@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE import-control PUBLIC
+    "-//Puppy Crawl//DTD Import Control 1.1//EN"
+    "http://www.puppycrawl.com/dtds/import_control_1_1.dtd">
+
+<!-- ca.gobits.bnf -->
+<import-control pkg="ca.gobits.bnf">
+
+	<allow pkg="java.util" />
+	
+	<!-- ca.gobits.bnf.parser -->
+	<subpackage name="parser">
+		
+		<allow pkg="java.io" />
+		<allow pkg="org.apache.commons.io" />
+			
+		<allow pkg="ca.gobits.bnf.parser.BNFParserState" />
+		<allow pkg="ca.gobits.bnf.parser.BNFSymbol" />
+		<allow pkg="ca.gobits.bnf.tokenizer" />
+		<allow pkg="ca.gobits.bnf.tokenizer.BNFToken" />
+		
+		<!-- ca.gobits.bnf.parser.tests -->
+		<subpackage name="tests">
+			<allow pkg="java.io" />
+			<allow pkg="org.apache.commons.io" />
+			<allow pkg="org.junit" />
+		
+			<allow pkg="ca.gobits.bnf.parser" />
+		</subpackage>
+	</subpackage>
+	
+	<!-- ca.gobits.bnf.tokenizer -->
+	<subpackage name="tokenizer">
+	
+		<allow pkg="ca.gobits.bnf.tokenizer.BNFToken" />
+		<allow pkg="ca.gobits.bnf.tokenizer.BNFTokenizerFactory" />
+	
+		<!-- ca.gobits.bnf.tokenizer.tests -->
+		<subpackage name="tests">
+			<allow pkg="java.io" />
+			<allow pkg="org.apache.commons.io" />
+			<allow pkg="org.junit" />
+			<allow pkg ="ca.gobits.bnf.tokenizer" />
+		</subpackage>
+	</subpackage>
+	
+</import-control>

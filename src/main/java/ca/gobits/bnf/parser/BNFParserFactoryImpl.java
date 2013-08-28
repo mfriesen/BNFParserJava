@@ -16,19 +16,24 @@
 
 package ca.gobits.bnf.parser;
 
+import java.util.List;
 import java.util.Map;
 
+/**
+ * BNFParser Factory implementation.
+ */
 public class BNFParserFactoryImpl implements BNFParserFactory {
 
-	private BNFStateDefinitionFactory df = new BNFStateDefinitionFactoryImpl();
-	
-	@Override
-	public BNFParser json() {
-		
-		Map<String, BNFStateDefinition> map = df.json();
-		BNFParser parser = new BNFParserImpl(map);
-		
-		return parser;
-	}
+    /** instance of BNF Sequence Factory. */
+    private final BNFSequenceFactory df = new BNFSequenceFactoryImpl();
+
+    @Override
+    public BNFParser json() {
+
+        Map<String, List<BNFSequence>> map = this.df.json();
+        BNFParser parser = new BNFParserImpl(map);
+
+        return parser;
+    }
 
 }

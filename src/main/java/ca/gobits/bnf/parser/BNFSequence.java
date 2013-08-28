@@ -16,16 +16,36 @@
 
 package ca.gobits.bnf.parser;
 
-import ca.gobits.bnf.parser.states.BNFState;
-import ca.gobits.bnf.tokenizer.BNFToken;
+import java.util.List;
 
-public interface BNFPath {
+/**
+ * BNFSequence contains a list of BNFSymbol objects.
+ */
+public class BNFSequence {
 
-	boolean isStateEnd();
+    /** List of BNFSymbols. */
+    private List<BNFSymbol> symbols;
 
-	BNFToken getToken();
+    /** default constructor. */
+    public BNFSequence() {
+    }
 
-	boolean isStateDefinition();
-	
-	BNFState getNextState();
+    /**
+     * @param list - list of BNF Symbols
+     */
+    public BNFSequence(final List<BNFSymbol> list) {
+        this.symbols = list;
+    }
+
+    /**
+     * @return List<BNFSymbol>
+     */
+    public List<BNFSymbol> getSymbols() {
+        return this.symbols;
+    }
+
+    @Override
+    public String toString() {
+        return this.symbols.toString();
+    }
 }

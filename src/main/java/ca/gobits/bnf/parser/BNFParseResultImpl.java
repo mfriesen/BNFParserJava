@@ -18,53 +18,92 @@ package ca.gobits.bnf.parser;
 
 import ca.gobits.bnf.tokenizer.BNFToken;
 
+/**
+ * BNF Parser Result implementation.
+ *
+ */
 public class BNFParseResultImpl implements BNFParseResult {
 
-	private BNFToken top;
-	private BNFToken error;
-	private BNFToken maxToken;
-	private boolean success;
+    /** Top token. */
+    private BNFToken top;
 
-	public BNFParseResultImpl() {		
-	}
+    /** Top error token. */
+    private BNFToken error;
 
-	@Override
-	public boolean isSuccess() {
-		return success;
-	}
+    /** Max token was successfully validated. */
+    private BNFToken maxToken;
 
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
+    /** Was Parser successful. */
+    private boolean success;
 
-	@Override
-	public BNFToken getTop() {
-		return top;
-	}
+    /**
+     * default constructor.
+     */
+    public BNFParseResultImpl() {
+    }
 
-	public void setTop(BNFToken top) {
-		this.top = top;
-	}
+    @Override
+    /**
+     * @return boolean
+     */
+    public boolean isSuccess() {
+        return this.success;
+    }
 
-	@Override
-	public BNFToken getError() {
-		return error;
-	}
+    /**
+     * @param status -
+     */
+    public void setSuccess(final boolean status) {
+        this.success = status;
+    }
 
-	public void setError(BNFToken error) {
-		this.error = error;
-	}
+    @Override
+    /**
+     * @return BNFToken
+     */
+    public BNFToken getTop() {
+        return this.top;
+    }
 
-	public void setMaxMatchToken(BNFToken token) {
-		if (this.maxToken == null || (token != null && token.getId() > this.maxToken.getId())) {
-			this.maxToken = token;
-		}
-	}
+    /**
+     * @param token -
+     */
+    public void setTop(final BNFToken token) {
+        this.top = token;
+    }
 
-	public void complete() {
+    @Override
+    /**
+     * @return BNFToken
+     */
+    public BNFToken getError() {
+        return this.error;
+    }
 
-		if (!isSuccess()) {			
-			setError(maxToken);
-		}
-	}
+    /**
+     * @param token -
+     */
+    public void setError(final BNFToken token) {
+        this.error = token;
+    }
+
+    /**
+     * @param token -
+     */
+    public void setMaxMatchToken(final BNFToken token) {
+        if (this.maxToken == null
+                || (token != null && token.getId() > this.maxToken.getId())) {
+            this.maxToken = token;
+        }
+    }
+
+    /**
+     * complete.
+     */
+    public void complete() {
+
+        if (!isSuccess()) {
+            setError(this.maxToken);
+        }
+    }
 }
