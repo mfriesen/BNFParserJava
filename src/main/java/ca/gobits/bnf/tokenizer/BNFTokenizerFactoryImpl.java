@@ -267,6 +267,7 @@ public class BNFTokenizerFactoryImpl implements BNFTokenizerFactory {
             BNFToken peek = stack.peek();
             peek.setNextToken(token);
             token.setId(peek.getId() + 1);
+            token.setPreviousToken(peek);
         } else {
             token.setId(1);
         }

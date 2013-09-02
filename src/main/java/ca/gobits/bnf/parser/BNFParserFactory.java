@@ -22,7 +22,7 @@ package ca.gobits.bnf.parser;
 public interface BNFParserFactory {
 
     /**
-     * Create BNFParser for JSON strings.
+     * Create BNFParser for JSON grammar.
      * @return BNFParser
      */
     BNFParser json();

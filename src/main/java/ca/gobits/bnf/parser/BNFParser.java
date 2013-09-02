@@ -29,4 +29,11 @@ public interface BNFParser {
      * @return BNFParseResult
      */
     BNFParseResult parse(BNFToken token);
+
+    /**
+     * Parse BNFTokens.
+     * @param string -
+     * @return BNFParseResult
+     */
+    BNFParseResult parse(String string);
 }

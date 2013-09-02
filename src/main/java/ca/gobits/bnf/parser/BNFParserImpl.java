@@ -26,6 +26,8 @@ import ca.gobits.bnf.parser.BNFParserState.BNFParserRepetition;
 import ca.gobits.bnf.parser.BNFParserState.ParserState;
 import ca.gobits.bnf.parser.BNFSymbol.BNFRepetition;
 import ca.gobits.bnf.tokenizer.BNFToken;
+import ca.gobits.bnf.tokenizer.BNFTokenizerFactory;
+import ca.gobits.bnf.tokenizer.BNFTokenizerFactoryImpl;
 
 /**
  * BNF Parser implementation.
@@ -50,6 +52,13 @@ public class BNFParserImpl implements BNFParser {
      */
     public BNFParserImpl(final Map<String, List<BNFSequence>> map) {
         this.sequenceMap = map;
+    }
+
+    @Override
+    public BNFParseResult parse(final String string) {
+        BNFTokenizerFactory tokenizer = new BNFTokenizerFactoryImpl();
+        BNFToken token = tokenizer.tokens(string);
+        return parse(token);
     }
 
     @Override

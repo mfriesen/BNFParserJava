@@ -53,6 +53,9 @@ public class BNFToken {
     /** next token in line. */
     private BNFToken nextToken;
 
+    /** previous token. */
+    private BNFToken previousToken;
+
     /**
      * default constructor.
      */
@@ -179,4 +182,17 @@ public class BNFToken {
         this.tokenType = type;
     }
 
+    /**
+     * @return BNFToken
+     */
+    public BNFToken getPreviousToken() {
+        return this.previousToken;
+    }
+
+    /**
+     * @param token -
+     */
+    public void setPreviousToken(final BNFToken token) {
+        this.previousToken = token;
+    }
 }

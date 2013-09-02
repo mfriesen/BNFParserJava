@@ -14,20 +14,22 @@
 // limitations under the License.
 //
 
-package ca.gobits.bnf.tree;
+package ca.gobits.bnf.search;
 
-public class BNFTree {
-	
-	private BNFTreeNode top;
-	
-	public BNFTree() {		
-	}
+import ca.gobits.bnf.parser.BNFParseResult;
 
-	public BNFTreeNode getTop() {
-		return this.top;
-	}
 
-	public void setTop(BNFTreeNode top) {
-		this.top = top;
-	}
+/**
+ * Interface for building indexes.
+ */
+public interface BNFIndexBuilder {
+
+    /**
+     * Creates Index from a BNFParseResult.
+     *
+     * @param result -
+     * @param indexCreator -
+     * @return BNFIndex
+     */
+    BNFIndex createIndex(final BNFParseResult result, BNFIndexCreator indexCreator);
 }

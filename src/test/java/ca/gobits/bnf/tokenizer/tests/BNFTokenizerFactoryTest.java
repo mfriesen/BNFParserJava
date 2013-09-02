@@ -91,12 +91,15 @@ public class BNFTokenizerFactoryTest {
 
         // then
         assertEquals("{", token.getStringValue());
+        assertNull(token.getPreviousToken());
         assertTrue(token.isSymbol());
         token = token.getNextToken();
         assertEquals("}", token.getStringValue());
+        assertEquals("{", token.getPreviousToken().getStringValue());
         assertTrue(token.isSymbol());
         token = token.getNextToken();
         assertEquals("asd", token.getStringValue());
+        assertEquals("}", token.getPreviousToken().getStringValue());
         assertNull(token.getNextToken());
     }
 
@@ -398,5 +401,27 @@ public class BNFTokenizerFactoryTest {
         // then
         assertEquals("Эторусскийтекст", token.getStringValue());
         assertNull(token.getNextToken());
+    }
+
+    /**
+     * testTokens16.
+     */
+    @Test
+    public void testTokens16() {
+        // testTokens03 also changed
+        // given
+        String s = "The cow jumped over the moon";
+
+        // when
+        BNFToken token = this.factory.tokens(s);
+
+        // then
+        assertEquals("The", token.getStringValue());
+        assertNull(token.getPreviousToken());
+
+        token = token.getNextToken();
+        assertEquals("cow", token.getStringValue());
+        assertEquals("The", token.getPreviousToken().getStringValue());
+
     }
 }
