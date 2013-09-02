@@ -14,22 +14,22 @@
 // limitations under the License.
 //
 
-package ca.gobits.bnf.search;
-
-import ca.gobits.bnf.parser.BNFParseResult;
-
+package ca.gobits.bnf.index;
 
 /**
- * Interface for building indexes.
+ * BNFIndexPath describes how to traverse an index and find values.
  */
-public interface BNFIndexBuilder {
+public interface BNFIndexPath {
 
     /**
-     * Creates Index from a BNFParseResult.
-     *
-     * @param result -
-     * @param indexCreator -
-     * @return BNFIndex
+     * Method for finding a path on an Index.
+     * @param path -
+     * @return BNFIndexPath
      */
-    BNFIndex createIndex(final BNFParseResult result, BNFIndexCreator indexCreator);
+    BNFIndexPath getPath(final String path);
+
+    /**
+     * @return BNFIndexNode
+     */
+    BNFIndexNode getNode();
 }

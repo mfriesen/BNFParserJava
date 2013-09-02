@@ -14,91 +14,58 @@
 // limitations under the License.
 //
 
-package ca.gobits.bnf.search;
+package ca.gobits.bnf.index;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents an Index Node.
+ * BNFIndex is a data structure that improves the speed of data retrieval operations.
+ *
+ * Indexes are used to quickly locate data without having to search every object.
  */
-public class BNFIndexNode {
+public class BNFIndex implements BNFIndexPath {
 
-    /** key for the node. */
-    private String keyValue;
-
-    /** value for the node. */
-    private String stringValue;
-
-    /** list of children nodes. */
+    /** Top nodes of the tree. */
     private List<BNFIndexNode> nodeList;
 
     /**
-     * default constructor.
+     * default contructor.
      */
-    public BNFIndexNode() {
+    public BNFIndex() {
         this.nodeList = new ArrayList<BNFIndexNode>();
     }
 
     /**
-     * constructor.
-     * @param key -
-     * @param value -
-     */
-    public BNFIndexNode(final String key, final String value) {
-        this();
-        this.keyValue = key;
-        this.stringValue = value;
-    }
-
-    /**
-     * @return String
-     */
-    public String getKeyValue() {
-        return this.keyValue;
-    }
-
-    /**
-     * Setter for Key value.
-     * @param key -
-     */
-    public void setKeyValue(final String key) {
-        this.keyValue = key;
-    }
-
-    /**
-     * @return List<BNFTreeNode>
+     * @return List<BNFIndexNode> nodes of the tree
      */
     public List<BNFIndexNode> getNodes() {
         return this.nodeList;
     }
 
     /**
-     * @param nodes -
+     * Setter for the Tree Top Nodes.
+     * @param nodes - tree nodes
      */
     public void setNodes(final List<BNFIndexNode> nodes) {
         this.nodeList = nodes;
     }
 
     /**
-     * Add node.
+     * Adds Node to Index.
      * @param node -
      */
     public void addNode(final BNFIndexNode node) {
         this.nodeList.add(node);
     }
 
-    /**
-     * @return String
-     */
-    public String getStringValue() {
-        return this.stringValue;
+    @Override
+    public BNFIndexNode getPath(final String path) {
+        return BNFIndexHelper.getPath(this.nodeList, path);
     }
 
-    /**
-     * @param value -
-     */
-    public void setStringValue(final String value) {
-        this.stringValue = value;
+    @Override
+    public BNFIndexNode getNode() {
+        return null;
     }
 }

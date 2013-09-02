@@ -29,18 +29,18 @@
 		</subpackage>
 	</subpackage>
 	
-	<!-- ca.gobits.bnf.search -->
-	<subpackage name="search">
+	<!-- ca.gobits.bnf.index -->
+	<subpackage name="index">
 		
 		<allow pkg="ca.gobits.bnf.parser" />
 		<allow pkg="ca.gobits.bnf.tokenizer" />
 		
-		<!-- ca.gobits.bnf.search.tests -->
+		<!-- ca.gobits.bnf.index.tests -->
 		<subpackage name="tests">
 			<allow pkg="org.junit" />
 			
 			<allow pkg="ca.gobits.bnf.parser" />
-			<allow pkg="ca.gobits.bnf.search" />
+			<allow pkg="ca.gobits.bnf.index" />
 		</subpackage>
 		
 	</subpackage>
