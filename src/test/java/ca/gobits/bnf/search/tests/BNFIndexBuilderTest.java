@@ -283,4 +283,18 @@ public class BNFIndexBuilderTest {
         assertEquals("}", nodeA1.getStringValue());
         assertEquals(0, nodeA1.getNodes().size());
     }
+
+    /**
+     * testCreateIndex06 ParseResult is not Successful.
+     */
+    @Test(expected = RuntimeException.class)
+    public void testCreateIndex06() {
+
+        // given
+        String s = "{\"list\": \"A\", \"B\" ]}";
+        BNFParseResult parseResult = this.jsonParser.parse(s);
+
+        // when
+        this.indexBuilder.createIndex(parseResult, this.indexCreator);
+    }
 }
