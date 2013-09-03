@@ -60,7 +60,7 @@ public class BNFIndex implements BNFIndexPath {
     }
 
     @Override
-    public BNFIndexNode getPath(final String path) {
+    public BNFIndexPath getPath(final String path) {
         return BNFIndexHelper.getPath(this.nodeList, path);
     }
 

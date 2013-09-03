@@ -28,8 +28,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ca.gobits.bnf.index.BNFIndex;
-import ca.gobits.bnf.index.BNFIndexBuilder;
-import ca.gobits.bnf.index.BNFIndexBuilderJSON;
+import ca.gobits.bnf.index.BNFIndexFactory;
+import ca.gobits.bnf.index.BNFIndexFactoryJSON;
 import ca.gobits.bnf.index.BNFIndexNode;
 import ca.gobits.bnf.index.BNFIndexPath;
 import ca.gobits.bnf.parser.BNFParseResult;
@@ -41,13 +41,13 @@ import ca.gobits.bnf.parser.BNFParserFactoryImpl;
  * BNFIndexBuilder Unit Tests.
  *
  */
-public class BNFIndexBuilderTest {
+public class BNFIndexFactoryJSONTest {
 
     /** instance of BNFParser. */
     private BNFParser jsonParser;
 
     /** instance of BNFIndexBuilder. */
-    private BNFIndexBuilder indexBuilder;
+    private BNFIndexFactory indexBuilder;
 
     /**
      * Setup Tests.
@@ -57,7 +57,7 @@ public class BNFIndexBuilderTest {
 
         BNFParserFactory parserFactory = new BNFParserFactoryImpl();
         this.jsonParser = parserFactory.json();
-        this.indexBuilder = new BNFIndexBuilderJSON();
+        this.indexBuilder = new BNFIndexFactoryJSON();
     }
 
     /**

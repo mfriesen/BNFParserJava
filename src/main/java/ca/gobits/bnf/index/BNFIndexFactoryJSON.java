@@ -25,7 +25,7 @@ import ca.gobits.bnf.tokenizer.BNFToken;
  * BNFIndexBuilder implements for creating a Tree structure index.
  *
  */
-public class BNFIndexBuilderJSON implements BNFIndexBuilder {
+public class BNFIndexFactoryJSON implements BNFIndexFactory {
 
     @Override
     public BNFIndex createIndex(final BNFParseResult result) {

@@ -33,11 +33,11 @@ public final class BNFIndexHelper {
      * Finds an Index Path Node.
      * @param nodes -
      * @param path -
-     * @return BNFIndexNode
+     * @return BNFIndexPath
      */
-    public static BNFIndexNode getPath(final List<BNFIndexNode> nodes, final String path) {
+    public static BNFIndexPath getPath(final List<BNFIndexNode> nodes, final String path) {
 
-        BNFIndexNode result = null;
+        BNFIndexPath result = null;
 
         for (BNFIndexNode node : nodes) {
 

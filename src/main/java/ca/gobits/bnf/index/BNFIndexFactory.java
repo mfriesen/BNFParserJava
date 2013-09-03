@@ -22,7 +22,7 @@ import ca.gobits.bnf.parser.BNFParseResult;
 /**
  * Interface for building indexes.
  */
-public interface BNFIndexBuilder {
+public interface BNFIndexFactory {
 
     /**
      * Creates Index from a BNFParseResult.
