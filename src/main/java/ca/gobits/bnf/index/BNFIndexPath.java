@@ -31,5 +31,12 @@ public interface BNFIndexPath {
     /**
      * @return BNFIndexNode
      */
-    BNFIndexNode getNode();
+    BNFIndexPath getNode();
+
+    /**
+     * Compare IndexPath value to a string.
+     * @param string -
+     * @return boolean
+     */
+    boolean eq(final String string);
 }

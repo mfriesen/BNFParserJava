@@ -353,9 +353,9 @@ public class BNFIndexFactoryJSONTest {
 
         // then
         BNFIndexPath result = resultIndex.getPath("\"phoneNumbers\"").getPath("\"number\"");
-        BNFIndexNode resultNode = result.getNode();
-        assertEquals("\"number\"", resultNode.getKeyValue());
-        assertEquals("\"212 555-1234\"", resultNode.getStringValue());
+        BNFIndexPath resultNode = result.getNode();
+        assertNotNull(resultNode);
+        assertTrue(resultNode.eq("\"212 555-1234\""));
     }
 
     /**
@@ -373,8 +373,8 @@ public class BNFIndexFactoryJSONTest {
 
         // then
         BNFIndexPath result = resultIndex.getPath("\"phoneNumbers\"");
-        BNFIndexNode resultNode = result.getNode();
-        assertEquals("\"phoneNumbers\"", resultNode.getKeyValue());
-        assertEquals("[", resultNode.getStringValue());
+        BNFIndexPath resultNode = result.getNode();
+        assertNotNull(resultNode);
+        assertTrue(resultNode.eq("["));
     }
 }

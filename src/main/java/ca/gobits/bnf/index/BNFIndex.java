@@ -68,4 +68,9 @@ public class BNFIndex implements BNFIndexPath {
     public BNFIndexNode getNode() {
         return null;
     }
+
+    @Override
+    public boolean eq(final String string) {
+        return false;
+    }
 }

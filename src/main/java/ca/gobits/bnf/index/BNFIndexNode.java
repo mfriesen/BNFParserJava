@@ -129,4 +129,9 @@ public class BNFIndexNode implements BNFIndexPath {
     public BNFIndexNode getNode() {
         return this;
     }
+
+    @Override
+    public boolean eq(final String string) {
+        return this.stringValue != null && this.stringValue.equals(string);
+    }
 }
