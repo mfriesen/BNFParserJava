@@ -16,6 +16,8 @@
 
 package ca.gobits.bnf.index;
 
+import java.util.List;
+
 /**
  * BNFIndexPath describes how to traverse an index and find values.
  */
@@ -29,14 +31,24 @@ public interface BNFIndexPath {
     BNFIndexPath getPath(final String path);
 
     /**
-     * @return BNFIndexNode
+     * @return BNFIndexPath
      */
     BNFIndexPath getNode();
 
     /**
      * Compare IndexPath value to a string.
-     * @param string -
+     * @param value -
      * @return boolean
      */
-    boolean eq(final String string);
+    boolean eq(final String value);
+
+    /**
+     * @return String
+     */
+    String getPathName();
+
+    /**
+     * @return List<? extends BNFIndexPath>
+     */
+    List<? extends BNFIndexPath> getPaths();
 }

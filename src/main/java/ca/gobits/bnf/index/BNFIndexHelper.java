@@ -48,7 +48,7 @@ public final class BNFIndexHelper {
 
             } else {
 
-                if (node.getKeyValue().equals(path)) {
+                if (node.getPathName().equals(path)) {
                     result = node;
                     break;
                 }

@@ -28,30 +28,30 @@ public class BNFIndexNode implements BNFIndexPath {
     private String keyValue;
 
     /** value for the node. */
-    private String stringValue;
+    private String value;
 
     /** whether this node should be searched or skipped. */
     private boolean shouldSkip;
 
     /** list of children nodes. */
-    private List<BNFIndexNode> nodeList;
+    private final List<BNFIndexNode> nodes;
 
     /**
      * default constructor.
      */
     public BNFIndexNode() {
-        this.nodeList = new ArrayList<BNFIndexNode>();
+        this.nodes = new ArrayList<BNFIndexNode>();
     }
 
     /**
      * constructor.
      * @param key -
-     * @param value -
+     * @param string -
      */
-    public BNFIndexNode(final String key, final String value) {
+    public BNFIndexNode(final String key, final String string) {
         this();
         this.keyValue = key;
-        this.stringValue = value;
+        this.value = string;
     }
 
     /**
@@ -70,44 +70,16 @@ public class BNFIndexNode implements BNFIndexPath {
     }
 
     /**
-     * @return List<BNFTreeNode>
-     */
-    public List<BNFIndexNode> getNodes() {
-        return this.nodeList;
-    }
-
-    /**
-     * @param nodes -
-     */
-    public void setNodes(final List<BNFIndexNode> nodes) {
-        this.nodeList = nodes;
-    }
-
-    /**
      * Add node.
      * @param node -
      */
     public void addNode(final BNFIndexNode node) {
-        this.nodeList.add(node);
-    }
-
-    /**
-     * @return String
-     */
-    public String getStringValue() {
-        return this.stringValue;
-    }
-
-    /**
-     * @param value -
-     */
-    public void setStringValue(final String value) {
-        this.stringValue = value;
+        this.nodes.add(node);
     }
 
     @Override
     public BNFIndexPath getPath(final String path) {
-        return BNFIndexHelper.getPath(this.nodeList, path);
+        return BNFIndexHelper.getPath(this.nodes, path);
     }
 
     /**
@@ -132,6 +104,23 @@ public class BNFIndexNode implements BNFIndexPath {
 
     @Override
     public boolean eq(final String string) {
-        return this.stringValue != null && this.stringValue.equals(string);
+        return this.value != null && this.value.equals(string);
+    }
+
+    @Override
+    public String getPathName() {
+        return this.keyValue;
+    }
+
+    @Override
+    public List<? extends BNFIndexPath> getPaths() {
+        return this.nodes;
+    }
+
+    /**
+     * @return List<BNFIndexNode>
+     */
+    public List<BNFIndexNode> getNodes() {
+        return this.nodes;
     }
 }

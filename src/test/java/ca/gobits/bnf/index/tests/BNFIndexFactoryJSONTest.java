@@ -30,7 +30,6 @@ import org.junit.Test;
 import ca.gobits.bnf.index.BNFIndex;
 import ca.gobits.bnf.index.BNFIndexFactory;
 import ca.gobits.bnf.index.BNFIndexFactoryJSON;
-import ca.gobits.bnf.index.BNFIndexNode;
 import ca.gobits.bnf.index.BNFIndexPath;
 import ca.gobits.bnf.parser.BNFParseResult;
 import ca.gobits.bnf.parser.BNFParser;
@@ -74,18 +73,18 @@ public class BNFIndexFactoryJSONTest {
         BNFIndex result = this.indexBuilder.createIndex(parseResult);
 
         // then
-        List<BNFIndexNode> nodes = result.getNodes();
+        List<? extends BNFIndexPath> nodes = result.getPaths();
         assertEquals(2, nodes.size());
 
-        BNFIndexNode node0 = nodes.get(0);
-        assertEquals("[", node0.getKeyValue());
-        assertNull(node0.getStringValue());
-        assertEquals(0, node0.getNodes().size());
+        BNFIndexPath node0 = nodes.get(0);
+        assertEquals("[", node0.getPathName());
+        //        assertNull(node0.getStringValue());
+        assertEquals(0, node0.getPaths().size());
 
-        BNFIndexNode node1 = nodes.get(1);
-        assertEquals("]", node1.getKeyValue());
-        assertNull(node1.getStringValue());
-        assertEquals(0, node1.getNodes().size());
+        BNFIndexPath node1 = nodes.get(1);
+        assertEquals("]", node1.getPathName());
+        //        assertNull(node1.getStringValue());
+        assertEquals(0, node1.getPaths().size());
     }
 
     /**
@@ -102,24 +101,24 @@ public class BNFIndexFactoryJSONTest {
         BNFIndex result = this.indexBuilder.createIndex(parseResult);
 
         // then
-        List<BNFIndexNode> nodes = result.getNodes();
+        List<? extends BNFIndexPath> nodes = result.getPaths();
         assertEquals(2, nodes.size());
 
-        BNFIndexNode nodeA0 = nodes.get(0);
-        assertEquals("{", nodeA0.getKeyValue());
-        assertTrue(nodeA0.isShouldSkip());
-        assertNull(nodeA0.getStringValue());
-        assertEquals(1, nodeA0.getNodes().size());
+        BNFIndexPath nodeA0 = nodes.get(0);
+        assertEquals("{", nodeA0.getPathName());
+        //        assertTrue(nodeA0.eq(null));
+        assertEquals(1, nodeA0.getPaths().size());
+        assertNotNull(nodeA0.getPath("\"food\""));
 
-        BNFIndexNode nodeB0 = nodeA0.getNodes().get(0);
-        assertEquals("\"food\"", nodeB0.getKeyValue());
-        assertEquals("\"chicken\"", nodeB0.getStringValue());
-        assertEquals(0, nodeB0.getNodes().size());
+        BNFIndexPath nodeB0 = nodeA0.getPaths().get(0);
+        assertEquals("\"food\"", nodeB0.getPathName());
+        assertTrue(nodeB0.eq("\"chicken\""));
+        assertEquals(0, nodeB0.getPaths().size());
 
-        BNFIndexNode nodeA1 = nodes.get(1);
-        assertEquals("}", nodeA1.getKeyValue());
-        assertNull(nodeA1.getStringValue());
-        assertEquals(0, nodeA1.getNodes().size());
+        BNFIndexPath nodeA1 = nodes.get(1);
+        assertEquals("}", nodeA1.getPathName());
+        //        assertTrue(nodeA1.eq(null));
+        assertEquals(0, nodeA1.getPaths().size());
     }
 
     /**
@@ -136,38 +135,36 @@ public class BNFIndexFactoryJSONTest {
         BNFIndex result = this.indexBuilder.createIndex(parseResult);
 
         // then
-        List<BNFIndexNode> nodes = result.getNodes();
+        List<? extends BNFIndexPath> nodes = result.getPaths();
         assertEquals(2, nodes.size());
 
-        BNFIndexNode nodeA0 = nodes.get(0);
-        assertEquals("{", nodeA0.getKeyValue());
-        assertNull(nodeA0.getStringValue());
-        assertEquals(3, nodeA0.getNodes().size());
+        BNFIndexPath nodeA0 = nodes.get(0);
+        assertEquals("{", nodeA0.getPathName());
+        //        assertTrue(nodeA0.eq(null));
+        assertEquals(3, nodeA0.getPaths().size());
 
-        BNFIndexNode nodeB0 = nodeA0.getNodes().get(0);
-        assertEquals("\"firstName\"", nodeB0.getKeyValue());
-        assertEquals("\"John\"", nodeB0.getStringValue());
-        assertEquals(0, nodeB0.getNodes().size());
+        BNFIndexPath nodeB0 = nodeA0.getPaths().get(0);
+        assertEquals(nodeB0.getPathName(), "\"firstName\"");
+        assertTrue(nodeB0.eq("\"John\""));
+        assertEquals(0, nodeB0.getPaths().size());
 
-        BNFIndexNode nodeB1 = nodeA0.getNodes().get(1);
-        assertEquals("\"address\"", nodeB1.getKeyValue());
-        assertEquals("{", nodeB1.getStringValue());
-        assertEquals(1, nodeB1.getNodes().size());
+        BNFIndexPath nodeB1 = nodeA0.getPaths().get(1);
+        assertEquals(nodeB1.getPathName(), "\"address\"");
+        assertTrue(nodeB1.eq("{"));
+        assertEquals(1, nodeB1.getPaths().size());
 
-        BNFIndexNode nodeC0 = nodeB1.getNodes().get(0);
-        assertEquals("\"postalCode\"", nodeC0.getKeyValue());
-        assertEquals("10021", nodeC0.getStringValue());
-        assertEquals(0, nodeC0.getNodes().size());
+        BNFIndexPath nodeC0 = nodeB1.getPaths().get(0);
+        assertEquals(nodeC0.getPathName(), "\"postalCode\"");
+        assertTrue(nodeC0.eq("10021"));
+        assertEquals(0, nodeC0.getPaths().size());
 
-        BNFIndexNode nodeB2 = nodeA0.getNodes().get(2);
-        assertEquals("}", nodeB2.getKeyValue());
-        assertNull(nodeB2.getStringValue());
-        assertEquals(0, nodeB2.getNodes().size());
+        BNFIndexPath nodeB2 = nodeA0.getPaths().get(2);
+        assertEquals(nodeB2.getPathName(), "}");
+        assertEquals(0, nodeB2.getPaths().size());
 
-        BNFIndexNode nodeA1 = nodes.get(1);
-        assertEquals("}", nodeA1.getKeyValue());
-        assertNull(nodeA1.getStringValue());
-        assertEquals(0, nodeA1.getNodes().size());
+        BNFIndexPath nodeA1 = nodes.get(1);
+        assertEquals("}", nodeA1.getPathName());
+        assertEquals(0, nodeA1.getPaths().size());
     }
 
     /**
@@ -184,68 +181,68 @@ public class BNFIndexFactoryJSONTest {
         BNFIndex result = this.indexBuilder.createIndex(parseResult);
 
         // then
-        List<BNFIndexNode> nodes = result.getNodes();
+        List<? extends BNFIndexPath> nodes = result.getPaths();
         assertEquals(2, nodes.size());
 
-        BNFIndexNode nodeA0 = nodes.get(0);
-        assertEquals("{", nodeA0.getKeyValue());
-        assertNull(nodeA0.getStringValue());
-        assertEquals(2, nodeA0.getNodes().size());
+        BNFIndexPath nodeA0 = nodes.get(0);
+        assertEquals(nodeA0.getPathName(), "{");
+        //        assertTrue(nodeA0.eq(null));
+        assertEquals(2, nodeA0.getPaths().size());
 
-        BNFIndexNode nodeB0 = nodeA0.getNodes().get(0);
-        assertEquals("\"phoneNumbers\"", nodeB0.getKeyValue());
-        assertEquals("[", nodeB0.getStringValue());
-        assertEquals(4, nodeB0.getNodes().size());
+        BNFIndexPath nodeB0 = nodeA0.getPaths().get(0);
+        assertEquals(nodeB0.getPathName(), "\"phoneNumbers\"");
+        assertTrue(nodeB0.eq("["));
+        assertEquals(4, nodeB0.getPaths().size());
 
-        BNFIndexNode nodeC0 = nodeB0.getNodes().get(0);
-        assertEquals("{", nodeC0.getKeyValue());
-        assertNull(nodeC0.getStringValue());
-        assertEquals(2, nodeC0.getNodes().size());
+        BNFIndexPath nodeC0 = nodeB0.getPaths().get(0);
+        assertEquals(nodeC0.getPathName(), "{");
+        //        assertTrue(nodeC0.eq(null));
+        assertEquals(2, nodeC0.getPaths().size());
 
-        BNFIndexNode nodeD0 = nodeC0.getNodes().get(0);
-        assertEquals("\"type\"", nodeD0.getKeyValue());
-        assertEquals("\"home\"", nodeD0.getStringValue());
-        assertEquals(0, nodeD0.getNodes().size());
+        BNFIndexPath nodeD0 = nodeC0.getPaths().get(0);
+        assertEquals("\"type\"", nodeD0.getPathName());
+        assertTrue(nodeD0.eq("\"home\""));
+        assertEquals(0, nodeD0.getPaths().size());
 
-        BNFIndexNode nodeD1 = nodeC0.getNodes().get(1);
-        assertEquals("\"number\"", nodeD1.getKeyValue());
-        assertEquals("\"212 555-1234\"", nodeD1.getStringValue());
-        assertEquals(0, nodeD1.getNodes().size());
+        BNFIndexPath nodeD1 = nodeC0.getPaths().get(1);
+        assertEquals("\"number\"", nodeD1.getPathName());
+        assertTrue(nodeD1.eq("\"212 555-1234\""));
+        assertEquals(0, nodeD1.getPaths().size());
 
-        BNFIndexNode nodeC1 = nodeB0.getNodes().get(1);
-        assertEquals("}", nodeC1.getKeyValue());
-        assertNull(nodeC1.getStringValue());
-        assertEquals(0, nodeC1.getNodes().size());
+        BNFIndexPath nodeC1 = nodeB0.getPaths().get(1);
+        assertEquals(nodeC1.getPathName(), "}");
+        //        assertTrue(nodeC1.eq(null));
+        assertEquals(0, nodeC1.getPaths().size());
 
-        BNFIndexNode nodeC2 = nodeB0.getNodes().get(2);
-        assertEquals("{", nodeC2.getKeyValue());
-        assertNull(nodeC2.getStringValue());
-        assertEquals(2, nodeC2.getNodes().size());
+        BNFIndexPath nodeC2 = nodeB0.getPaths().get(2);
+        assertEquals("{", nodeC2.getPathName());
+        //        assertTrue(nodeC2.eq(null));
+        assertEquals(2, nodeC2.getPaths().size());
 
-        nodeD0 = nodeC2.getNodes().get(0);
-        assertEquals("\"type\"", nodeD0.getKeyValue());
-        assertEquals("\"fax\"", nodeD0.getStringValue());
-        assertEquals(0, nodeD0.getNodes().size());
+        nodeD0 = nodeC2.getPaths().get(0);
+        assertEquals("\"type\"", nodeD0.getPathName());
+        assertTrue(nodeD0.eq("\"fax\""));
+        assertEquals(0, nodeD0.getPaths().size());
 
-        nodeD1 = nodeC2.getNodes().get(1);
-        assertEquals("\"number\"", nodeD1.getKeyValue());
-        assertEquals("\"646 555-4567\"", nodeD1.getStringValue());
-        assertEquals(0, nodeD1.getNodes().size());
+        nodeD1 = nodeC2.getPaths().get(1);
+        assertEquals("\"number\"", nodeD1.getPathName());
+        assertTrue(nodeD1.eq("\"646 555-4567\""));
+        assertEquals(0, nodeD1.getPaths().size());
 
-        BNFIndexNode nodeC3 = nodeB0.getNodes().get(3);
-        assertEquals("}", nodeC3.getKeyValue());
-        assertNull(nodeC3.getStringValue());
-        assertEquals(0, nodeC3.getNodes().size());
+        BNFIndexPath nodeC3 = nodeB0.getPaths().get(3);
+        assertEquals("}", nodeC3.getPathName());
+        //        assertTrue(nodeC3.eq(null));
+        assertEquals(0, nodeC3.getPaths().size());
 
-        BNFIndexNode nodeB1 = nodeA0.getNodes().get(1);
-        assertEquals("]", nodeB1.getKeyValue());
-        assertNull(nodeB1.getStringValue());
-        assertEquals(0, nodeB1.getNodes().size());
+        BNFIndexPath nodeB1 = nodeA0.getPaths().get(1);
+        assertEquals("]", nodeB1.getPathName());
+        //        assertTrue(nodeB1.eq(null));
+        assertEquals(0, nodeB1.getPaths().size());
 
-        BNFIndexNode nodeA1 = nodes.get(1);
-        assertEquals("}", nodeA1.getKeyValue());
-        assertNull(nodeA1.getStringValue());
-        assertEquals(0, nodeA1.getNodes().size());
+        BNFIndexPath nodeA1 = nodes.get(1);
+        assertEquals("}", nodeA1.getPathName());
+        //        assertTrue(nodeA1.eq(null));
+        assertEquals(0, nodeA1.getPaths().size());
     }
 
     /**
@@ -262,44 +259,44 @@ public class BNFIndexFactoryJSONTest {
         BNFIndex result = this.indexBuilder.createIndex(parseResult);
 
         // then
-        List<BNFIndexNode> nodes = result.getNodes();
+        List<? extends BNFIndexPath> nodes = result.getPaths();
         assertEquals(2, nodes.size());
 
-        BNFIndexNode nodeA0 = nodes.get(0);
-        assertEquals("{", nodeA0.getKeyValue());
-        assertNull(nodeA0.getStringValue());
-        assertEquals(2, nodeA0.getNodes().size());
+        BNFIndexPath nodeA0 = nodes.get(0);
+        assertEquals("{", nodeA0.getPathName());
+        //        assertTrue(nodeA0.eq(null));
+        assertEquals(2, nodeA0.getPaths().size());
 
-        BNFIndexNode nodeB0 = nodeA0.getNodes().get(0);
-        assertEquals("\"list\"", nodeB0.getKeyValue());
-        assertEquals("[", nodeB0.getStringValue());
-        assertEquals(2, nodeB0.getNodes().size());
+        BNFIndexPath nodeB0 = nodeA0.getPaths().get(0);
+        assertEquals("\"list\"", nodeB0.getPathName());
+        assertTrue(nodeB0.eq("["));
+        assertEquals(2, nodeB0.getPaths().size());
 
-        BNFIndexNode nodeC0 = nodeB0.getNodes().get(0);
-        assertNull(nodeC0.getKeyValue());
-        assertEquals("\"A\"", nodeC0.getStringValue());
-        assertEquals(0, nodeC0.getNodes().size());
+        BNFIndexPath nodeC0 = nodeB0.getPaths().get(0);
+        assertNull(nodeC0.getPathName());
+        assertTrue(nodeC0.eq("\"A\""));
+        assertEquals(0, nodeC0.getPaths().size());
 
-        BNFIndexNode nodeC1 = nodeB0.getNodes().get(1);
-        assertNull(nodeC1.getKeyValue());
-        assertEquals("\"B\"", nodeC1.getStringValue());
-        assertEquals(0, nodeC1.getNodes().size());
+        BNFIndexPath nodeC1 = nodeB0.getPaths().get(1);
+        assertNull(nodeC1.getPathName());
+        assertTrue(nodeC1.eq("\"B\""));
+        assertEquals(0, nodeC1.getPaths().size());
 
-        BNFIndexNode nodeB1 = nodeA0.getNodes().get(1);
-        assertEquals("]", nodeB1.getKeyValue());
-        assertNull(nodeB1.getStringValue());
-        assertEquals(0, nodeB1.getNodes().size());
+        BNFIndexPath nodeB1 = nodeA0.getPaths().get(1);
+        assertEquals("]", nodeB1.getPathName());
+        //        assertTrue(nodeB1.eq(null));
+        assertEquals(0, nodeB1.getPaths().size());
 
-        BNFIndexNode nodeA1 = nodes.get(1);
-        assertEquals("}", nodeA1.getKeyValue());
-        assertNull(nodeA1.getStringValue());
-        assertEquals(0, nodeA1.getNodes().size());
+        BNFIndexPath nodeA1 = nodes.get(1);
+        assertEquals("}", nodeA1.getPathName());
+        //        assertTrue(nodeA1.eq(null));
+        assertEquals(0, nodeA1.getPaths().size());
     }
 
     /**
      * testCreateIndex06 ParseResult is not Successful.
      */
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testCreateIndex06() {
 
         // given
@@ -308,7 +305,10 @@ public class BNFIndexFactoryJSONTest {
         assertFalse(parseResult.isSuccess());
 
         // when
-        this.indexBuilder.createIndex(parseResult);
+        BNFIndex result = this.indexBuilder.createIndex(parseResult);
+
+        // then
+        assertNull(result);
     }
 
     /**

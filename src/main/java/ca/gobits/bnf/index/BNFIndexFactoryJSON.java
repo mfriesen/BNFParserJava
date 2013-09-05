@@ -31,7 +31,7 @@ public class BNFIndexFactoryJSON implements BNFIndexFactory {
     public BNFIndex createIndex(final BNFParseResult result) {
 
         if (!result.isSuccess()) {
-            throw new IllegalArgumentException("Result must have status success=true");
+            return null;
         }
 
         Stack<BNFIndexNode> stack = new Stack<BNFIndexNode>();
@@ -121,11 +121,6 @@ public class BNFIndexFactoryJSON implements BNFIndexFactory {
     private String getStringValue(final BNFToken token) {
 
         String value = token.getStringValue();
-
-        //        if (token.isQuotedString()) {
-        //            value = value.substring(1, value.length() - 1);
-        //        }
-
         return value;
     }
 

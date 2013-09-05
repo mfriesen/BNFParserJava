@@ -73,4 +73,14 @@ public class BNFIndex implements BNFIndexPath {
     public boolean eq(final String string) {
         return false;
     }
+
+    @Override
+    public String getPathName() {
+        return null;
+    }
+
+    @Override
+    public List<? extends BNFIndexPath> getPaths() {
+        return this.nodeList;
+    }
 }
