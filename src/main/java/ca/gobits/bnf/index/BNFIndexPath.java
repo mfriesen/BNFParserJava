@@ -51,4 +51,9 @@ public interface BNFIndexPath {
      * @return List<? extends BNFIndexPath>
      */
     List<? extends BNFIndexPath> getPaths();
+
+    /**
+     * @return String
+     */
+    String getValue();
 }

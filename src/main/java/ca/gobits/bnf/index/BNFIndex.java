@@ -83,4 +83,9 @@ public class BNFIndex implements BNFIndexPath {
     public List<? extends BNFIndexPath> getPaths() {
         return this.nodeList;
     }
+
+    @Override
+    public String getValue() {
+        return null;
+    }
 }

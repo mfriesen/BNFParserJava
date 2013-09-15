@@ -123,4 +123,9 @@ public class BNFIndexNode implements BNFIndexPath {
     public List<BNFIndexNode> getNodes() {
         return this.nodes;
     }
+
+    @Override
+    public String getValue() {
+        return this.value;
+    }
 }
