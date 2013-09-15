@@ -383,4 +383,25 @@ public class BNFParserTest {
         assertNotNull(result.getError());
         assertEquals("}", result.getError().getStringValue());
     }
+
+    /**
+     * test extra characters at the end.
+     *
+     */
+    @Test
+    public void testParse16() {
+
+        // given
+        String json = "{}a";
+        BNFToken token = this.tokenizerFactory.tokens(json);
+
+        // when
+        BNFParseResult result = this.parser.parse(token);
+
+        // then
+        assertFalse(result.isSuccess());
+        assertNotNull(result.getTop());
+        assertNotNull(result.getError());
+        assertEquals("a", result.getError().getStringValue());
+    }
 }

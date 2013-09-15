@@ -130,11 +130,35 @@ public class BNFParserImpl implements BNFParser {
             }
         }
 
-        result.setError(errorToken);
-        result.setMaxMatchToken(maxMatchToken);
-        result.setSuccess(success);
+        updateResult(result, maxMatchToken, errorToken, success);
 
         return result;
+    }
+
+    /**
+     * Update BNFParserResult.
+     * @param result -
+     * @param maxMatchToken -
+     * @param errorToken -
+     * @param success -
+     */
+    private void updateResult(final BNFParseResultImpl result, final BNFToken maxMatchToken, final BNFToken errorToken, final boolean success) {
+
+        boolean succ = success;
+        BNFToken errToken = errorToken;
+
+        if (maxMatchToken != null && maxMatchToken.getNextToken() != null) {
+
+            if (errorToken == null) {
+                errToken = maxMatchToken.getNextToken();
+            }
+
+            succ = false;
+        }
+
+        result.setError(errToken);
+        result.setMaxMatchToken(maxMatchToken);
+        result.setSuccess(succ);
     }
 
     /**
